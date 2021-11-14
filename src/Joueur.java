@@ -67,6 +67,6 @@ public abstract class Joueur extends Observable {
     public abstract void jouer();
 
     public static void main(String[] args) {
-        System.out.print("Ide");
+        System.out.print("test");
     }
 }
