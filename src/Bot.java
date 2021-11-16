@@ -1,30 +1,39 @@
 
-public class Bot extends Joueur {
-    private int difficulté;
+public class Bot extends Player {
+    private int difficulty;
 
-    private int getDifficulté() {
+    private int getDifficulty() {
         // Automatically generated method. Please do not modify this code.
-        return this.difficulté;
+        return this.difficulty;
     }
 
-    private void setDifficulté(int value) {
+    private void setDifficulty(int value) {
         // Automatically generated method. Please do not modify this code.
-        this.difficulté = value;
+        this.difficulty = value;
     }
 
-    private Stratégie stratégie;
+    private Strategy strategy;
 
-    public Stratégie getStratégie() {
+    public Strategy getStrategy() {
         // Automatically generated method. Please do not modify this code.
-        return this.stratégie;
+        return this.strategy;
     }
 
-    public void setStratégie(Stratégie value) {
+    public void setStrategy(Strategy value) {
         // Automatically generated method. Please do not modify this code.
-        this.stratégie = value;
+        this.strategy = value;
     }
 
     public void setName() {
     }
 
+    @Override
+    public void chooseIdentity() {
+        
+    }
+
+    @Override
+    public void play() {
+
+    }
 }
