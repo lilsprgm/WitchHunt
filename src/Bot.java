@@ -1,6 +1,8 @@
 
 public class Bot extends Player {
     private int difficulty;
+    private Strategy strategy;
+    private String name;
 
     private int getDifficulty() {
         // Automatically generated method. Please do not modify this code.
@@ -11,8 +13,6 @@ public class Bot extends Player {
         // Automatically generated method. Please do not modify this code.
         this.difficulty = value;
     }
-
-    private Strategy strategy;
 
     public Strategy getStrategy() {
         // Automatically generated method. Please do not modify this code.
@@ -25,6 +25,7 @@ public class Bot extends Player {
     }
 
     public void setName() {
+
     }
 
     @Override

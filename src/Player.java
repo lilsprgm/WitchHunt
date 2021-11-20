@@ -4,8 +4,12 @@ import Cards.Identity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Player extends Observable {
+public class Player extends Observable {
     private String numberOfPoints;
+    private String name;
+    private boolean accused;
+    private Identity identity;
+    private List<Action> action = new ArrayList<Action> ();
 
     private String getNumberOfPoints() {
         // Automatically generated method. Please do not modify this code.
@@ -17,19 +21,15 @@ public abstract class Player extends Observable {
         this.numberOfPoints = value;
     }
 
-    private String name;
-
-    private String getName() {
+    public String getName() {
         // Automatically generated method. Please do not modify this code.
         return this.name;
     }
 
-    private void setName(String value) {
+    public void setName(String value) {
         // Automatically generated method. Please do not modify this code.
         this.name = value;
     }
-
-    private boolean accused;
 
     private boolean isAccused() {
         // Automatically generated method. Please do not modify this code.
@@ -41,8 +41,6 @@ public abstract class Player extends Observable {
         this.accused = value;
     }
 
-    private Identity identity;
-
     public Identity getIdentity() {
         // Automatically generated method. Please do not modify this code.
         return this.identity;
@@ -52,8 +50,6 @@ public abstract class Player extends Observable {
         // Automatically generated method. Please do not modify this code.
         this.identity = value;
     }
-
-    private List<Action> action = new ArrayList<Action> ();
 
     public List<Action> getAction() {
         // Automatically generated method. Please do not modify this code.
@@ -65,9 +61,9 @@ public abstract class Player extends Observable {
         this.action = value;
     }
 
-    public abstract void chooseIdentity();
+    public void chooseIdentity(){}
 
-    public abstract void play();
+    public void play(){}
 
     public static void main(String[] args) {
         System.out.print("test");
