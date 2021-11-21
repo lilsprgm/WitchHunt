@@ -1,4 +1,6 @@
 import Cards.Card;
+
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +97,6 @@ public class Game extends Observable {
         int nombreBot=0;
         Player player_temp = new Player();
         Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
-        Player player_temp2 = new Player();
 
 
         //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
@@ -112,18 +113,18 @@ public class Game extends Observable {
             numberOfBot=nombreBot;
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Non Fonctionnel
+        s.nextLine();                   // Je pense qu'il faut supprimer le ENTR précédent
         for(int i=1;i<nombreJoueur+1;i++){
-            System.out.print("Entrez le nom du Joueur n°"+i+" :");s.nextLine();     //Le ENTR est un caractère attention
+            System.out.print("Entrez le nom du Joueur n°"+i+" :");
+            players.add(i-1,new Player());
+            player_temp = players.get(i-1);
             player_temp.setName(s.nextLine());
-            players.add(i-1,player_temp);
-            player_temp2 = players.get(i-1);
-            System.out.println(player_temp2.getName());
         }
-        for(int i=0;i<nombreJoueur;i++){
-            player_temp=players.get(i);
+        for(Iterator<Player> p = players.iterator(); p.hasNext();){
+            player_temp = p.next();
             System.out.println(player_temp.getName());
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     public void game(){
