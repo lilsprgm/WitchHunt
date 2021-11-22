@@ -1,6 +1,11 @@
 package Cards;
 
 public class Broomstick extends Card implements Action{
+
+    public Broomstick(){
+        setName("Broomstick");
+    }
+
     @Override
     public void actionWitch() {
 

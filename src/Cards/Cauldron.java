@@ -1,6 +1,11 @@
 package Cards;
 
 public class Cauldron extends Card implements Action{
+
+    public Cauldron(){
+        setName("Cauldron");
+    }
+
     @Override
     public void actionWitch() {
 

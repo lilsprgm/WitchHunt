@@ -1,6 +1,11 @@
 package Cards;
 
 public class HookedNose extends Card implements Action{
+
+    public HookedNose(){
+        setName("HookedNose");
+    }
+
     @Override
     public void actionWitch() {
 

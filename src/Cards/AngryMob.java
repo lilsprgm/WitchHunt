@@ -1,6 +1,11 @@
 package Cards;
 
 public class AngryMob extends Card implements Action{
+
+    public AngryMob(){
+        setName("AngryMob");
+    }
+
     @Override
     public void actionWitch() {
 

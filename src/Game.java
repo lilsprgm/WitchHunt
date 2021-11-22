@@ -1,20 +1,20 @@
-import Cards.Card;
+import Cards.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Game extends Observable {
+
+    Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayer=0;
     private int numberOfBot;
     private Administrator admnistrator;
 
     private List<Player> players = new ArrayList<Player> (6);
-    private List<Card> cards = new ArrayList<Card> ();
+    private static List<Card> stockPile = new ArrayList<Card> (); //stock pile = pioche
 
+    private static Game instance = null;
 
-    private static volatile Game instance = null;
 
     private Game(){
     }
@@ -80,15 +80,41 @@ public class Game extends Observable {
 
     public List<Card> getCards() {
         // Automatically generated method. Please do not modify this code.
-        return this.cards;
+        return this.stockPile;
     }
-
+    /*
     public void setCards(List<Card> value) {
         // Automatically generated method. Please do not modify this code.
         this.cards = value;
     }
+*/
+    public void initStockPile(){ //Initialisation de la pioche
+        stockPile.add(new AngryMob());
+        stockPile.add(new BlackCat());
+        stockPile.add(new EvilEye());
+        stockPile.add(new Broomstick());
+        stockPile.add(new Cauldron());
+        stockPile.add(new DuckingStool());
+        stockPile.add(new HookedNose());
+        stockPile.add(new Toad());
+        stockPile.add(new PointedHat());
+        stockPile.add(new Wart());
+        stockPile.add(new PetNewt());
+        stockPile.add(new Inquisition());
+        suffle(stockPile);
+    }
 
-    public String toString(){
+    public Card draw(@NotNull List<Card> cards){
+        Card card = cards.get(0);// on prend toujours l'index 1 car dans tout les cas les cartes sont mélangés
+        cards.remove(0);
+        return card;
+
+    }
+    public void suffle(List<Card> cards){   // Pour être plus clair et rapide si on a besoin de melanger n'importe quoi par ex la main d'un joueur
+        Collections.shuffle(cards);
+    }
+
+    public String toString(){ // A quoi sert cette méthode ?
         return (""+this.numberOfPlayer);
     }
 
@@ -135,6 +161,7 @@ public class Game extends Observable {
     public static void main(String[] args){
         Game game = Game.getInstance();
         game.init_Game();
+
 
 
     }

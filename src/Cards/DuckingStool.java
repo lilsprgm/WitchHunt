@@ -1,6 +1,11 @@
 package Cards;
 
 public class DuckingStool extends Card implements Action{
+
+    public DuckingStool(){
+        setName("DuckingStool");
+    }
+
     @Override
     public void actionWitch() {
 

@@ -1,6 +1,11 @@
 package Cards;
 
 public class Inquisition extends Card implements Action{
+
+    public Inquisition(){
+        setName("Inquisition");
+    }
+
     @Override
     public void actionWitch() {
 

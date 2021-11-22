@@ -1,6 +1,11 @@
 package Cards;
 
 public class Wart extends Card implements Action{
+
+    public Wart(){
+        setName("Wart");
+    }
+
     @Override
     public void actionWitch() {
 
