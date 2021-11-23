@@ -2,6 +2,7 @@ import Cards.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.LinkedList;
 
 public class Game extends Observable {
 
@@ -9,8 +10,9 @@ public class Game extends Observable {
     private int numberOfPlayer=0;
     private int numberOfBot;
     private Administrator admnistrator;
-
-    private List<Player> players = new ArrayList<Player> (6);
+    
+    private LinkedList<Player> players = new LinkedList<Player> ();
+    private Player chosenNextPlayer = null;
     private static List<Card> stockPile = new ArrayList<Card> (); //stock pile = pioche
 
     private static Game instance = null;
@@ -73,11 +75,12 @@ public class Game extends Observable {
         return this.players;
     }
 
+    /*
     public void setPlayers(List<Player> value) {
         // Automatically generated method. Please do not modify this code.
         this.players = value;
     }
-
+*/
     public List<Card> getCards() {
         // Automatically generated method. Please do not modify this code.
         return this.stockPile;
@@ -104,7 +107,7 @@ public class Game extends Observable {
         suffle(stockPile);
     }
 
-    public Card draw(@NotNull List<Card> cards){
+    public Card draw(@NotNull List<Card> cards){ // pour piocher
         Card card = cards.get(0);// on prend toujours l'index 1 car dans tout les cas les cartes sont mélangés
         cards.remove(0);
         return card;
@@ -145,6 +148,7 @@ public class Game extends Observable {
             players.add(i-1,new Player());
             player_temp = players.get(i-1);
             player_temp.setName(s.nextLine());
+            player_temp.setGame(instance);
         }
         for(Iterator<Player> p = players.iterator(); p.hasNext();){
             player_temp = p.next();
@@ -161,9 +165,11 @@ public class Game extends Observable {
     public static void main(String[] args){
         Game game = Game.getInstance();
         game.init_Game();
-
-
-
+        while (!game.endOfGame()){
+            game.initNewRound();
+            game.roundManagement();
+        }
+        game.theWinnerIs();
     }
 
 }
