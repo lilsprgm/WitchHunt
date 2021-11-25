@@ -17,12 +17,12 @@ public class HookedNose extends Card implements Action{
     }
 
     @Override
-    public void conditionWitch() {
+    public boolean conditionWitch() {
 
     }
 
     @Override
-    public void conditionHunt() {
+    public boolean conditionHunt() {
 
     }
 }

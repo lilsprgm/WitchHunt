@@ -47,12 +47,12 @@ public class Player extends Observable {
         this.name = value;
     }
 
-    private boolean isAccused() {
+    public boolean isAccused() {
         // Automatically generated method. Please do not modify this code.
         return this.accused;
     }
 
-    private void setAccused(boolean value) {
+    public void setAccused(boolean value) {
         // Automatically generated method. Please do not modify this code.
         this.accused = value;
     }
@@ -106,7 +106,7 @@ public class Player extends Observable {
 
     }
     public void playCard(){
-
+        print
     }
 
     public void accusation(){}

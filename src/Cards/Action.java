@@ -5,8 +5,8 @@ public interface Action {
 
     public void actionHunt();
 
-    public void conditionWitch();
+    public boolean conditionWitch();
 
-    public void conditionHunt();
+    public boolean conditionHunt();
 
 }

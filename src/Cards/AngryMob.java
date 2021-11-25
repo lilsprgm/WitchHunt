@@ -8,21 +8,21 @@ public class AngryMob extends Card implements Action{
 
     @Override
     public void actionWitch() {
-
+        System.out.println("You take next turn");
     }
 
     @Override
     public void actionHunt() {
-
+        System.out.println("");
     }
 
     @Override
-    public void conditionWitch() {
-
+    public boolean conditionWitch() {
+        return true;
     }
 
     @Override
-    public void conditionHunt() {
+    public boolean conditionHunt() {
 
     }
 }
