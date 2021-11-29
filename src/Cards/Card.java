@@ -1,6 +1,6 @@
 package Cards;
 
-public class Card  { //(extends Observable)
+public class Card implements Action{ //(extends Observable)
     private boolean revealed;
     protected String name;
 
@@ -28,9 +28,31 @@ public class Card  { //(extends Observable)
 
 
     public static void main(String[] args) {
-        Card c = new AngryMob();
-        Card c2 = new BlackCat();
-        System.out.println(c);
-        System.out.println(c2);
+
+    }
+
+    @Override
+    public void actionWitch() {
+
+    }
+
+    @Override
+    public void actionHunt() {
+
+    }
+
+    @Override
+    public boolean conditionWitch() {
+        return false;
+    }
+
+    @Override
+    public boolean conditionHunt() {
+        return false;
+    }
+
+    @Override
+    public void playActionCard(Player play) {
+
     }
 }

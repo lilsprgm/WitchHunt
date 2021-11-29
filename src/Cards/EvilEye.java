@@ -1,6 +1,6 @@
 package Cards;
 
-public class EvilEye extends Card implements Action{
+public class EvilEye extends Card{
 
     public EvilEye(){
         setName("EvilEye");

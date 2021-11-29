@@ -1,6 +1,6 @@
 package Cards;
 
-public class Toad extends Card implements Action{
+public class Toad extends Card {
 
     public Toad(){
         setName("Toad");

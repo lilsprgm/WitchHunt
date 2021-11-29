@@ -1,6 +1,6 @@
 package Cards;
 
-public class BlackCat extends Card implements Action{
+public class BlackCat extends Card{
 
     public BlackCat(){
         setName("Black Cat");

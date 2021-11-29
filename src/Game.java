@@ -141,16 +141,13 @@ public class Game extends Observable {
         Collections.shuffle(cards);
     }
 
-    public String toString(){ // A quoi sert cette méthode ?
-        return (""+this.numberOfPlayer);
-    }
-
-    public void init_Game(){
+    /**
+     *
+     */
+    public void initPlayers(){ // A faire : permettre de modifier la difficulté des bot
         int nombreJoueur=0;
         int nombreBot=0;
         Player player_temp = new Player();
-        Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
-
 
         //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
         do {
@@ -178,11 +175,12 @@ public class Game extends Observable {
             player_temp = p.next();
             System.out.println(player_temp.getName());
         }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     /**
-     * Fonction permettant de regrouper les fonctions pour ddébuter une partie.
+     * Fonction permettant de regrouper les fonctions pour débuter une partie.
      *
      * @author lilsb
      */
@@ -366,7 +364,7 @@ public class Game extends Observable {
 
     /**
      * Permet d'afficher le nom du ou des gagnants de la partie.
-     * On regarde quel est/ sont les joueurs ayant le plus de points.
+     * On regarde quel est/sont les joueurs ayant le plus de points. On les affiche ensuite.
      *
      * @author lilsb
      */
@@ -399,6 +397,11 @@ public class Game extends Observable {
 
     public void gameManagement() {
     }
+
+    /**
+     * Partie main du programme. On crée une partie on joue et on affiche le gagnant à la fin
+     * @param args
+     */
     public static void main(String[] args){
         Game game = Game.getInstance();
         game.init_Game();

@@ -1,6 +1,6 @@
 package Cards;
 
-public class Inquisition extends Card implements Action{
+public class Inquisition extends Card {
 
     public Inquisition(){
         setName("Inquisition");

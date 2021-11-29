@@ -9,4 +9,7 @@ public interface Action {
 
     public boolean conditionHunt();
 
+    public void playActionCard();
+
+    void playActionCard(Player play);
 }

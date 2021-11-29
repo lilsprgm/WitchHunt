@@ -1,6 +1,6 @@
 package Cards;
 
-public class AngryMob extends Card implements Action{
+public class AngryMob extends Card { // peut etre revoir l'implémentation de l'interface.
 
     public AngryMob(){
         setName("AngryMob");

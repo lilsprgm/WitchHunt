@@ -1,6 +1,6 @@
 package Cards;
 
-public class Wart extends Card implements Action{
+public class Wart extends Card {
 
     public Wart(){
         setName("Wart");

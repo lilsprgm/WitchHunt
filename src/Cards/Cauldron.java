@@ -1,6 +1,6 @@
 package Cards;
 
-public class Cauldron extends Card implements Action{
+public class Cauldron extends Card {
 
     public Cauldron(){
         setName("Cauldron");

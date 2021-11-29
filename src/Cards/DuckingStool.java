@@ -1,6 +1,6 @@
 package Cards;
 
-public class DuckingStool extends Card implements Action{
+public class DuckingStool extends Card{
 
     public DuckingStool(){
         setName("DuckingStool");

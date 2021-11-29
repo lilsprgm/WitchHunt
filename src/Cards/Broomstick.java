@@ -1,6 +1,6 @@
 package Cards;
 
-public class Broomstick extends Card implements Action{
+public class Broomstick extends Card{
 
     public Broomstick(){
         setName("Broomstick");

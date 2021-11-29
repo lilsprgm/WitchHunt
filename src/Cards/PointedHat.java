@@ -1,6 +1,6 @@
 package Cards;
 
-public class PointedHat extends Card implements Action{
+public class PointedHat extends Card{
 
     public PointedHat(){
         setName("PointedHat");
