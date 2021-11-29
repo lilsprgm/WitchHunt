@@ -1,3 +1,4 @@
+package Game_operator;
 
 public class Bot extends Player {
     private int difficulty;

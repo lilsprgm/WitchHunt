@@ -1,4 +1,7 @@
+
 package Cards;
+
+import Game_operator.*;
 
 public class Card implements Action{ //(extends Observable)
     private boolean revealed;
@@ -32,15 +35,14 @@ public class Card implements Action{ //(extends Observable)
     }
 
     @Override
-    public void actionWitch() {
+    public void actionWitch(Player player) {
 
     }
 
     @Override
-    public void actionHunt() {
+    public void actionHunt(Player player) {
 
     }
-
     @Override
     public boolean conditionWitch() {
         return false;
@@ -51,8 +53,4 @@ public class Card implements Action{ //(extends Observable)
         return false;
     }
 
-    @Override
-    public void playActionCard(Player play) {
-
-    }
 }

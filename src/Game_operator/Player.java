@@ -1,3 +1,5 @@
+package Game_operator;
+
 import Cards.*;
 
 import java.util.ArrayList;
@@ -34,6 +36,10 @@ public class Player extends Observable {
     public void setGame(Game instance){
         this.game = instance; // On lie le joueur à une partie.
         // C'est une methode comme une autre on aurait pu aussi passer l'instance de la parrtie comme argument dans la fonction play du joueur
+    }
+
+    public Game getGame(){
+        return this.game;
     }
 
     /**
