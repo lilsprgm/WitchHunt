@@ -6,13 +6,13 @@ import Game_operator.*;
 import java.util.Scanner;
 
 public class Card implements Action{ //(extends Observable)
-    private boolean revealed;
+    private boolean revealed = false;
     protected String name;
     private String actionWitch;
     private String actionHunt;
     private String conditionHunt;
     private String conditionWitch;
-    private Scanner s = new Scanner(System.in);
+    protected Scanner s = new Scanner(System.in);
 
     public void setName(String name) {
         this.name = name;
