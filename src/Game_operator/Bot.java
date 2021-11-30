@@ -1,9 +1,12 @@
 package Game_operator;
 
+import Cards.Card;
+
+import java.util.List;
+
 public class Bot extends Player {
     private int difficulty;
     private Strategy strategy;
-    private String name;
 
     private int getDifficulty() {
         // Automatically generated method. Please do not modify this code.
@@ -25,13 +28,19 @@ public class Bot extends Player {
         this.strategy = value;
     }
 
-    public void setName() {
-
-    }
-
     @Override
     public void chooseIdentity() {
         
+    }
+
+    @Override
+    public Card chooseCardIn(List<Card> Stock) {
+        return null;
+    }
+
+    @Override
+    public void playCard() {
+
     }
 
     @Override

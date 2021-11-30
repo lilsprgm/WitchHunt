@@ -6,19 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Player extends Observable {
-    private int numberOfPoints = 0;
-    private String name;
-    private boolean accused = false;
-    private Identity identity =new Identity();
-    private List<Action> action = new ArrayList<Action> (); // je sais pas a quuoi sert cette variable ?
-    private List<Card> deck = new ArrayList<Card>();
-    private List<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
+public abstract class Player {
+
+    protected int numberOfPoints = 0;
+    protected String name;
+    protected boolean accused = false;
+    protected Identity identity =new Identity();
+    protected List<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
+    protected List<Card> deck = new ArrayList<Card>();
+    protected List<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
 
 
 
-    private Scanner s = new Scanner(System.in);
-    private Game game;
+    protected Scanner s = new Scanner(System.in);
+    protected Game game;
 
     public String toString(){
         return name +" --> Score : " + numberOfPoints;
@@ -33,7 +34,7 @@ public class Player extends Observable {
     }
     /**
      *
-     * @return le nombre de du joueur qui appelle la classe
+     * @return le nombre de joueur qui appelle la classe
      */
     public int getNumberOfPoints() {
         // Automatically generated method. Please do not modify this code.
@@ -44,7 +45,7 @@ public class Player extends Observable {
      * Permet de lier le joueur a une partie.
      * @param instance l'instance de la partie dans laquelle le joueur joue.
      */
-    public void setGame(Game instance){
+    public void setGame(Game instance){ // Pas obligé il me semple que l'instance est retourné directement par getInstance
         this.game = instance; // On lie le joueur à une partie.
         // C'est une methode comme une autre on aurait pu aussi passer l'instance de la parrtie comme argument dans la fonction play du joueur
     }
@@ -124,15 +125,7 @@ public class Player extends Observable {
      * Permet au joueur de choisir le rôle, l'identité qu'il veut prendre.
      * Enregistré grâce à l'instance de la classe Identity du joueur.
      */
-    public void chooseIdentity(){
-        System.out.println("Witch role do you want to take ?\n1- Witch\n2-Hunt\n--> ");
-        if (s.nextInt() == 1){
-            identity.setRole(Role.Witch);
-        }
-        else {
-            identity.setRole(Role.Hunt);
-        }
-    }
+    public abstract void chooseIdentity();
 
     public List<Action> getAction() { // a quoi elle sert ?
         // Automatically generated method. Please do not modify this code.
@@ -177,22 +170,9 @@ public class Player extends Observable {
      * @param Stock le tas de carte dans lequel on veut choisir la carte
      * @return la carte choisie
      */
-    public Card chooseCardIn (List<Card> Stock){ // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
-        System.out.println("Choose a card :");
-        System.out.println(Stock);
-        String chosenCard = s.nextLine();
-        for (Card card : this.deck){
-            if (card.getName() == chosenCard){
-                return card;
-            }
-        }
-    }
+    public abstract Card chooseCardIn (List<Card> Stock); // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
 
-    public void playCard(){
-        System.out.println("Wich card do you want to play");
-        Card cardToBePlayed = chooseCardIn(deck);
-
-    }
+    public abstract void playCard();
 
     /**
      * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.
@@ -202,34 +182,5 @@ public class Player extends Observable {
      * Enfin le dernier cas de figure, c'est le tour du joueur de jouer. Il peut donc soit joueur une carte, soit accuser quelqu'un.
      * La fonction permet le choix et appelle les fonctions permettant ces actions.
      */
-    public void play(){
-        if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch){
-            System.out.println("You can't play : you are a witch !");
-            return;
-        }
-        else if (this.isAccused()){
-            System.out.println("You are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action");
-            int choice = s.nextInt();
-            switch (choice){
-                case 1:
-                    this.getIdentity().setRevealed(true);
-                    break;
-                case  2:
-                    playCard();
-                    break;
-            }
-        }
-        else {
-            System.out.println("What do you want to do ?\n1- Accuse someone \n2-Play a card");
-            int choice = s.nextInt();
-            switch (choice){
-                case 1:
-                    game.accusation(this);
-                case  2:
-                    playCard();
-                    break;
-            }
-
-        }
-    }
+    public abstract void play();
 }
