@@ -1,7 +1,7 @@
 package Game_operator;
 
 import Cards.*;
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.LinkedList;
@@ -120,7 +120,7 @@ public class Game extends Observable {
      *
      * @author lilsb
      */
-    public Card draw(@NotNull List<Card> cards){ // pour piocher
+    public Card draw(/*@NotNull*/ List<Card> cards){ // pour piocher
         Card card = cards.get(0);// on prend toujours l'index 1 car dans tout les cas les cartes sont mélangés
         cards.remove(0);
         return card;
@@ -282,13 +282,22 @@ public class Game extends Observable {
             }
             System.out.println(player);
         }
-        String nameOfChosenPlayer = s.nextLine(); // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
-        // regarder avec la fonction scanner .next(pattern))
-        for (Player player : players){
-            if (player.getName() == nameOfChosenPlayer){
-                return player;
+        String nameOfChosenPlayer = s.nextLine();
+        do{
+            for (Player player : players){
+                if (player.getName() == nameOfChosenPlayer){
+                    return player;
+                }
+                else{
+                    nameOfChosenPlayer = s.nextLine();
+                }
             }
-        }
+        }while(true);
+
+        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
+        // regarder avec la fonction scanner .next(pattern))
+        ///////////////// Je pense que ca devrait marche à voir
+
     }
 
     /**
