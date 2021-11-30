@@ -11,6 +11,7 @@ public class HookedNose extends Card {
 
     @Override
     public void actionWitch(Player player) {
+        player.getGame().chooseNextPlayer(player.getGame().chooseAPlayer(player));
 
     }
 
