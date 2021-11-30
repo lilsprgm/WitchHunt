@@ -9,8 +9,8 @@ import java.util.LinkedList;
 public class Game extends Observable {
 
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
-    private int numberOfPlayer=0;
-    private int numberOfBot;
+    private int numberOfPlayerIRL=0;
+    private int numberOfBot=0;
     private Administrator admnistrator;
     
     private LinkedList<Player> players = new LinkedList<Player> ();
@@ -32,12 +32,12 @@ public class Game extends Observable {
 
     public int getNumberOfPlayer() {
         // Automatically generated method. Please do not modify this code.
-        return this.numberOfPlayer;
+        return this.numberOfPlayerIRL;
     }
 
     public void setNumberOfPlayer(int value) {
         // Automatically generated method. Please do not modify this code.
-        this.numberOfPlayer = value;
+        this.numberOfPlayerIRL = value;
     }
 
     /* private Game game;
@@ -142,37 +142,25 @@ public class Game extends Observable {
      *
      */
     public void initPlayers(){ // A faire : permettre de modifier la difficulté des bot
-        int nombreJoueur=0;
-        int nombreBot=0;
-        Player player_temp = new Player();
-
         //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
         do {
             System.out.print("Veuillez entrer le nombre de Joueur dans la Partie (6 joueurs max) : ");
-            nombreJoueur = s.nextInt();
-        }while(nombreJoueur > 6);
-        numberOfPlayer=nombreJoueur;
-        if(nombreJoueur<6) {
+            numberOfPlayerIRL = s.nextInt();
+        }while(numberOfPlayerIRL > 6);
+        if(numberOfPlayerIRL<6) {
             do {
                 System.out.print("Veuillez entrer le nombre de Bot dans la Partie : ");
-                nombreBot = s.nextInt();
-            } while (nombreBot > 6 - nombreJoueur);
-            numberOfBot=nombreBot;
+                numberOfBot = s.nextInt();
+            } while ((numberOfBot+numberOfPlayerIRL) > 6 || (numberOfBot+numberOfPlayerIRL)<3);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         s.nextLine();                   // Je pense qu'il faut supprimer le ENTR précédent
-        for(int i=1;i<nombreJoueur+1;i++){
+        for(int i=1;i<numberOfPlayerIRL+1;i++){
             System.out.print("Entrez le nom du Joueur n°"+i+" :");
-            players.add(i-1,new Player());
-            player_temp = players.get(i-1);
-            player_temp.setName(s.nextLine());
-            player_temp.setGame(instance);
+            players.add(i-1,new PlayerIRL());
+            players.get(i-1).setName(s.nextLine());
+            players.get(i-1).setGame(instance);
         }
-        for(Iterator<Player> p = players.iterator(); p.hasNext();){
-            player_temp = p.next();
-            System.out.println(player_temp.getName());
-        }
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -198,7 +186,7 @@ public class Game extends Observable {
         for (Player player : players){
             player.clearDeck();
         }
-        while (stockPile.size() - (numberOfPlayer + numberOfBot) >= 0){
+        while (stockPile.size() - (numberOfPlayerIRL + numberOfBot) >= 0){
             for (Player player : players){
                 player.addCardTo(player.getDeck(), draw(stockPile));
             }
@@ -206,6 +194,7 @@ public class Game extends Observable {
         for (Player player : players){
             System.out.println(player.getName() + " -->");
             player.chooseIdentity();
+            player.getIdentity().setRevealed(false); // je croit qu'il faut remettre les roles en place
         }
     }
 
@@ -275,24 +264,29 @@ public class Game extends Observable {
      *
      * @author lilsb
      */
-    public Player chooseAPlayer(Player exception){
+    public Player chooseAPlayer(Player exception){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
+
+        int i=0; boolean verif=false;
         for (Player player : players){
             if (player == exception){
                 continue;
             }
-            System.out.println(player);
+            i = players.indexOf(player);
+            System.out.println(i+" - "+ player);
         }
-        String nameOfChosenPlayer = s.nextLine();
+        int indexOfChosenPlayer = s.nextInt();
         do{
             for (Player player : players){
-                if (player.getName() == nameOfChosenPlayer){
-                    return player;
-                }
-                else{
-                    nameOfChosenPlayer = s.nextLine();
+                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(exception)){
+                    i = players.indexOf(player);
+                    verif = true;
                 }
             }
-        }while(true);
+            if(!verif){
+                indexOfChosenPlayer = s.nextInt();
+            }
+        }while(!verif);
+        return players.get(i);
 
         // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
         // regarder avec la fonction scanner .next(pattern))
