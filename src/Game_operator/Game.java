@@ -87,12 +87,6 @@ public class Game extends Observable {
         // Automatically generated method. Please do not modify this code.
         return this.stockPile;
     }
-    /*
-    public void setCards(List<Card> value) {
-        // Automatically generated method. Please do not modify this code.
-        this.cards = value;
-    }
-*/
 
     /**
      * intiStockPile est la fonction qui permet d'instancier les cartes action du jeu.
@@ -116,7 +110,7 @@ public class Game extends Observable {
         stockPile.add(new Wart());
         stockPile.add(new PetNewt());
         stockPile.add(new Inquisition());
-        suffle(stockPile);
+        shuffle(stockPile);
     }
 
     /**
@@ -139,11 +133,12 @@ public class Game extends Observable {
      *
      * @author lilsb
      */
-    public void suffle(List<Card> cards){   // Pour être plus clair et rapide si on a besoin de melanger n'importe quoi par ex la main d'un joueur
+    public void shuffle(List<Card> cards){   // Pour être plus clair et rapide si on a besoin de melanger n'importe quoi par ex la main d'un joueur
         Collections.shuffle(cards);
     }
 
     /**
+     *
      *
      */
     public void initPlayers(){ // A faire : permettre de modifier la difficulté des bot
@@ -205,7 +200,7 @@ public class Game extends Observable {
         }
         while (stockPile.size() - (numberOfPlayer + numberOfBot) >= 0){
             for (Player player : players){
-                player.addCardToDeck(draw(stockPile));
+                player.addCardTo(player.getDeck(), draw(stockPile));
             }
         }
         for (Player player : players){

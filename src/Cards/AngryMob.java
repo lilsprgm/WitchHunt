@@ -6,6 +6,11 @@ public class AngryMob extends Card implements Action{
 
     public AngryMob(){
         setName("AngryMob");
+        setActionHunt("Reveal another player's identity\nIf hhe is a witch you win 2 points else you lose 2 points");
+        setActionWitch("You take next turn");
+        setConditionHunt("Only available if you have been revealed as a Villager");
+        setConditionWitch("");
+
     }
 
     @Override

@@ -1,13 +1,16 @@
 package Cards;
 
+import Game_operator.Player;
+
 public class HookedNose extends Card {
 
     public HookedNose(){
         setName("HookedNose");
+        setActionHunt("Choose next player\n Before their turn take a card from its hand and add it to yours");
     }
 
     @Override
-    public void actionWitch() {
+    public void actionWitch(Player player) {
 
     }
 
@@ -17,12 +20,12 @@ public class HookedNose extends Card {
     }
 
     @Override
-    public boolean conditionWitch() {
-
+    public boolean conditionWitch(Player player) {
+        return true;
     }
 
     @Override
-    public boolean conditionHunt() {
-
+    public boolean conditionHunt(Player player) {
+        return true;
     }
 }

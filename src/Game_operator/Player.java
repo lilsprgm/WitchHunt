@@ -13,6 +13,10 @@ public class Player extends Observable {
     private Identity identity =new Identity();
     private List<Action> action = new ArrayList<Action> (); // je sais pas a quuoi sert cette variable ?
     private List<Card> deck = new ArrayList<Card>();
+    private List<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
+
+
+
     private Scanner s = new Scanner(System.in);
     private Game game;
 
@@ -20,6 +24,13 @@ public class Player extends Observable {
         return name +" --> Score : " + numberOfPoints;
     }
 
+    public List<Card> getTable() {
+        return table;
+    }
+
+    public void setTable(List<Card> table) {
+        this.table = table;
+    }
     /**
      *
      * @return le nombre de du joueur qui appelle la classe
@@ -148,18 +159,38 @@ public class Player extends Observable {
         deck.removeAll(deck);
      }
 
+     public void discardCardFrom(List<Card> stock ,Card card){
+         stock.remove(card);
+     }
     /**
-     * Permet d'ajouter une carte à la main du joueur
+     * Permet d'ajouter une carte dans un tas de carte(n'importe lequel). On mélange le tas à la fin.
+     * @param stock la "pile de carte dans laquelle on veut ajouter une carte.
      * @param card l'instance de la carte que l'on veut ajouter
      */
-    public void addCardToDeck (Card card){
-        deck.add(card);
+    public void addCardTo(List<Card> stock , Card card){
+        stock.add(card);
+        this.getGame().shuffle(stock);
     }
 
-    public void giveCard (){
-
+    /**
+     * Permet de  choisir un carte dans un tas de carte (n'importe lequel).
+     * @param Stock le tas de carte dans lequel on veut choisir la carte
+     * @return la carte choisie
+     */
+    public Card chooseCardIn (List<Card> Stock){ // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
+        System.out.println("Choose a card :");
+        System.out.println(Stock);
+        String chosenCard = s.nextLine();
+        for (Card card : this.deck){
+            if (card.getName() == chosenCard){
+                return card;
+            }
+        }
     }
+
     public void playCard(){
+        System.out.println("Wich card do you want to play");
+        Card cardToBePlayed = chooseCardIn(deck);
 
     }
 
