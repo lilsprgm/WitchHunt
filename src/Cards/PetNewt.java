@@ -1,6 +1,5 @@
 package Cards;
 
-import Game_operator.Game;
 import Game_operator.Player;
 
 public class PetNewt extends Card {
@@ -25,9 +24,9 @@ public class PetNewt extends Card {
      */
     @Override
     public void actionHunt(Player player) {
-        Game g = player.getGame();int i=1;
+        int i=1;
         System.out.println("Choose a player from whom you want to take a revealed Card : \n");
-        for(Player p : g.getPlayers()){
+        for(Player p : player.getGame().getPlayers()){
             if (p == player ){
                 continue;
             }
@@ -35,7 +34,7 @@ public class PetNewt extends Card {
             i++;
         }
 
-        player.addCardTo(player.getDeck(), player.chooseCardIn(g.chooseAPlayer(player).getTable()) );
+        player.addCardTo(player.getDeck(), player.chooseCardIn(player.getGame().chooseAPlayer(player).getTable()) );
     }
 
     @Override
