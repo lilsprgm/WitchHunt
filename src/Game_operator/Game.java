@@ -15,6 +15,13 @@ public class Game extends Observable {
     
     private LinkedList<Player> players = new LinkedList<Player> ();
     private Player chosenNextPlayer = null;
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    private Player currentPlayer = null;
+
     private static List<Card> stockPile = new ArrayList<Card> (); //stock pile = pioche
 
     private static Game instance = null;
@@ -327,7 +334,8 @@ public class Game extends Observable {
         Player currentPLayer = players.get(index);
         while (!endOfRound()){
             System.out.println("Your turn "+ currentPLayer.getName());
-           currentPLayer.play();
+            currentPLayer = currentPlayer;
+            currentPLayer.play();
             if (chosenNextPlayer != null){
                currentPLayer = chosenNextPlayer;
                chooseNextPlayer(null);

@@ -22,6 +22,16 @@ public class AngryMob extends Card implements Action{
     public void actionHunt(Player player) {
         System.out.println("You can reveal another player's identity");
         Player choosenPlayer = player.getGame().chooseAPlayer(player);
+        boolean containsBroomstick = false;
+        do{
+            containsBroomstick = false;
+            for (Card card : choosenPlayer.getTable()){
+                if (card instanceof Broomstick){
+                    containsBroomstick = true;
+                    break;
+                }
+            }
+        }while (containsBroomstick);
         choosenPlayer.getIdentity().setRevealed(true);
         if (choosenPlayer.getIdentity().getRole() == Role.Hunt){
             System.out.println(" You have revealed a Hunt. You loose 2 points");
