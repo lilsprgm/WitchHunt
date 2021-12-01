@@ -21,12 +21,14 @@ public class AngryMob extends Card implements Action{
     @Override
     public void actionHunt(Player player) {
         System.out.println("You can reveal another player's identity");
-        Player choosenPlayer = player.getGame().chooseAPlayer(player);
+        Player choosenPlayer;
         boolean containsBroomstick = false;
         do{
+            choosenPlayer = player.getGame().chooseAPlayer(player);
             containsBroomstick = false;
             for (Card card : choosenPlayer.getTable()){
                 if (card instanceof Broomstick){
+                    System.out.println("Choose another player. You can't choose him he has a special card");
                     containsBroomstick = true;
                     break;
                 }
