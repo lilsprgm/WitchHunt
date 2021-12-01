@@ -15,7 +15,11 @@ public class HookedNose extends Card {
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());
-        player.addCardTo(player.getDeck(), player.chooseCardIn(player.getGame().getCurrentPlayer().getDeck()));//on ajoute une carte au joueur
+        Player currentPlayer = player.getGame().getCurrentPlayer();
+        Card chosencard = player.chooseCardIn(currentPlayer.getDeck());
+        player.addCardTo(player.getDeck(), chosencard);
+        currentPlayer.discardCardFrom(currentPlayer.getDeck(), chosencard);
+        //on ajoute une carte au joueur
         //on la choisit dans la main du joueur qui joue actuellement (donc qui a accusé). On y accede a travers a partie du joueur,
         // la variable current player et on obtient le deck avec getDeck().
     }
