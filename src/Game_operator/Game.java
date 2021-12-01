@@ -16,9 +16,7 @@ public class Game extends Observable {
     private LinkedList<Player> players = new LinkedList<Player> ();
     private Player chosenNextPlayer = null;
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
+    private Player protectedPlayer = null;
 
     private Player currentPlayer = null;
 
@@ -45,6 +43,18 @@ public class Game extends Observable {
     public void setNumberOfPlayer(int value) {
         // Automatically generated method. Please do not modify this code.
         this.numberOfPlayerIRL = value;
+    }
+
+    public Player getProtectedPlayer() {
+        return protectedPlayer;
+    }
+
+    public void setProtectedPlayer(Player protectedPlayer) {
+        this.protectedPlayer = protectedPlayer;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /* private Game game;
@@ -192,6 +202,7 @@ public class Game extends Observable {
         initStockPile();
         for (Player player : players){
             player.clearDeck();
+            player.getIdentity().setRevealed(false);
         }
         while (stockPile.size() - (numberOfPlayerIRL + numberOfBot) >= 0){
             for (Player player : players){
@@ -310,10 +321,15 @@ public class Game extends Observable {
      */
     public void accusation(Player accusator){ // on transmet en parametre d'entré le joueur qui accuse
         System.out.println("Who do you want to accuse ?");
-        Player accusedPlayer = chooseAPlayer(accusator);
+        Player accusedPlayer;
+        do {
+            accusedPlayer = chooseAPlayer(accusator);
+        }while ((accusedPlayer == protectedPlayer) || accusedPlayer == accusator);// pb si le joueur protégé est le seul à pouvoir être accusé
+        // solution peut etre lorsque l'on set le playerprotected faire une verif
         accusedPlayer.setAccused(true);
         accusedPlayer.play();
         accusedPlayer.setAccused(false);
+        setProtectedPlayer(null);
         if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
             accusator.addPoints(1);
             System.out.println(accusator.getName() + " won 1 point");

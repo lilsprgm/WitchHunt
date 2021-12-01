@@ -19,7 +19,7 @@ public class Cauldron extends Card {
      */
     @Override
     public void actionWitch(Player player) {
-        System.out.println(getActionWitch());
+        System.out.println(getActionWitch());  // peut-etre utiliser une version avec draw
         int  range = player.getGame().getCurrentPlayer().getDeck().size()+1;
         int i = (int)(Math.random()*range);
         Card randomCard = player.getGame().getCurrentPlayer().getDeck().get(i);

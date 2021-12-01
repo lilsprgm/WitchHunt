@@ -33,7 +33,7 @@ public class PlayerIRL extends Player {
         System.out.println("Choose a card :");
         System.out.println(Stock);
         String chosenCard = s.nextLine();
-        for (Card card : this.deck) {
+        for (Card card : Stock) {
             if (card.getName() == chosenCard) {
                 return card;
             }
@@ -75,7 +75,13 @@ public class PlayerIRL extends Player {
             int choice = s.nextInt();
             switch (choice) {
                 case 1:
-                    game.accusation(this);
+                    if (this.game.getProtectedPlayer() == null){
+                        game.accusation(this);
+                    }
+                    else{
+                        game.accusation();
+                    }
+
                 case 2:
                     playCard();
                     break;
