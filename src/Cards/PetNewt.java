@@ -53,6 +53,7 @@ public class PetNewt extends Card {
      */
     @Override
     public boolean conditionHunt(Player player) {
+        System.out.println(getConditionHunt());
         for(Player p : player.getGame().getPlayers()){
             if(p.getTable().size()>0){
                 return true;
