@@ -16,7 +16,7 @@ public class PlayerIRL extends Player {
      * Enregistré grâce à l'instance de la classe Identity du joueur.
      */
     public void chooseIdentity() {
-        System.out.println("Witch role do you want to take ?\n1- Witch\n2-Hunt\n--> ");
+        System.out.println("Witch role do you want to take ?\n1- Witch\n2- Hunt\n--> ");
         if (s.nextInt() == 1) {
             identity.setRole(Role.Witch);
         } else {
@@ -29,22 +29,32 @@ public class PlayerIRL extends Player {
      * @param Stock le tas de carte dans lequel on veut choisir la carte
      * @return la carte choisie
      */
-    public Card chooseCardIn(List<Card> Stock) { // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
+    public Card chooseCardIn(List<Card> Stock) {
+        int i;
         System.out.println("Choose a card :");
-        System.out.println(Stock);
-        String chosenCard = s.nextLine();
-        for (Card card : Stock) {
-            if (card.getName() == chosenCard) {
-                return card;
-            }
+        for (Card card : Stock){
+            i = Stock.indexOf(card)+1;
+            System.out.println(i+" - "+ card);
         }
-        return null;
+        int chosenCard = s.nextInt();
+        while(chosenCard == 0 || chosenCard > Stock.size()){
+            chosenCard = s.nextInt();
+        }
+        return Stock.get(chosenCard-1);
     }
 
     public void playCard() {
         System.out.println("Wich card do you want to play");
         Card cardToBePlayed = chooseCardIn(deck);
-
+        if(accused && cardToBePlayed.conditionWitch(this)){
+            cardToBePlayed.actionWitch(this);
+            this.addCardTo(this.table,cardToBePlayed);
+        }
+        else if(!accused && cardToBePlayed.conditionHunt(this)){
+            cardToBePlayed.actionHunt(this);
+            this.addCardTo(this.table,cardToBePlayed);
+        }
+        this.getGame().chooseNextPlayer(this);
     }
 
     /**
@@ -60,30 +70,25 @@ public class PlayerIRL extends Player {
             System.out.println("You can't play : you are a witch !");
             return;
         } else if (this.isAccused()) {
-            System.out.println("You are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action");
+            System.out.println(this.getName() + " you are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
             int choice = s.nextInt();
             switch (choice) {
                 case 1:
                     this.getIdentity().setRevealed(true);
                     break;
                 case 2:
-                    playCard();
+                    this.playCard();
                     break;
             }
         } else {
-            System.out.println("What do you want to do ?\n1- Accuse someone \n2-Play a card");
+            System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
             int choice = s.nextInt();
             switch (choice) {
                 case 1:
-                    if (this.game.getProtectedPlayer() == null){
-                        game.accusation(this);
-                    }
-                    else{
-                        game.accusation();
-                    }
-
+                    game.accusation(this);
+                    break;
                 case 2:
-                    playCard();
+                    this.playCard();
                     break;
             }
         }
