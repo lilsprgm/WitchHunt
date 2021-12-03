@@ -8,12 +8,13 @@ public class EvilEye extends Card{
         setActionWitch(getActionHunt());
     }
 
+    // Ici le Joueur sera protégé du Joueur qu'il aura choisi et uniquement lui
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());
         Player chosenPlayer = player.getGame().chooseAPlayer(player);
         player.getGame().chooseNextPlayer(chosenPlayer);
-        player.getGame().setProtectedPlayer(player);
+        player.setProtectedPlayer(player.getGame().getPlayers().indexOf(chosenPlayer));
     }
 
     @Override
@@ -21,7 +22,7 @@ public class EvilEye extends Card{
         System.out.println(getActionHunt());
         Player chosenPlayer = player.getGame().chooseAPlayer(player);
         player.getGame().chooseNextPlayer(chosenPlayer);
-        player.getGame().setProtectedPlayer(player);
+        player.setProtectedPlayer(player.getGame().getPlayers().indexOf(chosenPlayer));
     }
 
     @Override
