@@ -15,7 +15,7 @@ public abstract class Player {
     protected List<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
     protected List<Card> deck = new ArrayList<Card>();
     protected List<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
-
+    protected int protected_who; // Le joueur sera protégé du numéro du Joueur dans la liste
 
 
     protected Scanner s = new Scanner(System.in);
@@ -66,7 +66,16 @@ public abstract class Player {
         // Automatically generated method. Please do not modify this code.
         this.numberOfPoints = value;
     }
+
+
 */
+    public int getProtectedPlayer() {
+     return this.protected_who;
+ }
+
+    public void setProtectedPlayer(int who) {
+        this.protected_who= who;
+    }
 
     /**
      *
@@ -127,16 +136,6 @@ public abstract class Player {
      */
     public abstract void chooseIdentity();
 
-    public List<Action> getAction() { // a quoi elle sert ?
-        // Automatically generated method. Please do not modify this code.
-        return this.action;
-    }
-
-    public void setAction(List<Action> value) {// a quoi elle sert ?
-        // Automatically generated method. Please do not modify this code.
-        this.action = value;
-    }
-
     /**
      * Permet de récupérer la main du joueur, contenant ses cartes
      * @return la variable deck, une collection d'instances de Card.
@@ -154,6 +153,7 @@ public abstract class Player {
 
      public void discardCardFrom(List<Card> stock ,Card card){
          stock.remove(card);
+         this.getGame().getDiscardedCard().add(card);
      }
     /**
      * Permet d'ajouter une carte dans un tas de carte(n'importe lequel). On mélange le tas à la fin.
