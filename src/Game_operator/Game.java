@@ -16,11 +16,10 @@ public class Game extends Observable {
     private LinkedList<Player> players = new LinkedList<Player> ();
     private Player chosenNextPlayer = null;
 
-    private Player protectedPlayer = null;
-
     private Player currentPlayer = null;
 
     private static List<Card> stockPile = new ArrayList<Card> (); //stock pile = pioche
+    private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
 
@@ -35,6 +34,10 @@ public class Game extends Observable {
         return Game.instance;
     }
 
+    public static List<Card> getDiscardedCard() {
+        return discardedCard;
+    }
+
     public int getNumberOfPlayer() {
         // Automatically generated method. Please do not modify this code.
         return this.numberOfPlayerIRL;
@@ -45,29 +48,9 @@ public class Game extends Observable {
         this.numberOfPlayerIRL = value;
     }
 
-    public Player getProtectedPlayer() {
-        return protectedPlayer;
-    }
-
-    public void setProtectedPlayer(Player protectedPlayer) {
-        this.protectedPlayer = protectedPlayer;
-    }
-
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
-    /* private Game game;
-
-    private Game getGame() {
-        // Automatically generated method. Please do not modify this code.
-        return this.game;
-    }                           Je sais pas trop ca sert à quoi comme méthode ????
-
-    private void setGame(Game value) {
-        // Automatically generated method. Please do not modify this code.
-        this.game = value;
-    }*/
 
     public int getNumberOfBot() {
         // Automatically generated method. Please do not modify this code.
@@ -141,7 +124,6 @@ public class Game extends Observable {
         Card card = cards.get(0);// on prend toujours l'index 1 car dans tout les cas les cartes sont mélangés
         cards.remove(0);
         return card;
-
     }
 
     /**
@@ -178,6 +160,11 @@ public class Game extends Observable {
             players.get(i-1).setName(s.nextLine());
             players.get(i-1).setGame(instance);
         }
+        for(int i=0;i<numberOfBot;i++){
+            players.add(i,new Bot());
+            players.get(i).setName("Bot"+i+1);
+            players.get(i).setGame(instance);
+        }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -212,7 +199,8 @@ public class Game extends Observable {
         for (Player player : players){
             System.out.println(player.getName() + " -->");
             player.chooseIdentity();
-            player.getIdentity().setRevealed(false); // je croit qu'il faut remettre les roles en place
+            player.getIdentity().setRevealed(false);
+            player.setProtectedPlayer(100);
         }
     }
 
@@ -286,25 +274,28 @@ public class Game extends Observable {
 
         int i=0; boolean verif=false;
         for (Player player : players){
-            if (player == exception){
+            if (player == exception || player.getIdentity().getRole() == Role.Witch){
                 continue;
             }
             i = players.indexOf(player);
             System.out.println(i+" - "+ player);
         }
         int indexOfChosenPlayer = s.nextInt();
+        while(indexOfChosenPlayer>=players.size()){
+            indexOfChosenPlayer = s.nextInt();
+        }
         do{
-            for (Player player : players){
-                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(exception)){
-                    i = players.indexOf(player);
-                    verif = true;
-                }
+            if(indexOfChosenPlayer != players.indexOf(exception) & !players.get(indexOfChosenPlayer).getIdentity().isRevealed()) {
+                verif = true;
             }
+            else if (players.get(indexOfChosenPlayer).getIdentity().getRole() == Role.Witch & players.get(indexOfChosenPlayer).getIdentity().isRevealed()){
+                    System.out.println("He is a revealed witch, choose someone else !");
+                } // Rajouter la possibilité de pouvoir choisir une Witch dans le cas d'un vol de carte
             if(!verif){
                 indexOfChosenPlayer = s.nextInt();
             }
         }while(!verif);
-        return players.get(i);
+        return players.get(indexOfChosenPlayer);
 
         // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
         // regarder avec la fonction scanner .next(pattern))
@@ -322,17 +313,23 @@ public class Game extends Observable {
     public void accusation(Player accusator){ // on transmet en parametre d'entré le joueur qui accuse
         System.out.println("Who do you want to accuse ?");
         Player accusedPlayer;
-        do {
+        accusedPlayer = chooseAPlayer(accusator);
+        while(accusedPlayer.getProtectedPlayer() == players.indexOf(accusator)){
+            System.out.printf("This player is protected from you !\nWho do you want to accuse ?");
             accusedPlayer = chooseAPlayer(accusator);
-        }while ((accusedPlayer == protectedPlayer) || accusedPlayer == accusator);// pb si le joueur protégé est le seul à pouvoir être accusé
+        }
         // solution peut etre lorsque l'on set le playerprotected faire une verif
         accusedPlayer.setAccused(true);
         accusedPlayer.play();
         accusedPlayer.setAccused(false);
-        setProtectedPlayer(null);
         if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
             accusator.addPoints(1);
-            System.out.println(accusator.getName() + " won 1 point");
+            System.out.println(accusedPlayer.getName()+" was a Witch !\n"+accusator.getName()+" won 1 point\n");
+            chooseNextPlayer(accusator);
+        }
+        if(accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Hunt){
+            System.out.println(accusedPlayer.getName()+" was a Hunt !\n"+accusator.getName()+" won 0 point\n");
+            chooseNextPlayer(accusedPlayer);
         }
 
     }
@@ -346,27 +343,12 @@ public class Game extends Observable {
      * @author lilsb
      */
     public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
-        int index = 0;
-        Player currentPLayer = players.get(index);
+        this.currentPlayer = players.get(0);
         while (!endOfRound()){
-            System.out.println("Your turn "+ currentPLayer.getName());
-            currentPLayer = currentPlayer;
-            currentPLayer.play();
-            if (chosenNextPlayer != null){
-               currentPLayer = chosenNextPlayer;
-               chooseNextPlayer(null);
-               index = players.indexOf(currentPLayer);
-               continue;
-            }
-            else if (currentPLayer == players.getLast()){
-                currentPLayer = players.getFirst();
-                index = 0;
-                continue;
-            }
-            else {
-                index++;
-                currentPLayer = players.get(index);
-            }
+            System.out.println("Your turn "+ this.currentPlayer.getName());
+            this.currentPlayer.play();
+            this.currentPlayer = chosenNextPlayer;
+            System.out.println(chosenNextPlayer);
         }
     }
 
