@@ -4,7 +4,7 @@ import Cards.Card;
 
 import java.util.List;
 
-public class Bot extends Player implements Strategy {
+public class Bot extends Player {
     private int difficulty;
     private Strategy strategy;
 
