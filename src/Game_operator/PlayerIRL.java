@@ -49,12 +49,17 @@ public class PlayerIRL extends Player {
         if(accused && cardToBePlayed.conditionWitch(this)){
             cardToBePlayed.actionWitch(this);
             this.addCardTo(this.table,cardToBePlayed);
+            this.deck.remove(cardToBePlayed);
         }
         else if(!accused && cardToBePlayed.conditionHunt(this)){
             cardToBePlayed.actionHunt(this);
             this.addCardTo(this.table,cardToBePlayed);
+            this.deck.remove(cardToBePlayed);
         }
-        this.getGame().chooseNextPlayer(this);
+        else {
+            System.out.println("You can't play this card");
+            this.getGame().chooseNextPlayer(this);
+        }
     }
 
     /**

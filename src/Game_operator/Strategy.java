@@ -1,6 +1,6 @@
 package Game_operator;
 
-public abstract class Strategy {
+public interface Strategy {
     public abstract void play();
 
 }

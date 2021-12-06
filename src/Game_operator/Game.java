@@ -18,7 +18,7 @@ public class Game extends Observable {
 
     private Player currentPlayer = null;
 
-    private static List<Card> stockPile = new ArrayList<Card> (); //stock pile = pioche
+    private static List<Card> stockPile = new ArrayList<Card> (); //stock pile =  // utre type de variable
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
