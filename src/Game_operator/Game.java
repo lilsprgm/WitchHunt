@@ -13,12 +13,11 @@ public class Game extends Observable {
     private int numberOfBot=0;
     private Administrator admnistrator;
     
-    private LinkedList<Player> players = new LinkedList<Player> ();
+    private LinkedList<Player> players = new LinkedList<Player> ();     // Utiliser ArrayList pour les Joueurs
     private Player chosenNextPlayer = null;
-
     private Player currentPlayer = null;
 
-    private static List<Card> stockPile = new ArrayList<Card> (); //stock pile =  // utre type de variable
+    private static List<Card> stockPile = new ArrayList<Card> (); // Utiliser les Liste QUEUE à la place
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
