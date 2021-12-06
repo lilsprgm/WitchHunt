@@ -274,7 +274,7 @@ public class Game extends Observable {
 
         int i=0; boolean verif=false;
         for (Player player : players){
-            if (player == exception || player.getIdentity().getRole() == Role.Witch){
+            if (player == exception){
                 continue;
             }
             i = players.indexOf(player);
