@@ -11,14 +11,13 @@ public class Game extends Observable {
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayerIRL=0;
     private int numberOfBot=0;
-    private Administrator admnistrator;
     
     private LinkedList<Player> players = new LinkedList<Player> ();
     private Player chosenNextPlayer = null;
 
     private Player currentPlayer = null;
 
-    private static List<Card> stockPile = new ArrayList<Card> (); //stock pile =  // utre type de variable
+    private static List<Card> stockPile = new ArrayList<Card> (); //stock pile = pioche
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
@@ -62,15 +61,6 @@ public class Game extends Observable {
         this.numberOfBot = value;
     }
 
-    public Administrator getAdmnistrator() {
-        // Automatically generated method. Please do not modify this code.
-        return this.admnistrator;
-    }
-
-    public void setAdmnistrator(Administrator value) {
-        // Automatically generated method. Please do not modify this code.
-        this.admnistrator = value;
-    }
 
     public List<Player> getPlayers() {
         // Automatically generated method. Please do not modify this code.

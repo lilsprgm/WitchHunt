@@ -45,25 +45,6 @@ public class PlayerIRL extends Player {
         return Stock.get(chosenCard-1);
     }
 
-    public void playCard() {
-        System.out.println("Wich card do you want to play");
-        Card cardToBePlayed = chooseCardIn(deck);
-        if
-        if(accused && cardToBePlayed.conditionWitch(this)){
-            cardToBePlayed.actionWitch(this);
-            this.addCardTo(this.table,cardToBePlayed);
-            this.deck.remove(cardToBePlayed);
-        }
-        else if(!accused && cardToBePlayed.conditionHunt(this)){
-            cardToBePlayed.actionHunt(this);
-            this.addCardTo(this.table,cardToBePlayed);
-            this.deck.remove(cardToBePlayed);
-        }
-        else {
-            System.out.println("You can't play this card");
-            this.getGame().chooseNextPlayer(this);
-        }
-    }
 
     /**
      * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.

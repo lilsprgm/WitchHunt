@@ -207,5 +207,20 @@ public abstract class Player {
 
     }
 
+
+    public void playCard() {
+        System.out.println("Wich card do you want to play");
+        Card cardToBePlayed = chooseCardIn(deck);
+        if(accused && cardToBePlayed.conditionWitch(this)){
+            cardToBePlayed.actionWitch(this);
+            this.addCardTo(this.table,cardToBePlayed);
+        }
+        else if(!accused && cardToBePlayed.conditionHunt(this)){
+            cardToBePlayed.actionHunt(this);
+            this.addCardTo(this.table,cardToBePlayed);
+        }
+        this.getGame().chooseNextPlayer(this);
+    }
+
     public abstract Player chooseAPlayer();
 }
