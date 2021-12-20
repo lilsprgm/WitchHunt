@@ -297,9 +297,6 @@ public class Game extends Observable {
         }while(!verif);
         return players.get(indexOfChosenPlayer);
 
-        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
-        // regarder avec la fonction scanner .next(pattern))
-        ///////////////// Je pense que ca devrait marche à voir
 
     }
 
@@ -332,7 +329,6 @@ public class Game extends Observable {
             chooseNextPlayer(accusedPlayer);
         }
 
-    }
 
     /**
      * Permet la gestion d'un round complet. Tant que le round n'est pas fini cette fonction permet de gérer l'ordre de jeu ses joueurs.

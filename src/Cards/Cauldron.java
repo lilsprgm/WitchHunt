@@ -51,7 +51,7 @@ public class Cauldron extends Card {
             }
         }
         else{
-            player.getGame().chooseNextPlayer(player.getGame().chooseAPlayer(player));
+            player.getGame().chooseNextPlayer(player.chooseAPlayer());
         }
     }
     @Override

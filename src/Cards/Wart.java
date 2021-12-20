@@ -29,7 +29,7 @@ public class Wart extends Card {
     @Override
     public void actionHunt(Player player) {
         System.out.println(getActionHunt());
-        player.getGame().chooseNextPlayer(player.getGame().chooseAPlayer(player));
+        player.getGame().chooseNextPlayer(player.chooseAPlayer());
     }
 
     @Override

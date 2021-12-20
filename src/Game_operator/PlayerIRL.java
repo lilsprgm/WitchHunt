@@ -1,6 +1,8 @@
 package Game_operator;
 
 import Cards.*;
+
+import java.util.LinkedList;
 import java.util.List;
 
 public class PlayerIRL extends Player {
@@ -46,6 +48,7 @@ public class PlayerIRL extends Player {
     public void playCard() {
         System.out.println("Wich card do you want to play");
         Card cardToBePlayed = chooseCardIn(deck);
+        if
         if(accused && cardToBePlayed.conditionWitch(this)){
             cardToBePlayed.actionWitch(this);
             this.addCardTo(this.table,cardToBePlayed);
@@ -92,10 +95,56 @@ public class PlayerIRL extends Player {
                 case 1:
                     game.accusation(this);
                     break;
+                    if (this.game.getProtectedPlayer() == null){
+                        accusation();
+                    }
+                    else{
+                        accusation();
+                    }
+
                 case 2:
                     this.playCard();
                     break;
             }
         }
+    }
+
+    /**
+     * Permet de choisir le nom du joueur suivant.
+     * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
+     * @return le joueur choisi.
+     *
+     * @author lilsb
+     */
+    public Player chooseAPlayer(){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
+
+        int i=0;
+        boolean verif=false;
+        List<Player> players = game.getPlayers();
+        for (Player player : players){
+            if (player == this){
+                continue;
+            }
+            i = players.indexOf(player);
+            System.out.println(i+" - "+ player);
+        }
+        int indexOfChosenPlayer = s.nextInt();
+        do{
+            for (Player player : players){
+                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(this)){
+                    i = players.indexOf(player);
+                    verif = true;
+                }
+            }
+            if(!verif){
+                indexOfChosenPlayer = s.nextInt();
+            }
+        }while(!verif);
+        return players.get(i);
+
+        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
+        // regarder avec la fonction scanner .next(pattern))
+        ///////////////// Je pense que ca devrait marche à voir
+
     }
 }

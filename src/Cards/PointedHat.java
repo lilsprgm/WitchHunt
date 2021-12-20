@@ -25,7 +25,7 @@ public class PointedHat extends Card{
         chosenCard.setRevealed(false);
         player.addCardTo(player.getDeck(), chosenCard);
         player.discardCardFrom(player.getTable(), chosenCard);
-        player.getGame().chooseNextPlayer(player.getGame().chooseAPlayer(player));
+        player.getGame().chooseNextPlayer(player.chooseAPlayer());
     }
 
     @Override

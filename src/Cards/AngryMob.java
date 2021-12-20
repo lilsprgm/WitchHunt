@@ -24,7 +24,7 @@ public class AngryMob extends Card implements Action{
         Player choosenPlayer;
         boolean containsBroomstick = false;
         do{
-            choosenPlayer = player.getGame().chooseAPlayer(player);
+            choosenPlayer = player.chooseAPlayer();
             containsBroomstick = false;
             for (Card card : choosenPlayer.getTable()){
                 if (card instanceof Broomstick){
