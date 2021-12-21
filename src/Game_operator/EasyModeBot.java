@@ -15,10 +15,9 @@ public class EasyModeBot extends Player {
     }
 
     @Override
-    public Card chooseCardIn(List<Card> Stock) throws Exception{
+    public Card chooseCardIn(List<Card> Stock) { //  a faire :  coder l'exceptions quand il n'y a plus de cartes
         if (Stock.size() == 0){
-            Exception e = new Exception("You have no card left to play");
-            throw e;
+            return null;
         }
         else{
             Card card = Stock.get((int) Math.round(Math.random()*Stock.size()));
@@ -27,7 +26,6 @@ public class EasyModeBot extends Player {
 
 
     }
-
 
     /**
      * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.

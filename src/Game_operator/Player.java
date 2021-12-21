@@ -15,7 +15,7 @@ public abstract class Player {
     protected List<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
     protected List<Card> deck = new ArrayList<Card>();
     protected List<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
-    protected int protected_who; // Le joueur sera protégé du numéro du Joueur dans la liste
+
 
 
     protected Scanner s = new Scanner(System.in);
@@ -66,16 +66,7 @@ public abstract class Player {
         // Automatically generated method. Please do not modify this code.
         this.numberOfPoints = value;
     }
-
-
 */
-    public int getProtectedPlayer() {
-     return this.protected_who;
- }
-
-    public void setProtectedPlayer(int who) {
-        this.protected_who= who;
-    }
 
     /**
      *
@@ -166,15 +157,6 @@ public abstract class Player {
     }
 
     /**
-     * Permet de  choisir un carte dans un tas de carte (n'importe lequel).
-     * @param Stock le tas de carte dans lequel on veut choisir la carte
-     * @return la carte choisie
-     */
-    public abstract Card chooseCardIn (List<Card> Stock) throws Exception; // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
-
-    public abstract void playCard();
-
-    /**
      * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.
      * D'abord si le l'identité du joueur a été révélée et qu'il est une sorcière, il ne peut plus jouer.
      * Ensuite, si le joueur est accusé, il va pouvoir jouer, mais doit choisir entre révéler son identité ou jouer une carte,
@@ -194,7 +176,7 @@ public abstract class Player {
         Player accusedPlayer;
         do {
             accusedPlayer = chooseAPlayer();
-        }while ((accusedPlayer == game.getProtectedPlayer()) || accusedPlayer == this);// pb si le joueur protégé est le seul à pouvoir être accusé
+        }while ((accusedPlayer == game.getProtectedPlayer()) || accusedPlayer == this);// pb si le joueur protégé est le seul à pouvoir être accusé // remettre en protected player pour que ca soit plus simple et que ca colle avec les cartes.
         // solution peut etre lorsque l'on set le playerprotected faire une verif
         accusedPlayer.setAccused(true);
         accusedPlayer.play();
@@ -210,7 +192,7 @@ public abstract class Player {
 
     public void playCard() {
         System.out.println("Wich card do you want to play");
-        Card cardToBePlayed = chooseCardIn(deck);
+        Card cardToBePlayed = this.chooseCardIn(deck);
         if(accused && cardToBePlayed.conditionWitch(this)){
             cardToBePlayed.actionWitch(this);
             this.addCardTo(this.table,cardToBePlayed);
@@ -223,4 +205,6 @@ public abstract class Player {
     }
 
     public abstract Player chooseAPlayer();
+
+    public abstract Card chooseCardIn(List<Card> Stock);
 }

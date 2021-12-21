@@ -31,18 +31,16 @@ public class PlayerIRL extends Player {
      * @param Stock le tas de carte dans lequel on veut choisir la carte
      * @return la carte choisie
      */
-    public Card chooseCardIn(List<Card> Stock) {
-        int i;
+    public Card chooseCardIn(List<Card> Stock) { // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
         System.out.println("Choose a card :");
-        for (Card card : Stock){
-            i = Stock.indexOf(card)+1;
-            System.out.println(i+" - "+ card);
+        System.out.println(Stock);
+        String chosenCard = s.nextLine();
+        for (Card card : Stock) {
+            if (card.getName() == chosenCard) {
+                return card;
+            }
         }
-        int chosenCard = s.nextInt();
-        while(chosenCard == 0 || chosenCard > Stock.size()){
-            chosenCard = s.nextInt();
-        }
-        return Stock.get(chosenCard-1);
+        return null;
     }
 
 
@@ -74,14 +72,8 @@ public class PlayerIRL extends Player {
             int choice = s.nextInt();
             switch (choice) {
                 case 1:
-                    game.accusation(this);
+                    this.accusation();
                     break;
-                    if (this.game.getProtectedPlayer() == null){
-                        accusation();
-                    }
-                    else{
-                        accusation();
-                    }
 
                 case 2:
                     this.playCard();

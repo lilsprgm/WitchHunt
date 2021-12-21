@@ -11,10 +11,12 @@ public class Game extends Observable {
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayerIRL=0;
     private int numberOfBot=0;
-    private Administrator admnistrator;
     
     private LinkedList<Player> players = new LinkedList<Player> ();     // Utiliser ArrayList pour les Joueurs
     private Player chosenNextPlayer = null;
+
+    private Player protectedPlayer = null;
+
     private Player currentPlayer = null;
 
     private static List<Card> stockPile = new ArrayList<Card> (); // Utiliser les Liste QUEUE à la place
@@ -47,6 +49,14 @@ public class Game extends Observable {
         this.numberOfPlayerIRL = value;
     }
 
+    public Player getProtectedPlayer() {
+        return protectedPlayer;
+    }
+
+    public void setProtectedPlayer(Player protectedPlayer) {
+        this.protectedPlayer = protectedPlayer;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -59,16 +69,6 @@ public class Game extends Observable {
     public void setNumberOfBot(int value) {
         // Automatically generated method. Please do not modify this code.
         this.numberOfBot = value;
-    }
-
-    public Administrator getAdmnistrator() {
-        // Automatically generated method. Please do not modify this code.
-        return this.admnistrator;
-    }
-
-    public void setAdmnistrator(Administrator value) {
-        // Automatically generated method. Please do not modify this code.
-        this.admnistrator = value;
     }
 
     public List<Player> getPlayers() {
@@ -198,8 +198,7 @@ public class Game extends Observable {
         for (Player player : players){
             System.out.println(player.getName() + " -->");
             player.chooseIdentity();
-            player.getIdentity().setRevealed(false);
-            player.setProtectedPlayer(100);
+            player.getIdentity().setRevealed(false); // je croit qu'il faut remettre les roles en place
         }
     }
 
@@ -269,67 +268,36 @@ public class Game extends Observable {
      *
      * @author lilsb
      */
-    public Player chooseAPlayer(Player exception){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
+    public Player chooseAPlayer(Player exception) { // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
 
-        int i=0; boolean verif=false;
-        for (Player player : players){
-            if (player == exception){
+        int i = 0;
+        boolean verif = false;
+        for (Player player : players) {
+            if (player == exception) {
                 continue;
             }
             i = players.indexOf(player);
-            System.out.println(i+" - "+ player);
+            System.out.println(i + " - " + player);
         }
         int indexOfChosenPlayer = s.nextInt();
-        while(indexOfChosenPlayer>=players.size()){
+        while (indexOfChosenPlayer >= players.size()) {
             indexOfChosenPlayer = s.nextInt();
         }
-        do{
-            if(indexOfChosenPlayer != players.indexOf(exception) & !players.get(indexOfChosenPlayer).getIdentity().isRevealed()) {
+        do {
+            if (indexOfChosenPlayer != players.indexOf(exception) & !players.get(indexOfChosenPlayer).getIdentity().isRevealed()) {
                 verif = true;
-            }
-            else if (players.get(indexOfChosenPlayer).getIdentity().getRole() == Role.Witch & players.get(indexOfChosenPlayer).getIdentity().isRevealed()){
-                    System.out.println("He is a revealed witch, choose someone else !");
-                } // Rajouter la possibilité de pouvoir choisir une Witch dans le cas d'un vol de carte
-            if(!verif){
+            } else if (players.get(indexOfChosenPlayer).getIdentity().getRole() == Role.Witch & players.get(indexOfChosenPlayer).getIdentity().isRevealed()) {
+                System.out.println("He is a revealed witch, choose someone else !");
+            } // Rajouter la possibilité de pouvoir choisir une Witch dans le cas d'un vol de carte
+            if (!verif) {
                 indexOfChosenPlayer = s.nextInt();
             }
-        }while(!verif);
+        } while (!verif);
         return players.get(indexOfChosenPlayer);
 
         // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
         // regarder avec la fonction scanner .next(pattern))
         ///////////////// Je pense que ca devrait marche à voir
-
-    }
-
-    /**
-     * Fonction quui permet de gérer la phase de jeu correspondant à une accusation.
-     * Elle regroupe le choix du joueur accusé, l'action du joueur accusé, ainsi que l'attribution des points à la fin de l'accusation.
-     * @param accusator le joueur qui accuse. Ce paramettre permet d'attribuer les points à celui-ci à la fin du tour.
-     *
-     * @author lilsb
-     */
-    public void accusation(Player accusator){ // on transmet en parametre d'entré le joueur qui accuse
-        System.out.println("Who do you want to accuse ?");
-        Player accusedPlayer;
-        accusedPlayer = chooseAPlayer(accusator);
-        while(accusedPlayer.getProtectedPlayer() == players.indexOf(accusator)){
-            System.out.printf("This player is protected from you !\nWho do you want to accuse ?");
-            accusedPlayer = chooseAPlayer(accusator);
-        }
-        // solution peut etre lorsque l'on set le playerprotected faire une verif
-        accusedPlayer.setAccused(true);
-        accusedPlayer.play();
-        accusedPlayer.setAccused(false);
-        if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
-            accusator.addPoints(1);
-            System.out.println(accusedPlayer.getName()+" was a Witch !\n"+accusator.getName()+" won 1 point\n");
-            chooseNextPlayer(accusator);
-        }
-        if(accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Hunt){
-            System.out.println(accusedPlayer.getName()+" was a Hunt !\n"+accusator.getName()+" won 0 point\n");
-            chooseNextPlayer(accusedPlayer);
-        }
 
     }
 
