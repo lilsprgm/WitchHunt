@@ -259,47 +259,6 @@ public class Game extends Observable {
         chosenNextPlayer = player;
     }
 
-    /**
-     * Permet de choisir le nom du joueur suivant.
-     * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
-     * @param exception le joueur qui ne pourra pas être désigné comme étant le joueur suivant.
-     * (Parce que c'est lui qui appelle la fonction par exemeple donc il ne pourra pas se désigner lui même).
-     * @return le joueur choisi.
-     *
-     * @author lilsb
-     */
-    public Player chooseAPlayer(Player exception) { // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
-
-        int i = 0;
-        boolean verif = false;
-        for (Player player : players) {
-            if (player == exception) {
-                continue;
-            }
-            i = players.indexOf(player);
-            System.out.println(i + " - " + player);
-        }
-        int indexOfChosenPlayer = s.nextInt();
-        while (indexOfChosenPlayer >= players.size()) {
-            indexOfChosenPlayer = s.nextInt();
-        }
-        do {
-            if (indexOfChosenPlayer != players.indexOf(exception) & !players.get(indexOfChosenPlayer).getIdentity().isRevealed()) {
-                verif = true;
-            } else if (players.get(indexOfChosenPlayer).getIdentity().getRole() == Role.Witch & players.get(indexOfChosenPlayer).getIdentity().isRevealed()) {
-                System.out.println("He is a revealed witch, choose someone else !");
-            } // Rajouter la possibilité de pouvoir choisir une Witch dans le cas d'un vol de carte
-            if (!verif) {
-                indexOfChosenPlayer = s.nextInt();
-            }
-        } while (!verif);
-        return players.get(indexOfChosenPlayer);
-
-        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
-        // regarder avec la fonction scanner .next(pattern))
-        ///////////////// Je pense que ca devrait marche à voir
-
-    }
 
     /**
      * Permet la gestion d'un round complet. Tant que le round n'est pas fini cette fonction permet de gérer l'ordre de jeu ses joueurs.
