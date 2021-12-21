@@ -170,7 +170,7 @@ public abstract class Player {
      * @param Stock le tas de carte dans lequel on veut choisir la carte
      * @return la carte choisie
      */
-    public abstract Card chooseCardIn (List<Card> Stock); // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
+    public abstract Card chooseCardIn (List<Card> Stock) throws Exception; // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
 
     public abstract void playCard();
 
@@ -183,4 +183,44 @@ public abstract class Player {
      * La fonction permet le choix et appelle les fonctions permettant ces actions.
      */
     public abstract void play();
+
+    /**
+     * Fonction quui permet de gérer la phase de jeu correspondant à une accusation.
+     * Elle regroupe le choix du joueur accusé, l'action du joueur accusé, ainsi que l'attribution des points à la fin de l'accusation.
+     * @author lilsb
+     */
+    public void accusation(){ // on transmet en parametre d'entré le joueur qui accuse
+        System.out.println("Who do you want to accuse ?");
+        Player accusedPlayer;
+        do {
+            accusedPlayer = chooseAPlayer();
+        }while ((accusedPlayer == game.getProtectedPlayer()) || accusedPlayer == this);// pb si le joueur protégé est le seul à pouvoir être accusé
+        // solution peut etre lorsque l'on set le playerprotected faire une verif
+        accusedPlayer.setAccused(true);
+        accusedPlayer.play();
+        accusedPlayer.setAccused(false);
+        game.setProtectedPlayer(null); // permet la réinitialistation de joueur protégé (car protégé un tour seulement
+        if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
+            this.addPoints(1);
+            System.out.println(this.getName() + " won 1 point");
+        }
+
+    }
+
+
+    public void playCard() {
+        System.out.println("Wich card do you want to play");
+        Card cardToBePlayed = chooseCardIn(deck);
+        if(accused && cardToBePlayed.conditionWitch(this)){
+            cardToBePlayed.actionWitch(this);
+            this.addCardTo(this.table,cardToBePlayed);
+        }
+        else if(!accused && cardToBePlayed.conditionHunt(this)){
+            cardToBePlayed.actionHunt(this);
+            this.addCardTo(this.table,cardToBePlayed);
+        }
+        this.getGame().chooseNextPlayer(this);
+    }
+
+    public abstract Player chooseAPlayer();
 }

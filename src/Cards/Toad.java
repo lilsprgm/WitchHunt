@@ -18,7 +18,7 @@ public class Toad extends Card {
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());
-        player.getGame().chooseNextPlayer(player.getGame().chooseAPlayer(player));
+        player.getGame().chooseNextPlayer(player.chooseAPlayer());
     }
 
     /**
@@ -44,7 +44,7 @@ public class Toad extends Card {
             }
         }
         else{
-            player.getGame().chooseNextPlayer(player.getGame().chooseAPlayer(player));
+            player.getGame().chooseNextPlayer(player.chooseAPlayer());
         }
     }
 

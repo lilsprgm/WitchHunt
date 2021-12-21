@@ -11,7 +11,7 @@ public class DuckingStool extends Card{
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());
-        Player chosenPlayer = player.getGame().chooseAPlayer(player);
+        Player chosenPlayer = player.chooseAPlayer();
         player.getGame().chooseNextPlayer(chosenPlayer);
     }
 
@@ -22,7 +22,7 @@ public class DuckingStool extends Card{
         // permet de s'assurer qu'il ne choisit pas un joueur qui a joué une carte wart
         boolean containsWart = false;
         do{
-            choosenPlayer = player.getGame().chooseAPlayer(player);
+            choosenPlayer = player.chooseAPlayer();
             containsWart = false;
             for (Card card : choosenPlayer.getTable()){
                 if (card instanceof Broomstick){
@@ -32,7 +32,7 @@ public class DuckingStool extends Card{
                 }
             }
         }while (containsWart);
-        Player chosenPlayer = player.getGame().chooseAPlayer(player);
+        Player chosenPlayer =player.chooseAPlayer();
         System.out.println(chosenPlayer.getName() + "--> Choose :\n1- Reveal your identity\n2- Discard a card from your hand");
         int choice = s.nextInt();
         switch (choice){
