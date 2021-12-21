@@ -42,7 +42,7 @@ public class HardModeBot extends Player {
             //bot accusé
         } else if (this.isAccused()) {
             System.out.println(this.getName() + " you are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
-            if (this.identity.getRole() == Role.Hunt ){
+            if (this.deck.isEmpty() ){
                 this.identity.setRevealed(true);
             }else{
                 playCard();
@@ -51,12 +51,7 @@ public class HardModeBot extends Player {
             //tour de jeu du bot classique
         } else {
             System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
-            if (this.deck.isEmpty()){
-                accusation();
-            }
-            else{
-                playCard();
-            }
+            this.accusation();
         }
     }
 
