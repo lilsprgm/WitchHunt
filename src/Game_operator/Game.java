@@ -2,7 +2,7 @@ package Game_operator;
 
 import Cards.*;
 //import org.jetbrains.annotations.NotNull;
-
+import GraphicInterface.*;
 import java.util.*;
 import java.util.LinkedList;
 
@@ -141,6 +141,7 @@ public class Game extends Observable {
      */
     public void initPlayers(){ // A faire : permettre de modifier la difficulté des bot
         //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
+        //SettingsInterface.main();
         do {
             System.out.print("Veuillez entrer le nombre de Joueur dans la Partie (6 joueurs max) : ");
             numberOfPlayerIRL = s.nextInt();
@@ -160,7 +161,7 @@ public class Game extends Observable {
             players.get(i-1).setGame(instance);
         }
         for(int i=0;i<numberOfBot;i++){
-            players.add(i,new Bot());
+            //players.add(i,new Bot());
             players.get(i).setName("Bot"+i+1);
             players.get(i).setGame(instance);
         }
@@ -259,7 +260,6 @@ public class Game extends Observable {
         chosenNextPlayer = player;
     }
 
-
     /**
      * Permet la gestion d'un round complet. Tant que le round n'est pas fini cette fonction permet de gérer l'ordre de jeu ses joueurs.
      * Il y a deux cas possible : soit on suit l'orde "naturel" de jeu des joueurs,
@@ -327,14 +327,12 @@ public class Game extends Observable {
     public void game(){
     }
 
-    public void gameManagement() {
-    }
+
 
     /**
      * Partie main du programme. On crée une partie on joue et on affiche le gagnant à la fin
-     * @param args
      */
-    public static void main(String[] args){
+    public static void main(){
         Game game = Game.getInstance();
         game.init_Game();
         while (!game.endOfGame()){
