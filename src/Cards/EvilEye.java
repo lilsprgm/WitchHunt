@@ -12,7 +12,7 @@ public class EvilEye extends Card{
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());
-        Player chosenPlayer = player.getGame().chooseAPlayer(player);
+        Player chosenPlayer = player.chooseAPlayer();
         player.getGame().chooseNextPlayer(chosenPlayer);
         player.getGame().setProtectedPlayer(player);
     }
@@ -20,7 +20,7 @@ public class EvilEye extends Card{
     @Override
     public void actionHunt(Player player) {
         System.out.println(getActionHunt());
-        Player chosenPlayer = player.getGame().chooseAPlayer(player);
+        Player chosenPlayer = player.chooseAPlayer();
         player.getGame().chooseNextPlayer(chosenPlayer);
         player.getGame().setProtectedPlayer(player);
     }
