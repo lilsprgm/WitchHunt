@@ -2,10 +2,11 @@ package Game_operator;
 
 import Cards.*;
 //import org.jetbrains.annotations.NotNull;
+import GraphicInterface.*;
 import java.util.*;
 import java.util.LinkedList;
 
-public class Game extends Observable implements Runnable{
+public class Game extends Observable implements Runnable {
 
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayerIRL=0;
@@ -358,8 +359,8 @@ public class Game extends Observable implements Runnable{
      * Partie main du programme. On crée une partie on joue et on affiche le gagnant à la fin
      */
     public static void main(String[] arg){
-        GameScreen myGameScreen = new GameScreen();
-        GameTerminal myGameTerminal = new GameTerminal();
+        //GameScreen myGameScreen = new GameScreen();
+        //GameTerminal myGameTerminal = new GameTerminal();
         Game game = Game.getInstance();
     }
 
