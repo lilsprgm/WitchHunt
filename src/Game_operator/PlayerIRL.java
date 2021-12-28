@@ -31,16 +31,18 @@ public class PlayerIRL extends Player {
      * @param Stock le tas de carte dans lequel on veut choisir la carte
      * @return la carte choisie
      */
-    public Card chooseCardIn(List<Card> Stock) { // pareil problème de saisi. Il faut s'assurer que le nom renttré soit dans la liste de cartes
+    public Card chooseCardIn(List<Card> Stock) {
+        int i;
         System.out.println("Choose a card :");
-        System.out.println(Stock);
-        String chosenCard = s.nextLine();
-        for (Card card : Stock) {
-            if (card.getName() == chosenCard) {
-                return card;
-            }
+        for (Card card : Stock){
+            i = Stock.indexOf(card)+1;
+            System.out.println(i+" - "+ card);
         }
-        return null;
+        int chosenCard = s.nextInt();
+        while(chosenCard == 0 || chosenCard > Stock.size()){
+            chosenCard = s.nextInt();
+        }
+        return Stock.get(chosenCard-1);
     }
 
 

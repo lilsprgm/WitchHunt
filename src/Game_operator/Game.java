@@ -2,11 +2,10 @@ package Game_operator;
 
 import Cards.*;
 //import org.jetbrains.annotations.NotNull;
-import GraphicInterface.*;
 import java.util.*;
 import java.util.LinkedList;
 
-public class Game extends Observable {
+public class Game extends Observable implements Runnable{
 
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayerIRL=0;
@@ -26,7 +25,24 @@ public class Game extends Observable {
 
 
     private Game(){
+        Thread t = new Thread(this);
+        t.start();
     }
+
+
+    @Override
+    public void run() {
+        while(true){
+            this.init_Game();
+            while (!this.endOfGame()){
+                this.initNewRound();
+                this.roundManagement();
+            }
+            this.theWinnerIs();
+        }
+    }
+
+
 
     public static Game getInstance() {
         if (Game.instance == null) {
@@ -160,10 +176,20 @@ public class Game extends Observable {
             players.get(i-1).setName(s.nextLine());
             players.get(i-1).setGame(instance);
         }
-        for(int i=0;i<numberOfBot;i++){
-            //players.add(i,new Bot());
-            players.get(i).setName("Bot"+i+1);
-            players.get(i).setGame(instance);
+        for(int i=1;i<numberOfBot+1;i++){
+            System.out.print("Difficulté Bot n°"+i+"\n1-Easy\n2-Hard\n");
+            int chosenDifficulty = s.nextInt();
+            while(chosenDifficulty>2 || chosenDifficulty<1){
+                chosenDifficulty = s.nextInt();
+            }
+            if(chosenDifficulty==1){
+                players.add(i-1,new EasyModeBot());
+            }
+            if(chosenDifficulty==2){
+                players.add(i-1,new HardModeBot());
+            }
+            players.get(i-1).setName("Bot"+i);
+            players.get(i-1).setGame(instance);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
@@ -328,18 +354,14 @@ public class Game extends Observable {
     }
 
 
-
     /**
      * Partie main du programme. On crée une partie on joue et on affiche le gagnant à la fin
      */
-    public static void main(){
+    public static void main(String[] arg){
+        GameScreen myGameScreen = new GameScreen();
+        GameTerminal myGameTerminal = new GameTerminal();
         Game game = Game.getInstance();
-        game.init_Game();
-        while (!game.endOfGame()){
-            game.initNewRound();
-            game.roundManagement();
-        }
-        game.theWinnerIs();
     }
+
 
 }

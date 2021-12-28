@@ -69,5 +69,4 @@ public class HardModeBot extends Player {
         } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
         return player;
     }
-
 }
