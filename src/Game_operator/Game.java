@@ -30,21 +30,6 @@ public class Game extends Observable implements Runnable {
         t.start();
     }
 
-
-    @Override
-    public void run() {
-        while(true){
-            this.init_Game();
-            while (!this.endOfGame()){
-                this.initNewRound();
-                this.roundManagement();
-            }
-            this.theWinnerIs();
-        }
-    }
-
-
-
     public static Game getInstance() {
         if (Game.instance == null) {
             Game.instance = new Game();
@@ -355,13 +340,25 @@ public class Game extends Observable implements Runnable {
     }
 
 
+    @Override
+    public void run() {
+        while(true){
+            this.init_Game();
+            while (!this.endOfGame()){
+                this.initNewRound();
+                this.roundManagement();
+            }
+            this.theWinnerIs();
+        }
+    }
+
     /**
      * Partie main du programme. On crée une partie on joue et on affiche le gagnant à la fin
      */
     public static void main(String[] arg){
-        //GameScreen myGameScreen = new GameScreen();
-        //GameTerminal myGameTerminal = new GameTerminal();
         Game game = Game.getInstance();
+        LaunchInerface myLaunch = new LaunchInerface();
+        //GameTerminal myGameTerminal = new GameTerminal();
     }
 
 

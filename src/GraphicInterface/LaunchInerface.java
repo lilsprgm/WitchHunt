@@ -14,29 +14,24 @@ public class LaunchInerface extends  JFrame {
 
 
     public LaunchInerface(){ // constructeur avec titre de l'app
-        super("WITCHHUNT");
 
+        super("WITCHHUNT");
         this.setContentPane(launchPanel); // permet de choisr la fenetre a afficher
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
         this.pack(); // ajustement taille de la fenetre automatique
-
+        this.setVisible(true);
+        allAction();
     }
-
-    public JButton getSTARTPLAYButton() {
-        return STARTPLAYButton;
-    }
-
-    public static void main(String[] args) {
-        LaunchInerface gameInterface = new LaunchInerface();
-        gameInterface.setVisible(true);
-        JButton STARTPLAYButton = gameInterface.getSTARTPLAYButton();
-        // Listener pour le bouton.
+    public void allAction(){
         STARTPLAYButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameInterface.dispose();
-                //Game.main();
+                dispose();
+                SettingsInterface gameSettings = new SettingsInterface();
+                gameSettings.setVisible(true);
             }
         });
+    }
+    public static void main(String[] args) {
     }
 }
