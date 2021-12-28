@@ -6,7 +6,8 @@ import GraphicInterface.*;
 import java.util.*;
 import java.util.LinkedList;
 
-public class Game extends Observable implements Runnable {
+
+public class Game extends Observable  implements Runnable {
 
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayerIRL=0;
@@ -27,6 +28,11 @@ public class Game extends Observable implements Runnable {
 
     private Game(){
         Thread t = new Thread(this);
+        SettingsInterface gameSettings = new SettingsInterface(this);
+        TerminalInterface myTerminalInterface = new TerminalInterface(this,gameSettings);
+        LaunchInterface myLaunch = new LaunchInterface(gameSettings);
+        addObserver(myTerminalInterface);
+        addObserver(gameSettings);
         t.start();
     }
 
@@ -145,38 +151,13 @@ public class Game extends Observable implements Runnable {
         //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
         //SettingsInterface.main();
         do {
-            System.out.print("Veuillez entrer le nombre de Joueur dans la Partie (6 joueurs max) : ");
-            numberOfPlayerIRL = s.nextInt();
-        }while(numberOfPlayerIRL > 6);
-        if(numberOfPlayerIRL<6) {
-            do {
-                System.out.print("Veuillez entrer le nombre de Bot dans la Partie : ");
-                numberOfBot = s.nextInt();
-            } while ((numberOfBot+numberOfPlayerIRL) > 6 || (numberOfBot+numberOfPlayerIRL)<3);
-        }
+            setChanged();
+            notifyObservers(UpdateCode.INIT_NUMBER_PLAYER);
+            System.out.println(numberOfBot+" "+numberOfPlayerIRL);
+        }while((numberOfBot+numberOfPlayerIRL) > 6 || (numberOfBot+numberOfPlayerIRL)<3);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        s.nextLine();                   // Je pense qu'il faut supprimer le ENTR précédent
-        for(int i=1;i<numberOfPlayerIRL+1;i++){
-            System.out.print("Entrez le nom du Joueur n°"+i+" :");
-            players.add(i-1,new PlayerIRL());
-            players.get(i-1).setName(s.nextLine());
-            players.get(i-1).setGame(instance);
-        }
-        for(int i=1;i<numberOfBot+1;i++){
-            System.out.print("Difficulté Bot n°"+i+"\n1-Easy\n2-Hard\n");
-            int chosenDifficulty = s.nextInt();
-            while(chosenDifficulty>2 || chosenDifficulty<1){
-                chosenDifficulty = s.nextInt();
-            }
-            if(chosenDifficulty==1){
-                players.add(i-1,new EasyModeBot());
-            }
-            if(chosenDifficulty==2){
-                players.add(i-1,new HardModeBot());
-            }
-            players.get(i-1).setName("Bot"+i);
-            players.get(i-1).setGame(instance);
-        }
+        setChanged();
+        notifyObservers(UpdateCode.INIT_NAME_PLAYER);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -357,8 +338,6 @@ public class Game extends Observable implements Runnable {
      */
     public static void main(String[] arg){
         Game game = Game.getInstance();
-        LaunchInerface myLaunch = new LaunchInerface();
-        //GameTerminal myGameTerminal = new GameTerminal();
     }
 
 

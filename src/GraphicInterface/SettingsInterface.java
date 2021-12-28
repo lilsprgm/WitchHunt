@@ -1,20 +1,22 @@
 package GraphicInterface;
 
 //import Game_operator.Observer;
-import Game_operator.Player;
+import Game_operator.*;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import javax.swing.*;
 
 public class SettingsInterface extends JFrame implements Observer {
 
-    private String[] playerType = {"Player", "Bot (hard)", "Bot (easy)"};
+    private Game currentGame;
+    private Scanner s;
     private JLabel settingLabel;
 
     private JPanel settingsPanel;
@@ -22,7 +24,7 @@ public class SettingsInterface extends JFrame implements Observer {
     private int nbr = 0;
     private JLabel textBotDifficulty;
     private JButton registerButton;
-    private JButton okButton;
+    private JButton okButtonPlayer;
     private JComboBox<Integer> nbrPlayer;
     private JComboBox<Integer> nbrBot;
     private JTextField ErrorNbr;
@@ -61,6 +63,7 @@ public class SettingsInterface extends JFrame implements Observer {
     private JLabel textBot6;
 
 
+
     /*  public void initializeComboBox(){
           comboBox1.setEditable(true);
           comboBox2.setEditable(true);
@@ -82,11 +85,10 @@ public class SettingsInterface extends JFrame implements Observer {
           this.add(comboBox6);
 
       }*/
-    @Override
-    public void update(Observable o, Object arg) {
 
+    public void setScanner(Scanner newScanner){
+        s=newScanner;
     }
-
     public <T> void fillArray(
             ArrayList<T> arrayElements, T elem1, T elem2, T elem3, T elem4, T elem5, T elem6){
         arrayElements.add(elem1);
@@ -103,11 +105,21 @@ public class SettingsInterface extends JFrame implements Observer {
         for(int i=nbr;i<6;i++){
             list.get(i).setVisible(false);
         }
-    }
+    }/*
+    public void setArrayEnable(ArrayList<JComponent> list, boolean b, int nbr){
+        for(int i=0;i<nbr;i++){
+            list.get(i).setEnabled(b);
+        }
+        for(int i=nbr;i<6;i++){
+            list.get(i).setEnabled(false);
+        }
+    }*/
 
-    public SettingsInterface() {
+
+    public SettingsInterface(Game game) {
         super("WITCHHUNT");
-        //
+        currentGame = game;
+
         fillArray(comboBoxList, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
         fillArray(textPlayerList, textPlayer1, textPlayer2, textPlayer3, textPlayer4, textPlayer5, textPlayer6);
         fillArray(textFieldsList, fieldP1, fieldP2, fieldP3, fieldP4, fieldP5, fieldP6);
@@ -124,26 +136,25 @@ public class SettingsInterface extends JFrame implements Observer {
         setArrayVisibility(textBotList,false,6);
         nameLabel.setVisible(false);
         textBotDifficulty.setVisible(false);
+        nbrPlayer.setEnabled(false);
+        nbrBot.setEnabled(false);
+        okButtonPlayer.setEnabled(false);
 
         allAction();
     }
 
     public void allAction() {
 
-        okButton.addActionListener(e -> {
+        okButtonPlayer.addActionListener(e -> {
             nbr = nbrPlayer.getSelectedIndex() + nbrBot.getSelectedIndex();
-            System.out.println(nbr);
             if (nbr > 6 || nbr < 3) {
                 ErrorNbr.setVisible(true);
             } else {
                 ErrorNbr.setVisible(false);
-                setArrayVisibility(comboBoxList,true,nbrBot.getSelectedIndex());
-                setArrayVisibility(textBotList,true,nbrBot.getSelectedIndex());
-                setArrayVisibility(textFieldsList,true,nbrPlayer.getSelectedIndex());
-                setArrayVisibility(textPlayerList,true,nbrPlayer.getSelectedIndex());
-                nameLabel.setVisible(true);textBotDifficulty.setVisible(true);
-
+                currentGame.setNumberOfPlayer(nbrPlayer.getSelectedIndex());
+                currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
             }
+
         });
         // Vérifier si l'utilisateur a bien rentré tout les noms.
         play.addActionListener(e -> {
@@ -156,5 +167,26 @@ public class SettingsInterface extends JFrame implements Observer {
 
             }
         });
+    }
+    @Override
+    public void update(Observable o, Object arg) {
+        switch ((UpdateCode)arg){
+            case INIT_NUMBER_PLAYER:
+                nbrPlayer.setEnabled(true);
+                nbrBot.setEnabled(true);
+                okButtonPlayer.setEnabled(true);
+                break;
+
+            case INIT_NAME_PLAYER:
+                nbrPlayer.setEnabled(false);
+                nbrBot.setEnabled(false);
+                okButtonPlayer.setEnabled(false);ErrorNbr.setVisible(false);
+                setArrayVisibility(comboBoxList,true,currentGame.getNumberOfBot());
+                setArrayVisibility(textBotList,true,currentGame.getNumberOfBot());
+                setArrayVisibility(textFieldsList,true,currentGame.getNumberOfPlayer());
+                setArrayVisibility(textPlayerList,true,currentGame.getNumberOfPlayer());
+                nameLabel.setVisible(true);textBotDifficulty.setVisible(true);
+                break;
+        }
     }
 }
