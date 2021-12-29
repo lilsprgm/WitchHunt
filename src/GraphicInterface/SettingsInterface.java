@@ -10,6 +10,11 @@ import java.util.Observer;
 import java.util.Scanner;
 import javax.swing.*;
 
+/**
+ *
+ * @author lilsb & Agougile
+ * @param
+ */
 public class SettingsInterface extends JFrame implements Observer {
 
     private final Game currentGame;
@@ -61,6 +66,12 @@ public class SettingsInterface extends JFrame implements Observer {
     private JLabel textBot6;
     private JButton submitButton;
 
+    /**
+     * fillArray permet de remplir une ArrayList de 6 éléments.
+     * Simple Fonction utile permettant de gagner du temps.
+     * @author lilsb & Agougile
+     * @param
+     */
     public <T> void fillArray(
             ArrayList<T> arrayElements, T elem1, T elem2, T elem3, T elem4, T elem5, T elem6){
         arrayElements.add(elem1);
@@ -70,14 +81,33 @@ public class SettingsInterface extends JFrame implements Observer {
         arrayElements.add(elem5);
         arrayElements.add(elem6);
     }
+
+    /**
+     * setArrayEnable permet d'activer/désactiver un nombre d'élément d'une liste d'Objet JTextField uniquement.
+     * @author lilsb & Agougile
+     * @param
+     */
     public void setArrayEnable(ArrayList<JTextField> list, boolean b, int nbr){
         for(int i=0;i<nbr;i++){
             list.get(i).setEnabled(b);
         }
     }
+
+    /**
+     * SettingsInterface représente la page de configuration de la partie donné en argument.
+     * Lors de la construction de la page, elle se met invisible avec tous les éléments la composant.
+     * Le constructeur appel aussi la méthode allAction().
+     * @author lilsb & Agougile
+     * @param
+     */
     public SettingsInterface(Game game) {
         super("WITCHHUNT");
         currentGame = game;
+
+        //A supprimer !!!
+        PlayInterface test = new PlayInterface(currentGame);
+        test.setVisible(true);
+        ////////////////////////////////////////////////////
 
         this.setContentPane(settingsPanel); // permet de choisr la fenetre a afficher
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
@@ -104,14 +134,22 @@ public class SettingsInterface extends JFrame implements Observer {
         nbrBot.setVisible(false);
         okButtonBOT.setVisible(false);
         textNbrBot.setVisible(false);
-
         allAction();
     }
 
+    /**
+     * allAction représente toutes les actions disponibles sur l'interface.
+     * @author lilsb & Agougile
+     * @param
+     */
     public void allAction() {
+        //L'appui sur le bouton OKplayer fait appel a Game pour qu'il modifie le Nbr de Joueur
         okButtonPlayer.addActionListener(e -> {
-            currentGame.setNumberOfPlayer(nbrPlayer.getSelectedIndex());
+            currentGame.setNumberOfPlayer(nbrPlayer.getSelectedIndex());    // Ici l'index correspond à la valeur dans notre cas uniquement
         });
+
+        //Si il y a pas assez/trop de Joueurs on affiche un texte en laissant l'opportunité de changer le Nbr de JoueurIRL
+        //Sinon on fait appel a GAME si tout se passe bien
         okButtonBOT.addActionListener(e -> {
             nbr = currentGame.getNumberOfPlayer() + nbrBot.getSelectedIndex();
             if (nbr > 6 || nbr < 3) {
@@ -123,11 +161,13 @@ public class SettingsInterface extends JFrame implements Observer {
                 currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
             }
         });
-        // Vérifier si l'utilisateur a bien rentré tout les noms.
+
+        //On prend le nom écrit sur les fields pour les envoyer à GAME.
+        //Le field devient rouge si il est SUBMIT en étant vide et inversement se met en Vert
         submitButton.addActionListener(e -> {
             ArrayList<Player> p = new ArrayList<Player>();
-            boolean verif = true;
-            for(int i=0;i<currentGame.getNumberOfPlayer();i++){
+            boolean verif = true;                                   //verif permet d'éviter de modifier le nombre de Joueur si
+            for(int i=0;i<currentGame.getNumberOfPlayer();i++){     //l'utilisateur a déja configurer le nombre sur graphique.
                 if(textFieldsList.get(i).getText().isEmpty()){
                     textFieldsList.get(i).setBackground(Color.red);
                     verif = false;
@@ -139,7 +179,7 @@ public class SettingsInterface extends JFrame implements Observer {
                     p.get(i).setGame(currentGame);
                 }
             }
-            if(verif){
+            if(verif){      //Ici le changement dans le GAME se fait seulement si l'étape n'a pas été dépassé par l'interface graphique
                 currentGame.setPlayers(p);
             }
         });
@@ -156,12 +196,18 @@ public class SettingsInterface extends JFrame implements Observer {
             }
             currentGame.setBots(bots);
             dispose();
-            PlayInterface gamePlay = new PlayInterface();
+            PlayInterface gamePlay = new PlayInterface(currentGame);
             currentGame.addObserver(gamePlay);
             gamePlay.setVisible(true);
         });
     }
 
+    /**
+     * Update permet de modifier l'interface en fonction de l'avancement de la configuration du jeu.
+     * Elle utilisera l'énumération "UpdateCode" pour détecter l'étape actuelle.
+     * @author lilsb & Agougile
+     * @param
+     */
     @Override
     public void update(Observable o, Object arg) {
         switch ((UpdateCode) arg) {

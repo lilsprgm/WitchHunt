@@ -22,6 +22,8 @@ public class LaunchInterface extends  JFrame {
         this.pack(); // ajustement taille de la fenetre automatique
         this.setVisible(true);
         allAction();
+
+
     }
     public void allAction(){
         STARTPLAYButton.addActionListener(new ActionListener() {
