@@ -24,11 +24,11 @@ public class Game extends Observable  implements Runnable {
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
+    Thread t = new Thread(this);
     private UpdateCode actualCode;
 
 
     private Game(){
-        Thread t = new Thread(this);
         SettingsInterface gameSettings = new SettingsInterface(this);
         TerminalInterface myTerminalInterface = new TerminalInterface(this,gameSettings);
         LaunchInterface myLaunch = new LaunchInterface(gameSettings);
@@ -37,21 +37,43 @@ public class Game extends Observable  implements Runnable {
         t.start();
     }
 
-    private void setUpdateCode(UpdateCode newUpdateCode){
+    @Override
+    public void run() {
+        while(true){
+            this.init_Game();
+            while (!this.endOfGame()){
+                this.initNewRound();
+                this.roundManagement();
+            }
+            this.theWinnerIs();
+        }
+    }
+
+    public synchronized void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
         setChanged();
         notifyObservers(newUpdateCode);
     }
+    public UpdateCode getUpdateCode(){
+        return actualCode;
+    }
 
-    public void setNumberOfUser(int nbrPlayer, int nbrBot){
+    public void setNumberOfPlayer(int nbrPlayer){
         this.numberOfPlayerIRL = nbrPlayer;
+        setUpdateCode(UpdateCode.INIT_NUMBER_BOT);
+    }
+
+    public void setNumberOfBot(int nbrBot){
         this.numberOfBot = nbrBot;
         setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
     }
-
     public void setPlayers(ArrayList<Player> clone){
         players = clone;
         setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
+    }
+    public void setBots(ArrayList<Player> clone){
+        players.addAll(clone);
+        setUpdateCode(UpdateCode.GAME);
     }
 
     public static Game getInstance() {
@@ -70,11 +92,6 @@ public class Game extends Observable  implements Runnable {
         return this.numberOfPlayerIRL;
     }
 
-    public void setNumberOfPlayer(int value) {
-        // Automatically generated method. Please do not modify this code.
-        this.numberOfPlayerIRL = value;
-    }
-
     public Player getProtectedPlayer() {
         return protectedPlayer;
     }
@@ -90,11 +107,6 @@ public class Game extends Observable  implements Runnable {
     public int getNumberOfBot() {
         // Automatically generated method. Please do not modify this code.
         return this.numberOfBot;
-    }
-
-    public void setNumberOfBot(int value) {
-        // Automatically generated method. Please do not modify this code.
-        this.numberOfBot = value;
     }
 
     public List<Player> getPlayers() {
@@ -289,12 +301,12 @@ public class Game extends Observable  implements Runnable {
      */
     public boolean endOfGame(){
         for (Player player : players){
-            if (player.getNumberOfPoints() < 5){
-                return false;
+            if (player.getNumberOfPoints() >= 5){
+                System.out.println("End of the game");
+                return true;
             }
         }
-        System.out.println("End of the game");
-        return true;
+        return false;
     }
 
     /**
@@ -328,19 +340,6 @@ public class Game extends Observable  implements Runnable {
     }
 
     public void game(){
-    }
-
-
-    @Override
-    public void run() {
-        while(true){
-            this.init_Game();
-            while (!this.endOfGame()){
-                this.initNewRound();
-                this.roundManagement();
-            }
-            this.theWinnerIs();
-        }
     }
 
     /**

@@ -23,20 +23,12 @@
           <text value="Number of Real Player"/>
         </properties>
       </component>
-      <component id="b1888" class="javax.swing.JLabel">
+      <component id="b1888" class="javax.swing.JLabel" binding="textNbrBot">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Number of Bot"/>
-        </properties>
-      </component>
-      <component id="a0cfd" class="javax.swing.JLabel" binding="textPlayer1">
-        <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Player n°1"/>
         </properties>
       </component>
       <component id="6803a" class="javax.swing.JTextField" binding="fieldP1">
@@ -45,22 +37,8 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
-      </component>
-      <component id="70274" class="javax.swing.JLabel" binding="textPlayer2">
-        <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
         <properties>
-          <text value="Player n°2"/>
-        </properties>
-      </component>
-      <component id="194c9" class="javax.swing.JLabel" binding="textPlayer3">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Player n°3"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="acce3" class="javax.swing.JTextField" binding="fieldP2">
@@ -78,14 +56,6 @@
           </grid>
         </constraints>
         <properties/>
-      </component>
-      <component id="37d92" class="javax.swing.JLabel" binding="textPlayer4">
-        <constraints>
-          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Player n°4"/>
-        </properties>
       </component>
       <component id="997fc" class="javax.swing.JTextField" binding="fieldP4">
         <constraints>
@@ -253,14 +223,6 @@
           <text value="OK"/>
         </properties>
       </component>
-      <component id="8af3" class="javax.swing.JLabel" binding="textPlayer6">
-        <constraints>
-          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Player n°6"/>
-        </properties>
-      </component>
       <component id="3b490" class="javax.swing.JTextField" binding="fieldP6">
         <constraints>
           <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -276,14 +238,6 @@
           </grid>
         </constraints>
         <properties/>
-      </component>
-      <component id="952d4" class="javax.swing.JLabel" binding="textPlayer5">
-        <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Player n°5"/>
-        </properties>
       </component>
       <component id="94c55" class="javax.swing.JLabel" binding="nameLabel">
         <constraints>
@@ -320,9 +274,17 @@
           <text value="Difficulty Bot"/>
         </properties>
       </component>
+      <component id="b905f" class="javax.swing.JButton" binding="submitButton">
+        <constraints>
+          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="SUBMIT"/>
+        </properties>
+      </component>
       <component id="8b47" class="javax.swing.JTextField" binding="ErrorNbr">
         <constraints>
-          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
@@ -339,12 +301,60 @@
           <visible value="true"/>
         </properties>
       </component>
-      <component id="b905f" class="javax.swing.JButton" binding="submitButton">
+      <component id="f3232" class="javax.swing.JButton" binding="okButtonBOT">
         <constraints>
-          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="SUBMIT"/>
+          <text value="OK"/>
+        </properties>
+      </component>
+      <component id="342b7" class="javax.swing.JLabel" binding="textPlayer1">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Player n°1"/>
+        </properties>
+      </component>
+      <component id="5f1bb" class="javax.swing.JLabel" binding="textPlayer2">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Player n°2"/>
+        </properties>
+      </component>
+      <component id="3bb02" class="javax.swing.JLabel" binding="textPlayer3">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Player n°3"/>
+        </properties>
+      </component>
+      <component id="f43d9" class="javax.swing.JLabel" binding="textPlayer4">
+        <constraints>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Player n°4"/>
+        </properties>
+      </component>
+      <component id="f35f" class="javax.swing.JLabel" binding="textPlayer5">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Player n°5"/>
+        </properties>
+      </component>
+      <component id="3b804" class="javax.swing.JLabel" binding="textPlayer6">
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Player n°6"/>
         </properties>
       </component>
     </children>
