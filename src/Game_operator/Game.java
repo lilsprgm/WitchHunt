@@ -13,7 +13,7 @@ public class Game extends Observable  implements Runnable {
     private int numberOfPlayerIRL=0;
     private int numberOfBot=0;
     
-    private LinkedList<Player> players = new LinkedList<Player> ();     // Utiliser ArrayList pour les Joueurs
+    private ArrayList<Player> players = new ArrayList<Player> ();     // Utiliser ArrayList pour les Joueurs
     private Player chosenNextPlayer = null;
 
     private Player protectedPlayer = null;
@@ -24,6 +24,7 @@ public class Game extends Observable  implements Runnable {
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
+    private UpdateCode actualCode;
 
 
     private Game(){
@@ -34,6 +35,23 @@ public class Game extends Observable  implements Runnable {
         addObserver(myTerminalInterface);
         addObserver(gameSettings);
         t.start();
+    }
+
+    private void setUpdateCode(UpdateCode newUpdateCode){
+        this.actualCode = newUpdateCode;
+        setChanged();
+        notifyObservers(newUpdateCode);
+    }
+
+    public void setNumberOfUser(int nbrPlayer, int nbrBot){
+        this.numberOfPlayerIRL = nbrPlayer;
+        this.numberOfBot = nbrBot;
+        setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
+    }
+
+    public void setPlayers(ArrayList<Player> clone){
+        players = clone;
+        setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
     }
 
     public static Game getInstance() {
@@ -147,17 +165,9 @@ public class Game extends Observable  implements Runnable {
      *
      *
      */
-    public void initPlayers(){ // A faire : permettre de modifier la difficulté des bot
+    public void initPlayers(){
         //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
-        //SettingsInterface.main();
-        do {
-            setChanged();
-            notifyObservers(UpdateCode.INIT_NUMBER_PLAYER);
-            System.out.println(numberOfBot+" "+numberOfPlayerIRL);
-        }while((numberOfBot+numberOfPlayerIRL) > 6 || (numberOfBot+numberOfPlayerIRL)<3);
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        setChanged();
-        notifyObservers(UpdateCode.INIT_NAME_PLAYER);
+        setUpdateCode(UpdateCode.INIT_NUMBER_PLAYER);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -295,7 +305,7 @@ public class Game extends Observable  implements Runnable {
      */
     public void theWinnerIs(){ // fonction permettant d'afficher les gagnants
         List<Player> winner = new ArrayList<Player>();
-        winner.add(players.getFirst());
+        winner.add(players.get(0));
         for (Player player : players){
             if (player.getNumberOfPoints() > winner.get(0).getNumberOfPoints()){
                 winner.removeAll(winner);

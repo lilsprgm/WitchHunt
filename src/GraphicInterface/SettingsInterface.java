@@ -3,6 +3,8 @@ package GraphicInterface;
 //import Game_operator.Observer;
 import Game_operator.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
@@ -61,6 +63,7 @@ public class SettingsInterface extends JFrame implements Observer {
     private JLabel textBot4;
     private JLabel textBot5;
     private JLabel textBot6;
+    private JButton submitButton;
 
 
 
@@ -105,15 +108,12 @@ public class SettingsInterface extends JFrame implements Observer {
         for(int i=nbr;i<6;i++){
             list.get(i).setVisible(false);
         }
-    }/*
+    }
     public void setArrayEnable(ArrayList<JComponent> list, boolean b, int nbr){
         for(int i=0;i<nbr;i++){
             list.get(i).setEnabled(b);
         }
-        for(int i=nbr;i<6;i++){
-            list.get(i).setEnabled(false);
-        }
-    }*/
+    }
 
 
     public SettingsInterface(Game game) {
@@ -128,33 +128,33 @@ public class SettingsInterface extends JFrame implements Observer {
         this.setContentPane(settingsPanel); // permet de choisr la fenetre a afficher
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
         this.pack(); // ajustement taille de la fenetre automatique
+
         this.setVisible(false);
         ErrorNbr.setVisible(false);
         setArrayVisibility(comboBoxList,false,6);
         setArrayVisibility(textFieldsList,false,6);
         setArrayVisibility(textPlayerList,false,6);
         setArrayVisibility(textBotList,false,6);
+        submitButton.setVisible(false);
         nameLabel.setVisible(false);
         textBotDifficulty.setVisible(false);
-        nbrPlayer.setEnabled(false);
+
+        /*nbrPlayer.setEnabled(false);
         nbrBot.setEnabled(false);
-        okButtonPlayer.setEnabled(false);
+        okButtonPlayer.setEnabled(false);*/
 
         allAction();
     }
 
     public void allAction() {
-
         okButtonPlayer.addActionListener(e -> {
             nbr = nbrPlayer.getSelectedIndex() + nbrBot.getSelectedIndex();
             if (nbr > 6 || nbr < 3) {
                 ErrorNbr.setVisible(true);
             } else {
                 ErrorNbr.setVisible(false);
-                currentGame.setNumberOfPlayer(nbrPlayer.getSelectedIndex());
-                currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
+                currentGame.setNumberOfUser(nbrPlayer.getSelectedIndex(), nbrBot.getSelectedIndex());
             }
-
         });
         // Vérifier si l'utilisateur a bien rentré tout les noms.
         play.addActionListener(e -> {
@@ -164,8 +164,10 @@ public class SettingsInterface extends JFrame implements Observer {
                 gamePlay.setVisible(true);
             }
             else{
-
             }
+        });
+        submitButton.addActionListener(e -> {
+
         });
     }
     @Override
@@ -177,15 +179,23 @@ public class SettingsInterface extends JFrame implements Observer {
                 okButtonPlayer.setEnabled(true);
                 break;
 
-            case INIT_NAME_PLAYER:
-                nbrPlayer.setEnabled(false);
-                nbrBot.setEnabled(false);
-                okButtonPlayer.setEnabled(false);ErrorNbr.setVisible(false);
+//            case INIT_NAME_PLAYER:
+//                nbrPlayer.setEnabled(false);
+//                nbrBot.setEnabled(false);
+//                okButtonPlayer.setEnabled(false);ErrorNbr.setVisible(false);
+//
+//                nameLabel.setVisible(true);
+//                submitButton.setVisible(true);
+//                setArrayVisibility(textFieldsList,true,currentGame.getNumberOfPlayer());
+//                setArrayVisibility(textPlayerList,true,currentGame.getNumberOfPlayer());
+//                break;
+
+            case INIT_DIFFICULTY_BOT:
+                setArrayEnable(textFieldsList,false,currentGame.getNumberOfPlayer());
+
+                textBotDifficulty.setVisible(true);
                 setArrayVisibility(comboBoxList,true,currentGame.getNumberOfBot());
                 setArrayVisibility(textBotList,true,currentGame.getNumberOfBot());
-                setArrayVisibility(textFieldsList,true,currentGame.getNumberOfPlayer());
-                setArrayVisibility(textPlayerList,true,currentGame.getNumberOfPlayer());
-                nameLabel.setVisible(true);textBotDifficulty.setVisible(true);
                 break;
         }
     }
