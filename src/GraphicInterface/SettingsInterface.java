@@ -12,8 +12,7 @@ import javax.swing.*;
 
 public class SettingsInterface extends JFrame implements Observer {
 
-    private Game currentGame;
-    private Scanner s;
+    private final Game currentGame;
     private JLabel settingLabel;
 
     private JPanel settingsPanel;
@@ -62,9 +61,6 @@ public class SettingsInterface extends JFrame implements Observer {
     private JLabel textBot6;
     private JButton submitButton;
 
-    public void setScanner(Scanner newScanner){
-        s=newScanner;
-    }
     public <T> void fillArray(
             ArrayList<T> arrayElements, T elem1, T elem2, T elem3, T elem4, T elem5, T elem6){
         arrayElements.add(elem1);
@@ -79,8 +75,6 @@ public class SettingsInterface extends JFrame implements Observer {
             list.get(i).setEnabled(b);
         }
     }
-
-
     public SettingsInterface(Game game) {
         super("WITCHHUNT");
         currentGame = game;
@@ -170,57 +164,45 @@ public class SettingsInterface extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        switch ((UpdateCode)arg){
-            case INIT_NUMBER_PLAYER:
+        switch ((UpdateCode) arg) {
+            case INIT_NUMBER_PLAYER -> {
                 nbrPlayer.setEnabled(true);
                 okButtonPlayer.setEnabled(true);
-
                 nbrBot.setVisible(false);
                 okButtonBOT.setVisible(false);
                 textNbrBot.setVisible(false);
-                break;
-
-            case INIT_NUMBER_BOT:
-
+            }
+            case INIT_NUMBER_BOT -> {
                 nbrPlayer.setSelectedIndex(currentGame.getNumberOfPlayer());
-
                 nbrPlayer.setEnabled(false);
                 okButtonPlayer.setEnabled(false);
-
                 nbrBot.setVisible(true);
                 okButtonBOT.setVisible(true);
                 textNbrBot.setVisible(true);
-
-                break;
-
-            case INIT_NAME_PLAYER:
+            }
+            case INIT_NAME_PLAYER -> {
                 nbrBot.setSelectedIndex(currentGame.getNumberOfBot());
-
                 nbrBot.setEnabled(false);
                 okButtonBOT.setEnabled(false);
-
                 nameLabel.setVisible(true);
                 submitButton.setVisible(true);
-                for(int i=0;i<6;i++){
-                    textFieldsList.get(i).setVisible( (i<currentGame.getNumberOfPlayer()) );
-                    textPlayerList.get(i).setVisible( (i<currentGame.getNumberOfPlayer()) );
+                for (int i = 0; i < 6; i++) {
+                    textFieldsList.get(i).setVisible((i < currentGame.getNumberOfPlayer()));
+                    textPlayerList.get(i).setVisible((i < currentGame.getNumberOfPlayer()));
                 }
-                break;
-
-
-            case INIT_DIFFICULTY_BOT:
-                for(int i=0;i<currentGame.getNumberOfPlayer();i++){
+            }
+            case INIT_DIFFICULTY_BOT -> {
+                for (int i = 0; i < currentGame.getNumberOfPlayer(); i++) {
                     textFieldsList.get(i).setText(currentGame.getPlayers().get(i).getName());
                     textFieldsList.get(i).setBackground(Color.green);
                 }
-
-                setArrayEnable(textFieldsList,false,currentGame.getNumberOfPlayer());
+                setArrayEnable(textFieldsList, false, currentGame.getNumberOfPlayer());
                 textBotDifficulty.setVisible(true);
-                for(int i=0;i<6;i++){
-                    comboBoxList.get(i).setVisible( (i<currentGame.getNumberOfBot()) );
-                    textBotList.get(i).setVisible( (i<currentGame.getNumberOfBot()) );
+                for (int i = 0; i < 6; i++) {
+                    comboBoxList.get(i).setVisible((i < currentGame.getNumberOfBot()));
+                    textBotList.get(i).setVisible((i < currentGame.getNumberOfBot()));
                 }
-                break;
+            }
         }
     }
 }

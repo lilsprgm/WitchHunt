@@ -20,7 +20,6 @@ public class TerminalInterface implements Observer, Runnable{
 
     public TerminalInterface(Game game, SettingsInterface settings){
         currentGame = game;
-        settings.setScanner(s);
     }
 
     public boolean verifCode(UpdateCode code){
