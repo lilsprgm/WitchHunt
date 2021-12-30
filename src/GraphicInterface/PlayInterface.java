@@ -12,12 +12,13 @@ public class PlayInterface extends JFrame implements Observer {
     private final Game currentGame;
     private JLabel tourPlayer;
     private JPanel playPanel;
-    private JTextArea carteN1TextArea;
-    private JTextArea carteN2TextArea;
-    private JTextArea carteN3TextArea;
-    private JTextArea carteN4TextArea;
     private JTextField textField1;
-    private JLabel test;
+
+    private JLabel carteN1;
+    private JLabel carteN2;
+    private JLabel carteN3;
+    private JLabel carteN4;
+
 
     public PlayInterface(Game game){
         super("WITCHHUNT");
@@ -36,7 +37,10 @@ public class PlayInterface extends JFrame implements Observer {
     }
 
     private void createUIComponents() {
+
+
+
         ImageIcon myIcon = new ImageIcon(this.getClass().getResource("/Ressources/AngryMob.png"));
-        test = new JLabel(myIcon);
+        carteN1 = new JLabel(myIcon);
     }
 }

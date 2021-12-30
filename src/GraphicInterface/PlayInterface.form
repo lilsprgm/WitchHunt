@@ -43,14 +43,12 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="ef636" class="javax.swing.JTextArea" binding="carteN1TextArea" default-binding="true">
+                  <component id="5c612" class="javax.swing.JLabel" binding="carteN1" custom-create="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Carte n°1"/>
+                      <text value="Label"/>
                     </properties>
                   </component>
                 </children>
@@ -63,14 +61,12 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="89ff5" class="javax.swing.JTextArea" binding="carteN2TextArea" default-binding="true">
+                  <component id="28aae" class="javax.swing.JLabel" binding="carteN2">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Carte n°2"/>
+                      <text value="Label"/>
                     </properties>
                   </component>
                 </children>
@@ -83,14 +79,12 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="ac226" class="javax.swing.JTextArea" binding="carteN4TextArea" default-binding="true">
+                  <component id="f2d30" class="javax.swing.JLabel" binding="carteN4">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Carte n°4"/>
+                      <text value="Label"/>
                     </properties>
                   </component>
                 </children>
@@ -103,14 +97,12 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="b2985" class="javax.swing.JTextArea" binding="carteN3TextArea" default-binding="true">
+                  <component id="34a79" class="javax.swing.JLabel" binding="carteN3">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Carte n°3"/>
+                      <text value="Label"/>
                     </properties>
                   </component>
                 </children>
@@ -167,16 +159,7 @@
         </constraints>
         <properties/>
         <border type="none"/>
-        <children>
-          <component id="5c612" class="javax.swing.JLabel" binding="test" custom-create="true">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Label"/>
-            </properties>
-          </component>
-        </children>
+        <children/>
       </grid>
     </children>
   </grid>

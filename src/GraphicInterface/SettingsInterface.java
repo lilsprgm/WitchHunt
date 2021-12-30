@@ -104,7 +104,7 @@ public class SettingsInterface extends JFrame implements Observer {
         super("WITCHHUNT");
         currentGame = game;
 
-        //A supprimer !!!
+        //A supprimer !!! utile pour tester playInterface
         PlayInterface test = new PlayInterface(currentGame);
         test.setVisible(true);
         ////////////////////////////////////////////////////
