@@ -18,6 +18,8 @@ import javax.swing.*;
 public class SettingsInterface extends JFrame implements Observer {
 
     private final Game currentGame;
+    private PlayInterface playGame;
+
     private JLabel settingLabel;
 
     private JPanel settingsPanel;
@@ -100,13 +102,15 @@ public class SettingsInterface extends JFrame implements Observer {
      * @author lilsb & Agougile
      * @param
      */
-    public SettingsInterface(Game game) {
+    public SettingsInterface(Game game,PlayInterface gamePlay) {
         super("WITCHHUNT");
         currentGame = game;
+        playGame = gamePlay;
 
-        //A supprimer !!! utile pour tester playInterface
+        /*//A supprimer !!! utile pour tester playInterface
         PlayInterface test = new PlayInterface(currentGame);
-        test.setVisible(true);
+        test.setVisible(true);*/
+
         ////////////////////////////////////////////////////
 
         this.setContentPane(settingsPanel); // permet de choisr la fenetre a afficher
@@ -151,15 +155,7 @@ public class SettingsInterface extends JFrame implements Observer {
         //Si il y a pas assez/trop de Joueurs on affiche un texte en laissant l'opportunité de changer le Nbr de JoueurIRL
         //Sinon on fait appel a GAME si tout se passe bien
         okButtonBOT.addActionListener(e -> {
-            nbr = currentGame.getNumberOfPlayer() + nbrBot.getSelectedIndex();
-            if (nbr > 6 || nbr < 3) {
-                ErrorNbr.setVisible(true);
-                nbrPlayer.setEnabled(true);
-                okButtonPlayer.setEnabled(true);
-            } else {
-                ErrorNbr.setVisible(false);
-                currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
-            }
+            currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
         });
 
         //On prend le nom écrit sur les fields pour les envoyer à GAME.
@@ -185,20 +181,11 @@ public class SettingsInterface extends JFrame implements Observer {
         });
 
         play.addActionListener(e -> {
-            ArrayList<Player> bots = new ArrayList<Player>();
+            ArrayList<Integer> bots = new ArrayList<Integer>();
             for(int i=0;i<currentGame.getNumberOfBot();i++){
-                if(comboBoxList.get(i).getSelectedIndex()==1){
-                    bots.add(i,new EasyModeBot());
-                }
-                if(comboBoxList.get(i).getSelectedIndex()==2){
-                    bots.add(i,new HardModeBot());
-                }
+                bots.add(i,comboBoxList.get(i).getSelectedIndex());
             }
             currentGame.setBots(bots);
-            dispose();
-            PlayInterface gamePlay = new PlayInterface(currentGame);
-            currentGame.addObserver(gamePlay);
-            gamePlay.setVisible(true);
         });
     }
 
@@ -226,8 +213,14 @@ public class SettingsInterface extends JFrame implements Observer {
                 okButtonBOT.setVisible(true);
                 textNbrBot.setVisible(true);
             }
+            case ERROR_NUMBER -> {
+                ErrorNbr.setVisible(true);
+                nbrPlayer.setEnabled(true);
+                okButtonPlayer.setEnabled(true);
+            }
             case INIT_NAME_PLAYER -> {
                 nbrBot.setSelectedIndex(currentGame.getNumberOfBot());
+                ErrorNbr.setVisible(false);
                 nbrBot.setEnabled(false);
                 okButtonBOT.setEnabled(false);
                 nameLabel.setVisible(true);
@@ -248,7 +241,17 @@ public class SettingsInterface extends JFrame implements Observer {
                     comboBoxList.get(i).setVisible((i < currentGame.getNumberOfBot()));
                     textBotList.get(i).setVisible((i < currentGame.getNumberOfBot()));
                 }
+                break;
             }
+            case GAME_ROUND ->{
+                dispose();
+                playGame.setVisible(true);
+                System.out.println(currentGame.getPlayers());
+                System.out.println(currentGame.getCurrentPlayer());
+                break;
+            }
+
+
         }
     }
 }

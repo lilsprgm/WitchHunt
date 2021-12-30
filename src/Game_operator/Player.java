@@ -2,6 +2,7 @@ package Game_operator;
 
 import Cards.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,9 +13,9 @@ public abstract class Player {
     protected String name;
     protected boolean accused = false;
     protected Identity identity =new Identity();
-    protected List<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
-    protected List<Card> deck = new ArrayList<Card>();
-    protected List<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
+    protected ArrayList<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
+    protected ArrayList<Card> deck = new ArrayList<Card>();
+    protected ArrayList<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
 
 
 
@@ -29,7 +30,7 @@ public abstract class Player {
         return table;
     }
 
-    public void setTable(List<Card> table) {
+    public void setTable(ArrayList<Card> table) {
         this.table = table;
     }
     /**
@@ -131,7 +132,7 @@ public abstract class Player {
      * Permet de récupérer la main du joueur, contenant ses cartes
      * @return la variable deck, une collection d'instances de Card.
      */
-    public List<Card> getDeck() {
+    public ArrayList<Card> getDeck() {
         return deck;
     }
 

@@ -29,27 +29,31 @@ public class Game extends Observable  implements Runnable {
 
 
     private Game(){
-        SettingsInterface gameSettings = new SettingsInterface(this);
-        TerminalInterface myTerminalInterface = new TerminalInterface(this,gameSettings);
+        TerminalInterface myTerminalInterface = new TerminalInterface(this);
+        PlayInterface myGame = new PlayInterface(this);
+        SettingsInterface gameSettings = new SettingsInterface(this,myGame);
         LaunchInterface myLaunch = new LaunchInterface(gameSettings);
         addObserver(myTerminalInterface);
         addObserver(gameSettings);
+        addObserver(myGame);
         t.start();
     }
 
     @Override
     public void run() {
         while(true){
+
             this.init_Game();
             while (!this.endOfGame()){
                 this.initNewRound();
                 this.roundManagement();
             }
             this.theWinnerIs();
+
         }
     }
 
-    public synchronized void setUpdateCode(UpdateCode newUpdateCode){
+    private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
         setChanged();
         notifyObservers(newUpdateCode);
@@ -59,21 +63,53 @@ public class Game extends Observable  implements Runnable {
     }
 
     public void setNumberOfPlayer(int nbrPlayer){
-        this.numberOfPlayerIRL = nbrPlayer;
-        setUpdateCode(UpdateCode.INIT_NUMBER_BOT);
+        if(nbrPlayer > 6 || nbrPlayer<0){
+            setUpdateCode(UpdateCode.ERROR_NUMBER);
+        }
+        else{
+            this.numberOfPlayerIRL = nbrPlayer;
+            if(nbrPlayer!=6){
+                setUpdateCode(UpdateCode.INIT_NUMBER_BOT);
+            }else setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
+        }
+    }
+    public void setNumberOfBot(int nbrBot){
+        if(nbrBot+numberOfPlayerIRL > 6 || nbrBot+numberOfPlayerIRL<3){
+            setUpdateCode(UpdateCode.ERROR_NUMBER);
+        }
+        else{
+            this.numberOfBot = nbrBot;
+            setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
+        }
     }
 
-    public void setNumberOfBot(int nbrBot){
-        this.numberOfBot = nbrBot;
-        setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
-    }
     public void setPlayers(ArrayList<Player> clone){
-        players = clone;
+        players.addAll(clone);
         setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
     }
-    public void setBots(ArrayList<Player> clone){
-        players.addAll(clone);
-        setUpdateCode(UpdateCode.GAME);
+    public void setBots(ArrayList<Integer> listDifficulty){
+        boolean verif=true;
+        for(int difficulty : listDifficulty){
+            if(difficulty>2 ||difficulty<0){
+                setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
+                verif=false;
+                break;
+            }
+            else{
+                if(difficulty==1){
+                    players.add(new EasyModeBot());
+                }
+                if(difficulty==2){
+                    players.add(new HardModeBot());
+                }
+                players.get(players.size()).setName("Bot"+listDifficulty.indexOf(difficulty)+1);
+                players.get(players.size()).setGame(this);
+            }
+        }
+        if(verif){
+            this.currentPlayer = players.get(0);
+            setUpdateCode(UpdateCode.GAME_ROUND);
+        }
     }
 
     public static Game getInstance() {
@@ -200,21 +236,23 @@ public class Game extends Observable  implements Runnable {
      * @author lilsb
      */
     public void initNewRound (){
-        stockPile.removeAll(stockPile);
-        initStockPile();
-        for (Player player : players){
-            player.clearDeck();
-            player.getIdentity().setRevealed(false);
-        }
-        while (stockPile.size() - (numberOfPlayerIRL + numberOfBot) >= 0){
+        if(!players.isEmpty()){
+            stockPile.removeAll(stockPile);
+            initStockPile();
             for (Player player : players){
-                player.addCardTo(player.getDeck(), draw(stockPile));
+                player.clearDeck();
+                player.getIdentity().setRevealed(false);
             }
-        }
-        for (Player player : players){
-            System.out.println(player.getName() + " -->");
-            player.chooseIdentity();
-            player.getIdentity().setRevealed(false); // je croit qu'il faut remettre les roles en place
+            while (stockPile.size() - (numberOfPlayerIRL + numberOfBot) >= 0){
+                for (Player player : players){
+                    player.addCardTo(player.getDeck(), draw(stockPile));
+                }
+            }
+            for (Player player : players){
+                System.out.println(player.getName() + " -->");
+                player.chooseIdentity();
+                player.getIdentity().setRevealed(false);
+            }
         }
     }
 
@@ -284,12 +322,13 @@ public class Game extends Observable  implements Runnable {
      * @author lilsb
      */
     public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
-        this.currentPlayer = players.get(0);
-        while (!endOfRound()){
-            System.out.println("Your turn "+ this.currentPlayer.getName());
-            this.currentPlayer.play();
-            this.currentPlayer = chosenNextPlayer;
-            System.out.println(chosenNextPlayer);
+        if(actualCode==UpdateCode.GAME_ROUND){
+            while (!endOfRound()){
+                System.out.println("Your turn "+ this.currentPlayer.getName());
+                this.currentPlayer.play();
+                this.currentPlayer = chosenNextPlayer;
+                System.out.println(chosenNextPlayer);
+            }
         }
     }
 

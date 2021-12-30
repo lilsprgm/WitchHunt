@@ -18,7 +18,7 @@ public class TerminalInterface implements Observer, Runnable{
     private int nbPlayer;
     private int nbBot;
 
-    public TerminalInterface(Game game, SettingsInterface settings){
+    public TerminalInterface(Game game){
         currentGame = game;
     }
 
@@ -34,48 +34,40 @@ public class TerminalInterface implements Observer, Runnable{
 
     @Override
     public void run() {
-        try {
-            Robot robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
         while(true){
+            ArrayList<Integer> bots = new ArrayList<Integer>();
+            ArrayList<Player> p = new ArrayList<Player>();
             switch (flag){
                 case INIT_NUMBER_PLAYER:
                     flag = UpdateCode.ATTENTE;
-                    do{
-                        System.out.print("\nVeuillez entrer le nombre de Joueur dans la Partie (6 joueurs max) : ");
-                            nbPlayer = s.nextInt();
-                    }while(nbPlayer > 6);
+                    System.out.print("\nVeuillez entrer le nombre de Joueur dans la Partie (6 joueurs max) : ");
+                    nbPlayer = s.nextInt();
                     if(verifCode(UpdateCode.INIT_NUMBER_PLAYER)){
+                        currentGame.setNumberOfPlayer(nbPlayer);
+                    }
+                    break;
+
+                case ERROR_NUMBER:
+                    flag = UpdateCode.ATTENTE;
+                    System.out.print("Incorrect Number\n");
+                    System.out.print("\nVeuillez entrer le nombre de Joueur dans la Partie (6 joueurs max) : ");
+                    nbPlayer = s.nextInt();
+                    if(verifCode(UpdateCode.ERROR_NUMBER)){
                         currentGame.setNumberOfPlayer(nbPlayer);
                     }
                     break;
 
                 case INIT_NUMBER_BOT:
                     flag = UpdateCode.ATTENTE;
-                    if(currentGame.getNumberOfPlayer()!=6){
-                        System.out.print("\nVeuillez entrer le nombre de Bot dans la Partie : ");
-                        nbBot = s.nextInt();
-                        if(nbBot+currentGame.getNumberOfPlayer()>6 || nbBot+currentGame.getNumberOfPlayer()<3){
-                            if(verifCode(UpdateCode.INIT_NUMBER_BOT)) {
-                                currentGame.setUpdateCode(UpdateCode.INIT_NUMBER_PLAYER);
-                            }
-                        }
-                        else{
-                            if(verifCode(UpdateCode.INIT_NUMBER_BOT)){
-                                currentGame.setNumberOfBot(nbBot);
-                            }
-                        }
-                    }
-                    else{
-                        currentGame.setNumberOfBot(0);
+                    System.out.print("\nVeuillez entrer le nombre de Bot dans la Partie : ");
+                    nbBot = s.nextInt();
+                    if(verifCode(UpdateCode.INIT_NUMBER_BOT)){
+                        currentGame.setNumberOfBot(nbBot);
                     }
                     break;
 
                 case INIT_NAME_PLAYER:
                     flag = UpdateCode.ATTENTE;
-                    ArrayList<Player> p = new ArrayList<Player>();
                     s.nextLine();
                     for(int i=1;i< currentGame.getNumberOfPlayer()+1;i++){
                         System.out.print("\nEntrez le nom du Joueur n°"+i+" :");
@@ -90,22 +82,12 @@ public class TerminalInterface implements Observer, Runnable{
 
                 case INIT_DIFFICULTY_BOT:
                     flag = UpdateCode.ATTENTE;
-                    ArrayList<Player> bots = new ArrayList<Player>();
                     int chosenDifficulty;
                     for(int i=1;i<currentGame.getNumberOfBot()+1;i++){
                         if(verifCode(UpdateCode.INIT_DIFFICULTY_BOT)){
-                            do{
-                                System.out.print("\nDifficulté Bot n°"+i+"\n1-Easy\n2-Hard\n");
-                                chosenDifficulty = s.nextInt();
-                            }while(chosenDifficulty>2 || chosenDifficulty<1);
-                            if(chosenDifficulty==1){
-                                bots.add(i-1,new EasyModeBot());
-                            }
-                            if(chosenDifficulty==2){
-                                bots.add(i-1,new HardModeBot());
-                            }
-                            bots.get(i-1).setName("Bot"+i);
-                            bots.get(i-1).setGame(currentGame);
+                            System.out.print("\nDifficulté Bot n°"+i+"\n1-Easy\n2-Hard\n");
+                            chosenDifficulty = s.nextInt();
+                            bots.add(i-1,chosenDifficulty);
                         }
                     }
                     if(verifCode(UpdateCode.INIT_DIFFICULTY_BOT)){
@@ -113,8 +95,23 @@ public class TerminalInterface implements Observer, Runnable{
                     }
                     break;
 
-                case GAME:
+                case ERROR_DIFFICULTY:
+                    flag = UpdateCode.ATTENTE;
+                    for(int i=currentGame.getPlayers().size()-currentGame.getNumberOfBot()+1;i<currentGame.getNumberOfBot()+1;i++){
+                        if(verifCode(UpdateCode.INIT_DIFFICULTY_BOT)){
+                            System.out.print("\nWrong Difficulty");
+                            System.out.print("\nDifficulty Bot n°"+i+"\n1-Easy\n2-Hard\n");
+                            chosenDifficulty = s.nextInt();
+                            bots.set(i-1,chosenDifficulty);
+                        }
+                    }
+                    if(verifCode(UpdateCode.ERROR_DIFFICULTY)){
+                        currentGame.setBots(bots);
+                    }
+                    break;
 
+                case GAME_ROUND:
+                    //System.out.println("Game Round");
                     break;
 
                 case ATTENTE:
@@ -133,6 +130,14 @@ public class TerminalInterface implements Observer, Runnable{
                 }
                 break;
 
+            case ERROR_NUMBER:
+                flag = UpdateCode.ERROR_NUMBER;
+                break;
+
+            case ERROR_DIFFICULTY:
+                flag = UpdateCode.ERROR_DIFFICULTY;
+                break;
+
             case INIT_NUMBER_BOT:
                 flag = UpdateCode.INIT_NUMBER_BOT;
                 break;
@@ -143,8 +148,8 @@ public class TerminalInterface implements Observer, Runnable{
             case INIT_DIFFICULTY_BOT:
                 flag = UpdateCode.INIT_DIFFICULTY_BOT;
                 break;
-            case GAME:
-                flag = UpdateCode.GAME;
+            case GAME_ROUND:
+                flag = UpdateCode.GAME_ROUND;
                 break;
         }
 
