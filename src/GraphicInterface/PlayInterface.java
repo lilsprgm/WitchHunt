@@ -14,6 +14,10 @@ public class PlayInterface extends JFrame implements Observer {
     private JPanel playPanel;
     private JTextField textField1;
 
+    ImageIcon angryMob;ImageIcon blackCat;ImageIcon broomstick;ImageIcon cauldron;
+    ImageIcon duckingStool;ImageIcon pointedHad;ImageIcon Theinquisition;ImageIcon angryMob;
+    ImageIcon angryMob;ImageIcon angryMob;ImageIcon angryMob;ImageIcon angryMob;
+
     private JLabel carteN1;
     private JLabel carteN2;
     private JLabel carteN3;
@@ -27,9 +31,17 @@ public class PlayInterface extends JFrame implements Observer {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
         this.pack(); // ajustement taille de la fenetre automatique
         this.setVisible(true);
+        initImageIcon();
+        setImageIcon(carteN1);
     }
 
+    public void initImageIcon(){
+        ImageIcon angryMob = new ImageIcon(this.getClass().getResource("AngryMob.png"));
+    }
 
+    public void setImageIcon(JLabel label){
+
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -37,10 +49,5 @@ public class PlayInterface extends JFrame implements Observer {
     }
 
     private void createUIComponents() {
-
-
-
-        ImageIcon myIcon = new ImageIcon(this.getClass().getResource("/Ressources/AngryMob.png"));
-        carteN1 = new JLabel(myIcon);
     }
 }
