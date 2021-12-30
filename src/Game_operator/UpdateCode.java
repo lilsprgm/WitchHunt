@@ -10,4 +10,5 @@ public enum UpdateCode {
     ERROR_DIFFICULTY,
     GAME_INIT_ROUND,
     GAME_ROUND,
+    ROUND_MANAGEMENT;
 }

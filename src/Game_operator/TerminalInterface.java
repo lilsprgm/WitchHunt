@@ -9,14 +9,15 @@ public class TerminalInterface implements Observer, Runnable{
 
     private Game currentGame;
     private Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
-    private UpdateCode flag = UpdateCode.ATTENTE;
-    private Thread t = new Thread(this);
+    private volatile UpdateCode flag = UpdateCode.ATTENTE;
 
     private int nbPlayer;
     private int nbBot;
 
     public TerminalInterface(Game game){
         currentGame = game;
+        Thread t = new Thread(this);
+        t.start();
     }
 
     public boolean verifCode(UpdateCode code){
@@ -88,7 +89,6 @@ public class TerminalInterface implements Observer, Runnable{
                     if(verifCode(UpdateCode.INIT_DIFFICULTY_BOT)){
                         currentGame.setBots(chosenDifficulty);
                     }
-
                     break;
 
                 case ERROR_DIFFICULTY:
@@ -102,6 +102,11 @@ public class TerminalInterface implements Observer, Runnable{
                     break;
 
                 case GAME_INIT_ROUND:
+
+                    break;
+
+                case GAME_ROUND:
+                    flag = UpdateCode.ATTENTE;
                     break;
 
                 case ATTENTE:
@@ -115,9 +120,6 @@ public class TerminalInterface implements Observer, Runnable{
         switch ((UpdateCode)arg){
             case INIT_NUMBER_PLAYER:
                 flag = UpdateCode.INIT_NUMBER_PLAYER;
-                if(!t.isAlive()) {
-                    t.start();
-                }
                 break;
 
             case ERROR_NUMBER:
@@ -140,6 +142,9 @@ public class TerminalInterface implements Observer, Runnable{
                 break;
             case GAME_INIT_ROUND:
                 flag = UpdateCode.GAME_INIT_ROUND;
+                break;
+            case GAME_ROUND:
+                flag = UpdateCode.GAME_ROUND;
                 break;
         }
 

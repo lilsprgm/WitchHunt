@@ -1,16 +1,25 @@
 package Cards;
 
+import Game_operator.Game;
 import Game_operator.Player;
 
 public class AngryMob extends Card implements Action{
+    private static Card instance =null;
 
-    public AngryMob(){
+    private AngryMob(){
         setName("AngryMob");
         setActionHunt("Reveal another player's identity\nIf hhe is a witch you win 2 points else you lose 2 points");
         setActionWitch("You take next turn");
         setConditionHunt("Only available if you have been revealed as a Villager");
         setConditionWitch("");
 
+    }
+
+    public static AngryMob getInstance(){
+        if (AngryMob.instance == null) {
+            AngryMob.instance = new AngryMob();
+        }
+        return (AngryMob) instance;
     }
 
     @Override

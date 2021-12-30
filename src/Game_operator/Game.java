@@ -23,7 +23,7 @@ public class Game extends Observable {
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
-    private UpdateCode actualCode;
+    private volatile UpdateCode actualCode;
 
 
     private Game(){
@@ -38,6 +38,7 @@ public class Game extends Observable {
 
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
+        System.out.println("Phase actuelle : "+actualCode);                         // A SUPP PLUS TARD
         setChanged();
         notifyObservers(newUpdateCode);
     }
@@ -73,13 +74,13 @@ public class Game extends Observable {
         players.addAll(clone);
         if(numberOfBot>0){
             setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
-        }else
+        }else{
             this.currentPlayer = players.get(0);
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
-
+        }
     }
     public void setBots(Integer difficulty){
-        int indexBot = players.size()-numberOfPlayerIRL+1;
+        int indexBot = players.size()-numberOfPlayerIRL;
         if(difficulty>2 ||difficulty<0){
             setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
         }
@@ -159,7 +160,7 @@ public class Game extends Observable {
      *
      */
     public void initStockPile(){ //Initialisation de la pioche
-        stockPile.add(new AngryMob());
+        stockPile.add(AngryMob.getInstance());
         stockPile.add(new BlackCat());
         stockPile.add(new EvilEye());
         stockPile.add(new Broomstick());
@@ -202,9 +203,7 @@ public class Game extends Observable {
      *
      */
     public void initPlayers(){
-        //On créer une partie contenant le nombre de Joueurs et le nombre de Bot souhaité
         setUpdateCode(UpdateCode.INIT_NUMBER_PLAYER);
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     /**
@@ -236,11 +235,6 @@ public class Game extends Observable {
                     player.addCardTo(player.getDeck(), draw(stockPile));
                 }
             }
-            for (Player player : players){
-                System.out.println(player.getName() + " -->");
-                //player.chooseIdentity();
-                //player.getIdentity().setRevealed(false);
-            }
             setUpdateCode(UpdateCode.GAME_ROUND);
         }
     }
@@ -254,7 +248,7 @@ public class Game extends Observable {
      * @author lilsb
      */
     public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
-        if(actualCode==UpdateCode.GAME_INIT_ROUND){
+        if(actualCode==UpdateCode.ROUND_MANAGEMENT){
             while (!endOfRound()){
                 System.out.println("Your turn "+ this.currentPlayer.getName());
                 this.currentPlayer.play();
@@ -263,7 +257,6 @@ public class Game extends Observable {
             }
         }
     }
-
 
     /**
      * Permet de déterminer si le round est terminé (rappel round terminé si l'identité de tous les joueurs a été révélée sauf un).

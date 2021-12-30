@@ -106,12 +106,6 @@ public class SettingsInterface extends JFrame implements Observer{
         currentGame = game;
         playGame = gamePlay;
 
-        /*//A supprimer !!! utile pour tester playInterface
-        PlayInterface test = new PlayInterface(currentGame);
-        test.setVisible(true);*/
-
-        ////////////////////////////////////////////////////
-
         this.setContentPane(settingsPanel); // permet de choisr la fenetre a afficher
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
         this.pack(); // ajustement taille de la fenetre automatique
@@ -133,6 +127,7 @@ public class SettingsInterface extends JFrame implements Observer{
         submitButton.setVisible(false);
         nameLabel.setVisible(false);
         textBotDifficulty.setVisible(false);
+        play.setVisible(false);
 
         nbrBot.setVisible(false);
         okButtonBOT.setVisible(false);
@@ -228,6 +223,7 @@ public class SettingsInterface extends JFrame implements Observer{
                 }
             }
             case INIT_DIFFICULTY_BOT -> {
+                play.setVisible(true);
                 for (int i = 0; i < currentGame.getNumberOfPlayer(); i++) {
                     textFieldsList.get(i).setText(currentGame.getPlayers().get(i).getName());
                     textFieldsList.get(i).setBackground(Color.green);
