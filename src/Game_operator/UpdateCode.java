@@ -8,5 +8,6 @@ public enum UpdateCode {
     INIT_NAME_PLAYER,
     INIT_DIFFICULTY_BOT,
     ERROR_DIFFICULTY,
+    GAME_INIT_ROUND,
     GAME_ROUND,
 }

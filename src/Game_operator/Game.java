@@ -4,10 +4,9 @@ import Cards.*;
 //import org.jetbrains.annotations.NotNull;
 import GraphicInterface.*;
 import java.util.*;
-import java.util.LinkedList;
 
 
-public class Game extends Observable  implements Runnable {
+public class Game extends Observable {
 
     Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
     private int numberOfPlayerIRL=0;
@@ -24,7 +23,6 @@ public class Game extends Observable  implements Runnable {
     private static List<Card> discardedCard = new ArrayList<Card> ();
 
     private static Game instance = null;
-    Thread t = new Thread(this);
     private UpdateCode actualCode;
 
 
@@ -36,21 +34,6 @@ public class Game extends Observable  implements Runnable {
         addObserver(myTerminalInterface);
         addObserver(gameSettings);
         addObserver(myGame);
-        t.start();
-    }
-
-    @Override
-    public void run() {
-        while(true){
-
-            this.init_Game();
-            while (!this.endOfGame()){
-                this.initNewRound();
-                this.roundManagement();
-            }
-            this.theWinnerIs();
-
-        }
     }
 
     private void setUpdateCode(UpdateCode newUpdateCode){
@@ -79,37 +62,42 @@ public class Game extends Observable  implements Runnable {
         }
         else{
             this.numberOfBot = nbrBot;
-            setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
+            if(numberOfPlayerIRL==0){
+                setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
+            }else
+                setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
         }
     }
 
     public void setPlayers(ArrayList<Player> clone){
         players.addAll(clone);
-        setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
-    }
-    public void setBots(ArrayList<Integer> listDifficulty){
-        boolean verif=true;
-        for(int difficulty : listDifficulty){
-            if(difficulty>2 ||difficulty<0){
-                setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
-                verif=false;
-                break;
-            }
-            else{
-                if(difficulty==1){
-                    players.add(new EasyModeBot());
-                }
-                if(difficulty==2){
-                    players.add(new HardModeBot());
-                }
-                players.get(players.size()).setName("Bot"+listDifficulty.indexOf(difficulty)+1);
-                players.get(players.size()).setGame(this);
-            }
-        }
-        if(verif){
+        if(numberOfBot>0){
+            setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
+        }else
             this.currentPlayer = players.get(0);
-            setUpdateCode(UpdateCode.GAME_ROUND);
+            setUpdateCode(UpdateCode.GAME_INIT_ROUND);
+
+    }
+    public void setBots(Integer difficulty){
+        int indexBot = players.size()-numberOfPlayerIRL+1;
+        if(difficulty>2 ||difficulty<0){
+            setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
         }
+        else{
+            if(difficulty==1){
+                players.add(new EasyModeBot());
+            }
+            if(difficulty==2){
+                players.add(new HardModeBot());
+            }
+            players.get(players.size()-1).setName("Bot"+indexBot);
+            players.get(players.size()-1).setGame(this);
+        }
+        if(players.size()==numberOfPlayerIRL+numberOfBot){
+            this.currentPlayer = players.get(0);
+            setUpdateCode(UpdateCode.GAME_INIT_ROUND);
+        }
+        else setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
     }
 
     public static Game getInstance() {
@@ -236,7 +224,7 @@ public class Game extends Observable  implements Runnable {
      * @author lilsb
      */
     public void initNewRound (){
-        if(!players.isEmpty()){
+        if(actualCode==UpdateCode.GAME_INIT_ROUND){
             stockPile.removeAll(stockPile);
             initStockPile();
             for (Player player : players){
@@ -250,11 +238,32 @@ public class Game extends Observable  implements Runnable {
             }
             for (Player player : players){
                 System.out.println(player.getName() + " -->");
-                player.chooseIdentity();
-                player.getIdentity().setRevealed(false);
+                //player.chooseIdentity();
+                //player.getIdentity().setRevealed(false);
+            }
+            setUpdateCode(UpdateCode.GAME_ROUND);
+        }
+    }
+
+    /**
+     * Permet la gestion d'un round complet. Tant que le round n'est pas fini cette fonction permet de gérer l'ordre de jeu ses joueurs.
+     * Il y a deux cas possible : soit on suit l'orde "naturel" de jeu des joueurs,
+     * soit le joueurs suivant a été désigné par l'action d'une carte d'un joueurs.
+     * Quand on arrive au dernier joueurs à jouer, on refait jouer le premier.
+     *
+     * @author lilsb
+     */
+    public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
+        if(actualCode==UpdateCode.GAME_INIT_ROUND){
+            while (!endOfRound()){
+                System.out.println("Your turn "+ this.currentPlayer.getName());
+                this.currentPlayer.play();
+                this.currentPlayer = chosenNextPlayer;
+                System.out.println(chosenNextPlayer);
             }
         }
     }
+
 
     /**
      * Permet de déterminer si le round est terminé (rappel round terminé si l'identité de tous les joueurs a été révélée sauf un).
@@ -313,24 +322,6 @@ public class Game extends Observable  implements Runnable {
         chosenNextPlayer = player;
     }
 
-    /**
-     * Permet la gestion d'un round complet. Tant que le round n'est pas fini cette fonction permet de gérer l'ordre de jeu ses joueurs.
-     * Il y a deux cas possible : soit on suit l'orde "naturel" de jeu des joueurs,
-     * soit le joueurs suivant a été désigné par l'action d'une carte d'un joueurs.
-     * Quand on arrive au dernier joueurs à jouer, on refait jouer le premier.
-     *
-     * @author lilsb
-     */
-    public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
-        if(actualCode==UpdateCode.GAME_ROUND){
-            while (!endOfRound()){
-                System.out.println("Your turn "+ this.currentPlayer.getName());
-                this.currentPlayer.play();
-                this.currentPlayer = chosenNextPlayer;
-                System.out.println(chosenNextPlayer);
-            }
-        }
-    }
 
     /**
      * Permet de déterminer si la partie est finie ou non. (Rappel fin de partie si tous les joueurs ont auu moins 5 points).
@@ -386,6 +377,14 @@ public class Game extends Observable  implements Runnable {
      */
     public static void main(String[] arg){
         Game game = Game.getInstance();
+        while(true){
+            game.init_Game();
+            while (!game.endOfGame()){
+                game.initNewRound();
+                game.roundManagement();
+            }
+            game.theWinnerIs();
+        }
     }
 
 

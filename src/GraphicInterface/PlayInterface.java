@@ -6,10 +6,6 @@ import Game_operator.Player;
 import Game_operator.UpdateCode;
 
 import javax.swing.*;
-import javax.swing.plaf.TableHeaderUI;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -80,9 +76,11 @@ public class PlayInterface extends JFrame implements Observer {
      */
     public void initHand(Player p){
         hand = p.getDeck();
+        System.out.println(hand);
+        System.out.println(currentGame.getCurrentPlayer());
         for(int i=0;i<hand.size();i++){
-            actualImage.set(i,imageList.get(hand.get(i))) ;
-            carteN.get(i).setIcon(actualImage.get(i));
+            //actualImage.set(i,imageList.get(hand.get(i))) ;
+            //carteN.get(i).setIcon(actualImage.get(i));
         }
     }
     public void setImageIcon(JLabel label, ImageIcon image){
@@ -99,7 +97,7 @@ public class PlayInterface extends JFrame implements Observer {
     public void update(Observable o, Object arg) {
         switch ((UpdateCode)arg){
             case GAME_ROUND:
-                //initHand(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
+                initHand(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
                 break;
         }
     }

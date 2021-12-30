@@ -7,7 +7,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 import javax.swing.*;
 
 /**
@@ -15,7 +14,7 @@ import javax.swing.*;
  * @author lilsb & Agougile
  * @param
  */
-public class SettingsInterface extends JFrame implements Observer {
+public class SettingsInterface extends JFrame implements Observer{
 
     private final Game currentGame;
     private PlayInterface playGame;
@@ -181,11 +180,9 @@ public class SettingsInterface extends JFrame implements Observer {
         });
 
         play.addActionListener(e -> {
-            ArrayList<Integer> bots = new ArrayList<Integer>();
             for(int i=0;i<currentGame.getNumberOfBot();i++){
-                bots.add(i,comboBoxList.get(i).getSelectedIndex());
+                currentGame.setBots(comboBoxList.get(i).getSelectedIndex());
             }
-            currentGame.setBots(bots);
         });
     }
 
@@ -243,15 +240,14 @@ public class SettingsInterface extends JFrame implements Observer {
                 }
                 break;
             }
-            case GAME_ROUND ->{
+            case GAME_INIT_ROUND ->{
                 dispose();
                 playGame.setVisible(true);
-                System.out.println(currentGame.getPlayers());
-                System.out.println(currentGame.getCurrentPlayer());
                 break;
             }
 
 
         }
     }
+
 }
