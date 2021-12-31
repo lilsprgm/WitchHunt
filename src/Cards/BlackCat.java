@@ -4,13 +4,20 @@ import Game_operator.*;
 
 public class BlackCat extends Card{
 
-      public BlackCat(){
+      private BlackCat(){
             setName("Black Cat");
             setActionHunt("Add one discarded card to your hand, and then discard this card\n Take next turn");
             setActionWitch("Take next turn");
             setConditionHunt("At least one card is discarded");
         }
 
+    private static BlackCat instance =null;
+    public static BlackCat getInstance(){
+        if (BlackCat.instance == null) {
+            BlackCat.instance = new BlackCat();
+        }
+        return instance;
+    }
         /**
          * Permet d'activer l'effet Witch de la carte BlackCat.
          *Le Joueur qui à joué la carte est le prochain à jouer.

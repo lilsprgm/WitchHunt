@@ -85,10 +85,10 @@ public class Game extends Observable {
             setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
         }
         else{
-            if(difficulty==1){
+            if(difficulty==0){
                 players.add(new EasyModeBot());
             }
-            if(difficulty==2){
+            if(difficulty==1){
                 players.add(new HardModeBot());
             }
             players.get(players.size()-1).setName("Bot"+indexBot);
@@ -161,17 +161,17 @@ public class Game extends Observable {
      */
     public void initStockPile(){ //Initialisation de la pioche
         stockPile.add(AngryMob.getInstance());
-        stockPile.add(new BlackCat());
-        stockPile.add(new EvilEye());
-        stockPile.add(new Broomstick());
-        stockPile.add(new Cauldron());
-        stockPile.add(new DuckingStool());
-        stockPile.add(new HookedNose());
-        stockPile.add(new Toad());
-        stockPile.add(new PointedHat());
-        stockPile.add(new Wart());
-        stockPile.add(new PetNewt());
-        stockPile.add(new Inquisition());
+        stockPile.add(BlackCat.getInstance());
+        stockPile.add(EvilEye.getInstance());
+        stockPile.add(Broomstick.getInstance());
+        stockPile.add(Cauldron.getInstance());
+        stockPile.add(DuckingStool.getInstance());
+        stockPile.add(HookedNose.getInstance());
+        stockPile.add(Toad.getInstance());
+        stockPile.add(PointedHat.getInstance());
+        stockPile.add(Wart.getInstance());
+        stockPile.add(PetNewt.getInstance());
+        stockPile.add(Inquisition.getInstance());
         shuffle(stockPile);
     }
 

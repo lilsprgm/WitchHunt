@@ -2,10 +2,18 @@ package Cards;
 import Game_operator.*;
 public class DuckingStool extends Card{
 
-    public DuckingStool(){
+    private DuckingStool(){
         setName("DuckingStool");
         setActionHunt("Choose a player. They must reveal their identity or discard a card from their hand\n Witch you gain 1pt\nHunt you loose 1 pt");
         setConditionWitch("Choose next player");
+    }
+
+    private static DuckingStool instance =null;
+    public static DuckingStool getInstance(){
+        if (DuckingStool.instance == null) {
+            DuckingStool.instance = new DuckingStool();
+        }
+        return instance;
     }
 
     @Override

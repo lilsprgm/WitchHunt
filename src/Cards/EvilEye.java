@@ -2,10 +2,17 @@ package Cards;
  import  Game_operator.*;
 public class EvilEye extends Card{
 
-    public EvilEye(){
+    private EvilEye(){
         setName("EvilEye");
         setActionHunt("Choose next player\n At their turn they must accuse a player other than you if possible");
         setActionWitch(getActionHunt());
+    }
+    private static EvilEye instance =null;
+    public static EvilEye getInstance(){
+        if (EvilEye.instance == null) {
+            EvilEye.instance = new EvilEye();
+        }
+        return instance;
     }
 
     // Ici le Joueur sera protégé du Joueur qu'il aura choisi et uniquement lui
@@ -16,6 +23,7 @@ public class EvilEye extends Card{
         player.getGame().chooseNextPlayer(chosenPlayer);
         player.getGame().setProtectedPlayer(player);
     }
+
 
     @Override
     public void actionHunt(Player player) {

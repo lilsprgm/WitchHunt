@@ -4,7 +4,7 @@ import Game_operator.Player;
 
 public class HookedNose extends Card {
 
-    public HookedNose(){
+    private HookedNose(){
         setName("HookedNose");
         setActionHunt("Choose next player\n Before their turn take a card from its hand and add it to yours");
         setActionWitch("You take a card from the  hand of the player who has accused you\n You take next turn");
@@ -12,6 +12,13 @@ public class HookedNose extends Card {
         setConditionHunt("");
     }
 
+    private static HookedNose instance =null;
+    public static HookedNose getInstance(){
+        if (HookedNose.instance == null) {
+            HookedNose.instance = new HookedNose();
+        }
+        return instance;
+    }
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());

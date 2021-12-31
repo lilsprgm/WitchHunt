@@ -4,11 +4,18 @@ import Game_operator.Player;
 
 public class PetNewt extends Card {
 
-    public PetNewt(){
+    private PetNewt(){
         setName("Pet Newt");
         setActionHunt("Take a revealed Rumour card from any other player into your hand\nChoose next player");
         setActionWitch("Take next turn");
         setConditionHunt("At least one player has already revealed a Rumor Card");
+    }
+    private static PetNewt instance =null;
+    public static PetNewt getInstance(){
+        if (PetNewt.instance == null) {
+            PetNewt.instance = new PetNewt();
+        }
+        return instance;
     }
 
     @Override

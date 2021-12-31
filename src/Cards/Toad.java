@@ -4,10 +4,17 @@ import Game_operator.Player;
 
 public class Toad extends Card {
 
-    public Toad(){
+    private Toad(){
         setName("Toad");
         setActionHunt("Reveal your identity\nVillager : Choose next player\nWitch : Player to your left takes next turn");
         setActionWitch("Choose next player");
+    }
+    private static Toad instance =null;
+    public static Toad getInstance(){
+        if (Toad.instance == null) {
+            Toad.instance = new Toad();
+        }
+        return instance;
     }
 
     /**

@@ -87,7 +87,7 @@ public class TerminalInterface implements Observer, Runnable{
                     System.out.print("\nDifficulté Bot n°"+indexBot+"\n1-Easy\n2-Hard\n");
                     chosenDifficulty = s.nextInt();
                     if(verifCode(UpdateCode.INIT_DIFFICULTY_BOT)){
-                        currentGame.setBots(chosenDifficulty);
+                        currentGame.setBots(chosenDifficulty-1);
                     }
                     break;
 

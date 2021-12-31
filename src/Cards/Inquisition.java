@@ -4,11 +4,18 @@ import Game_operator.*;
 
 public class Inquisition extends Card {
 
-    public Inquisition(){
+    private Inquisition(){
         setName("Inquisition");
         setActionHunt("Choose next player\nBefore their turn secretly look at their identity");
         setActionWitch("Discard a card from your hand\n You take next turn");
         setConditionHunt("Only available if you have been revealed as a Villager");
+    }
+    private static Inquisition instance =null;
+    public static Inquisition getInstance(){
+        if (Inquisition.instance == null) {
+            Inquisition.instance = new Inquisition();
+        }
+        return instance;
     }
 
     @Override

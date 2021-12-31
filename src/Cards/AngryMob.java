@@ -4,7 +4,7 @@ import Game_operator.Game;
 import Game_operator.Player;
 
 public class AngryMob extends Card implements Action{
-    private static Card instance =null;
+
 
     private AngryMob(){
         setName("AngryMob");
@@ -15,11 +15,12 @@ public class AngryMob extends Card implements Action{
 
     }
 
+    private static AngryMob instance =null;
     public static AngryMob getInstance(){
         if (AngryMob.instance == null) {
             AngryMob.instance = new AngryMob();
         }
-        return (AngryMob) instance;
+        return instance;
     }
 
     @Override

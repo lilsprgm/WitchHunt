@@ -4,9 +4,17 @@ import Game_operator.Player;
 
 public class PointedHat extends Card{
 
-    public PointedHat(){
+    private PointedHat(){
         setName("PointedHat");
         setActionWitch("Take one of your own revealed  rumour card into your hand\nTake next turn");
+    }
+
+    private static PointedHat instance =null;
+    public static PointedHat getInstance(){
+        if (PointedHat.instance == null) {
+            PointedHat.instance = new PointedHat();
+        }
+        return instance;
     }
 
     @Override

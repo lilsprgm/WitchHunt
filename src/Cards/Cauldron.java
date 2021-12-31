@@ -5,10 +5,17 @@ import java.lang.Math; // Pour les fonctions Random
 
 public class Cauldron extends Card {
 
-    public Cauldron(){
+    private Cauldron(){
         setName("Cauldron");
         setActionHunt("Reveal your identity\nVillager : Choose next player\nWitch : Player to your left takes next turn");
         setConditionWitch("The player who accused you discards a random card from their hand\nTake next turn");
+    }
+    private static Cauldron instance =null;
+    public static Cauldron getInstance(){
+        if (Cauldron.instance == null) {
+            Cauldron.instance = new Cauldron();
+        }
+        return instance;
     }
 
     /**

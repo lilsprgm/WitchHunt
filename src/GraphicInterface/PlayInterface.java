@@ -42,6 +42,7 @@ public class PlayInterface extends JFrame implements Observer {
         this.setContentPane(playPanel); // permet de choisr la fenetre a afficher
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
         this.pack(); // ajustement taille de la fenetre automatique
+        //this.setSize(800,1000);
         this.setVisible(false);
         initImageIcon();
         allActions();
@@ -65,12 +66,12 @@ public class PlayInterface extends JFrame implements Observer {
          wart = new ImageIcon(this.getClass().getResource("/Ressources/Wart.png"));
 
          //Permet d'affilier une image à la carte qu'elle représente
-        imageList.put(AngryMob.getInstance(),angryMob);imageList.put(new BlackCat(),blackCat);
-        imageList.put(new Broomstick(),broomstick);imageList.put(new Cauldron(),cauldron);
-        imageList.put(new DuckingStool(),duckingStool);imageList.put(new EvilEye(),evilEye);
-        imageList.put(new HookedNose(),hookedNose);imageList.put(new PetNewt(),petNewt);
-        imageList.put(new PointedHat(),pointedHat);imageList.put(new Inquisition(),theInquisition);
-        imageList.put(new Toad(),toad);imageList.put(new Wart(),wart);
+        imageList.put(AngryMob.getInstance(),angryMob);imageList.put(BlackCat.getInstance(),blackCat);
+        imageList.put(Broomstick.getInstance(),broomstick);imageList.put(Cauldron.getInstance(),cauldron);
+        imageList.put(DuckingStool.getInstance(),duckingStool);imageList.put( EvilEye.getInstance(),evilEye);
+        imageList.put(HookedNose.getInstance(),hookedNose);imageList.put(PetNewt.getInstance(),petNewt);
+        imageList.put(PointedHat.getInstance(),pointedHat);imageList.put(Inquisition.getInstance(),theInquisition);
+        imageList.put(Toad.getInstance(),toad);imageList.put(Wart.getInstance(),wart);
 
         carteN.add(carteN1);carteN.add(carteN2);carteN.add(carteN3);carteN.add(carteN4);
 
@@ -83,29 +84,18 @@ public class PlayInterface extends JFrame implements Observer {
         hand = p.getDeck();
         System.out.println(currentGame.getCurrentPlayer());
         System.out.println(hand);
-        //setImageIcon(carteN.get(0),imageList.get(hand.get(0)));
-        //setImageIcon(carteN1,cauldron);
-        //setImageIcon(carteN2,angryMob);
-//        setImageIcon(carteN3,petNewt);
-//        setImageIcon(carteN4,wart);
+        for(int i=0;i<hand.size();i++){
+            setImageIcon(carteN.get(i),imageList.get(hand.get(i)));
+        }
     }
     public void setImageIcon(JLabel label, ImageIcon image){
         label.setIcon(image);
-        dispose();
-        setVisible(true);
     }
 
     public void allActions(){
 
         buttontest.addActionListener(e -> {
-            System.out.println(imageList);
-            angryMob = imageList.get(AngryMob.getInstance());
-            setImageIcon(carteN1,angryMob);
         });
-//        button1.addActionListener(e -> {
-//            setImageIcon(carteN1,petNewt);
-//        });
-
     }
 
     @Override

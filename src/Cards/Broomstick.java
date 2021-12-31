@@ -4,12 +4,19 @@ import Game_operator.Player;
 
 public class Broomstick extends Card{
 
-    public Broomstick(){
+    private Broomstick(){
         setName("Broomstick");
         setActionHunt("You choose next player");
         setActionWitch("You take next turn");
         setConditionHunt("");
         setConditionWitch("");
+    }
+    private static Broomstick instance =null;
+    public static Broomstick getInstance(){
+        if (Broomstick.instance == null) {
+            Broomstick.instance = new Broomstick();
+        }
+        return instance;
     }
 
     @Override

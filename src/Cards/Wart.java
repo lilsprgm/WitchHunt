@@ -4,10 +4,17 @@ import Game_operator.Player;
 
 public class Wart extends Card {
 
-    public Wart(){
+    private Wart(){
         setName("Wart");
         setActionHunt("Choose next player");
         setActionWitch("Take next turn");
+    }
+    private static Wart instance =null;
+    public static Wart getInstance(){
+        if (Wart.instance == null) {
+            Wart.instance = new Wart();
+        }
+        return instance;
     }
 
     /**
