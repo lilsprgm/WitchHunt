@@ -8,6 +8,8 @@ import Game_operator.UpdateCode;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -18,7 +20,6 @@ public class PlayInterface extends JFrame implements Observer {
     private final Game currentGame;
     private JLabel tourPlayer;
     private JPanel playPanel;
-    private JTextField textField1;
 
     private ImageIcon angryMob; private ImageIcon blackCat; private ImageIcon broomstick; private ImageIcon cauldron;
     private ImageIcon duckingStool; private ImageIcon evilEye; private ImageIcon hookedNose; private ImageIcon petNewt;
@@ -30,10 +31,11 @@ public class PlayInterface extends JFrame implements Observer {
     private JLabel carteN2;
     private JLabel carteN3;
     private JLabel carteN4;
+    private JButton playACardButton;
+    private JButton accuseButton;
     private ArrayList<JLabel> carteN = new ArrayList<>();
 
     private JButton buttontest;
-    private JButton button1;
     private int i = 0;
 
     public PlayInterface(Game game){
@@ -47,6 +49,21 @@ public class PlayInterface extends JFrame implements Observer {
         initImageIcon();
         allActions();
 
+    }
+
+    public void allActions(){
+
+        //Lors d'un appui sur la carte n°1 :
+        carteN1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(carteN1.isEnabled()){
+                    carteN1.setEnabled(false);
+                }
+                else carteN1.setEnabled(true);
+            }
+        });
     }
 
     public void initImageIcon(){
@@ -80,23 +97,21 @@ public class PlayInterface extends JFrame implements Observer {
      * Permet d'initialiser la liste "actualImage" en fonction de la main du Joueur donné en paramètre (current Joueur)
      * @param p
      */
-    public void initHand(Player p){
+    public void initRound(Player p){
         hand = p.getDeck();
         System.out.println(currentGame.getCurrentPlayer());
         System.out.println(hand);
         for(int i=0;i<hand.size();i++){
             setImageIcon(carteN.get(i),imageList.get(hand.get(i)));
         }
+        tourPlayer.setText("Tour : "+p.getName());
     }
+
+
     public void setImageIcon(JLabel label, ImageIcon image){
         label.setIcon(image);
     }
 
-    public void allActions(){
-
-        buttontest.addActionListener(e -> {
-        });
-    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -104,7 +119,7 @@ public class PlayInterface extends JFrame implements Observer {
             case GAME_INIT_ROUND:
                 break;
             case GAME_ROUND:
-                initHand(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
+                initRound(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
                 break;
         }
     }

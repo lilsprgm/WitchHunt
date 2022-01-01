@@ -323,13 +323,16 @@ public class Game extends Observable {
      * @author lilsb
      */
     public boolean endOfGame(){
-        for (Player player : players){
-            if (player.getNumberOfPoints() >= 5){
-                System.out.println("End of the game");
-                return true;
+        if(actualCode==UpdateCode.GAME_INIT_ROUND ||actualCode==UpdateCode.GAME_ROUND){
+            for (int i=0;i<numberOfBot+numberOfPlayerIRL;i++){
+                if (players.get(i).getNumberOfPoints() >= 5){
+                    System.out.println("End of the game");
+                    return true;
+                }
             }
         }
         return false;
+
     }
 
     /**
