@@ -18,7 +18,7 @@ public class SettingsInterface extends JFrame implements Observer{
 
     private final Game currentGame;
     private PlayInterface playGame;
-
+    private TerminalInterface myTerminal;
     private JLabel settingLabel;
 
     private JPanel settingsPanel;
@@ -83,6 +83,10 @@ public class SettingsInterface extends JFrame implements Observer{
         arrayElements.add(elem6);
     }
 
+    public void setTerminal(TerminalInterface t){
+        myTerminal = t;
+    }
+
     /**
      * setArrayEnable permet d'activer/désactiver un nombre d'élément d'une liste d'Objet JTextField uniquement.
      * @author lilsb & Agougile
@@ -143,18 +147,21 @@ public class SettingsInterface extends JFrame implements Observer{
     public void allAction() {
         //L'appui sur le bouton OKplayer fait appel a Game pour qu'il modifie le Nbr de Joueur
         okButtonPlayer.addActionListener(e -> {
+            myTerminal.interruptScan();
             currentGame.setNumberOfPlayer(nbrPlayer.getSelectedIndex());    // Ici l'index correspond à la valeur dans notre cas uniquement
         });
 
         //Si il y a pas assez/trop de Joueurs on affiche un texte en laissant l'opportunité de changer le Nbr de JoueurIRL
         //Sinon on fait appel a GAME si tout se passe bien
         okButtonBOT.addActionListener(e -> {
+            myTerminal.interruptScan();
             currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
         });
 
         //On prend le nom écrit sur les fields pour les envoyer à GAME.
         //Le field devient rouge si il est SUBMIT en étant vide et inversement se met en Vert
         submitButton.addActionListener(e -> {
+            myTerminal.interruptScan();
             ArrayList<Player> p = new ArrayList<Player>();
             boolean verif = true;                                   //verif permet d'éviter de modifier le nombre de Joueur si
             for(int i=0;i<currentGame.getNumberOfPlayer();i++){     //l'utilisateur a déja configurer le nombre sur graphique.
@@ -175,6 +182,7 @@ public class SettingsInterface extends JFrame implements Observer{
         });
 
         play.addActionListener(e -> {
+            myTerminal.interruptScan();
             for(int i=0;i<currentGame.getNumberOfBot();i++){
                 currentGame.setBots(comboBoxList.get(i).getSelectedIndex());
             }

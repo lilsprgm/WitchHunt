@@ -32,6 +32,7 @@ public class Game extends Observable {
         PlayInterface myGame = new PlayInterface(this);
         SettingsInterface gameSettings = new SettingsInterface(this,myGame);
         LaunchInterface myLaunch = new LaunchInterface(gameSettings);
+        gameSettings.setTerminal(myTerminalInterface);
         addObserver(myTerminalInterface);
         addObserver(gameSettings);
         addObserver(myGame);
@@ -39,7 +40,6 @@ public class Game extends Observable {
 
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
-        System.out.println("Phase actuelle : "+actualCode);                         // A SUPP PLUS TARD
         setChanged();
         notifyObservers(newUpdateCode);
     }
