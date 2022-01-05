@@ -178,6 +178,7 @@ public abstract class Player extends Observable {
      * @author lilsb
      */
     public void accusation(){ // on transmet en parametre d'entré le joueur qui accuse
+        this.setUpdateCode(UpdateCode.ACCUSE);
         System.out.println("Who do you want to accuse ?");
         Player accusedPlayer;
         do {

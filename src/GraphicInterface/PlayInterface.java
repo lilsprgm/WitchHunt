@@ -18,6 +18,7 @@ import java.util.Observer;
 public class PlayInterface extends JFrame implements Observer {
 
     private final Game currentGame;
+    private Player actualObservable;
     private JLabel tourPlayer;
     private JPanel playPanel;
 
@@ -33,6 +34,8 @@ public class PlayInterface extends JFrame implements Observer {
     private JLabel carteN4;
     private JButton playACardButton;
     private JButton accuseButton;
+    private JComboBox playerComboBox;
+    private JButton validAccusation;
     private ArrayList<JLabel> carteN = new ArrayList<>();
 
     private JButton buttontest;
@@ -46,8 +49,12 @@ public class PlayInterface extends JFrame implements Observer {
         this.pack(); // ajustement taille de la fenetre automatique
         //this.setSize(800,1000);
         this.setVisible(false);
+        validAccusation.setVisible(false);
+        playerComboBox.setVisible(false);
         initImageIcon();
         allActions();
+
+
 
     }
 
@@ -63,6 +70,12 @@ public class PlayInterface extends JFrame implements Observer {
                 }
                 else carteN1.setEnabled(true);
             }
+        });
+        accuseButton.addActionListener(e -> {
+            actualObservable.setChoice(1);
+        });
+        playACardButton.addActionListener(e -> {
+            actualObservable.setChoice(2);
         });
     }
 
@@ -119,6 +132,16 @@ public class PlayInterface extends JFrame implements Observer {
             case GAME_ROUND:
                 initRound(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
                 break;
+            case CHOOSE_IDENTITY:
+                break;
+
+            case ACCUSE_OR_PLAY:
+                actualObservable =(Player) o;
+                accuseButton.setVisible(true);
+                accuseButton.setVisible(true);
+            case ACCUSE:
+                playerComboBox.setVisible(true);
+                validAccusation.setVisible(true);
         }
     }
 
