@@ -2,7 +2,6 @@ package Game_operator;
 
 import Cards.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class PlayerIRL extends Player {
@@ -13,18 +12,22 @@ public class PlayerIRL extends Player {
         this.numberOfPoints = value;
     }
 */
+
+    private void setUpdateCode(UpdateCode newUpdateCode){
+        this.actualCode = newUpdateCode;
+        setChanged();
+        notifyObservers(newUpdateCode);
+    }
+
     /**
      * Permet au joueur de choisir le rôle, l'identité qu'il veut prendre.
      * Enregistré grâce à l'instance de la classe Identity du joueur.
      */
     public void chooseIdentity() {
-        System.out.println("Witch role do you want to take ?\n1- Witch\n2- Hunt\n--> ");
-        if (s.nextInt() == 1) {
-            identity.setRole(Role.Witch);
-        } else {
-            identity.setRole(Role.Hunt);
-        }
+        setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
+        while(actualCode!=UpdateCode.END_CHOOSE_IDENTITY);
     }
+
     /**
      * Permet de choisir un carte dans un tas de carte (n'importe lequel).
      *
@@ -59,30 +62,13 @@ public class PlayerIRL extends Player {
             System.out.println("You can't play : you are a witch !");
             return;
         } else if (this.isAccused()) {
-            System.out.println(this.getName() + " you are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
-            int choice = s.nextInt();
-            switch (choice) {
-                case 1:
-                    this.getIdentity().setRevealed(true);
-                    break;
-                case 2:
-                    this.playCard();
-                    break;
-            }
+            setUpdateCode(UpdateCode.IS_ACCUSED);
         } else {
-            System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
-            int choice = s.nextInt();
-            switch (choice) {
-                case 1:
-                    this.accusation();
-                    break;
-
-                case 2:
-                    this.playCard();
-                    break;
-            }
+                setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
+                while(actualCode!=UpdateCode.END_PLAY);
         }
     }
+
 
     /**
      * Permet de choisir le nom du joueur suivant.

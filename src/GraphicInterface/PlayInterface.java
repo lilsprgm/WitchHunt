@@ -99,8 +99,6 @@ public class PlayInterface extends JFrame implements Observer {
      */
     public void initRound(Player p){
         hand = p.getDeck();
-        System.out.println(currentGame.getCurrentPlayer());
-        System.out.println(hand);
         for(int i=0;i<hand.size();i++){
             setImageIcon(carteN.get(i),imageList.get(hand.get(i)));
         }

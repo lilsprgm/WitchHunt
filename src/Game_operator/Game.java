@@ -71,16 +71,19 @@ public class Game extends Observable {
         }
     }
 
-    public void setPlayers(ArrayList<Player> clone){
+    public <T> void setPlayers(ArrayList<Player> clone,T vue){
         players.addAll(clone);
+        for(Player p : players){
+            p.setVue(vue);
+        }
         if(numberOfBot>0){
             setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
         }else{
-            this.currentPlayer = players.get(0);
+            //this.currentPlayer = players.get(0);                                  // A VOIR
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }
     }
-    public void setBots(Integer difficulty){
+    public <T> void setBots(Integer difficulty,T vue){
         int indexBot = players.size()-numberOfPlayerIRL;
         if(difficulty>2 ||difficulty<0){
             setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
@@ -94,9 +97,10 @@ public class Game extends Observable {
             }
             players.get(players.size()-1).setName("Bot"+indexBot);
             players.get(players.size()-1).setGame(this);
+            players.get(players.size()-1).setVue(vue);
+
         }
         if(players.size()==numberOfPlayerIRL+numberOfBot){
-            this.currentPlayer = players.get(0);
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }
         else setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
@@ -229,6 +233,7 @@ public class Game extends Observable {
             initStockPile();
             for (Player player : players){
                 player.clearDeck();
+                player.chooseIdentity();
                 player.getIdentity().setRevealed(false);
             }
             while (stockPile.size() - (numberOfPlayerIRL + numberOfBot) >= 0){
@@ -236,6 +241,7 @@ public class Game extends Observable {
                     player.addCardTo(player.getDeck(), draw(stockPile));
                 }
             }
+            this.currentPlayer = players.get(0);
             setUpdateCode(UpdateCode.GAME_ROUND);
         }
     }
@@ -249,9 +255,8 @@ public class Game extends Observable {
      * @author lilsb
      */
     public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
-        if(actualCode==UpdateCode.ROUND_MANAGEMENT){
+        if(actualCode==UpdateCode.GAME_ROUND){
             while (!endOfRound()){
-                System.out.println("Your turn "+ this.currentPlayer.getName());
                 this.currentPlayer.play();
                 this.currentPlayer = chosenNextPlayer;
                 System.out.println(chosenNextPlayer);

@@ -2,12 +2,9 @@ package Game_operator;
 
 import Cards.*;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public abstract class Player {
+public abstract class Player extends Observable {
 
     protected int numberOfPoints = 0;
     protected String name;
@@ -17,17 +14,25 @@ public abstract class Player {
     protected ArrayList<Card> deck = new ArrayList<Card>();
     protected ArrayList<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
 
-
-
     protected Scanner s = new Scanner(System.in);
     protected Game game;
+    protected volatile UpdateCode actualCode;
 
     public String toString(){
         return name +" --> Score : " + numberOfPoints;
     }
-
     public List<Card> getTable() {
         return table;
+    }
+
+    public <T> void setVue( T vue){
+        addObserver((Observer) vue);
+    }
+
+    private void setUpdateCode(UpdateCode newUpdateCode){
+        this.actualCode = newUpdateCode;
+        setChanged();
+        notifyObservers(newUpdateCode);
     }
 
     public void setTable(ArrayList<Card> table) {
@@ -208,4 +213,47 @@ public abstract class Player {
     public abstract Player chooseAPlayer();
 
     public abstract Card chooseCardIn(List<Card> Stock);
+
+
+    public void setChoice(int choice){
+        switch (choice) {
+            case 1 -> this.accusation();
+            case 2 -> this.playCard();
+            default -> setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
+        }
+    }
+    public void setChoiceAccused(int choice){
+        switch (choice) {
+            case 1 -> {
+                this.getIdentity().setRevealed(true);
+                game.chooseNextPlayer(game.getCurrentPlayer());
+                game.getCurrentPlayer().endPlay();
+            }
+            case 2 -> this.playCard();
+            default -> setUpdateCode(UpdateCode.IS_ACCUSED);
+        }
+    }
+
+    public void endPlay(){
+        setUpdateCode(UpdateCode.END_PLAY);
+    }
+
+    public void setIdentity(int choice){
+        switch (choice){
+            case 1:
+                identity.setRole(Role.Witch);
+                setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
+                break;
+            case 2:
+                identity.setRole(Role.Hunt);
+                setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
+                break;
+            default:
+                setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
+                break;
+        }
+    }
+
+
+
 }

@@ -177,14 +177,14 @@ public class SettingsInterface extends JFrame implements Observer{
                 }
             }
             if(verif){      //Ici le changement dans le GAME se fait seulement si l'étape n'a pas été dépassé par l'interface graphique
-                currentGame.setPlayers(p);
+                currentGame.setPlayers(p,this);
             }
         });
 
         play.addActionListener(e -> {
             myTerminal.interruptScan();
             for(int i=0;i<currentGame.getNumberOfBot();i++){
-                currentGame.setBots(comboBoxList.get(i).getSelectedIndex());
+                currentGame.setBots(comboBoxList.get(i).getSelectedIndex(),this);
             }
         });
     }
