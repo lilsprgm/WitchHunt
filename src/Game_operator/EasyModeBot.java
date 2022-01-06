@@ -6,6 +6,14 @@ import Cards.Role;
 import java.util.List;
 
 public class EasyModeBot extends Player {
+
+    private void setUpdateCode(UpdateCode newUpdateCode){
+        this.actualCode = newUpdateCode;
+        setChanged();
+        notifyObservers(newUpdateCode);
+    }
+
+
     // idée : en mode easy on choisit les joueurs et les cartes aléatoirement.
     // on  révèle l'identité directement lorsque l'on est hunt mais pas witch
     @Override
@@ -23,8 +31,6 @@ public class EasyModeBot extends Player {
             Card card = Stock.get((int) Math.round(Math.random()*Stock.size()));
             return card;
         }
-
-
     }
 
     /**
@@ -36,6 +42,16 @@ public class EasyModeBot extends Player {
      * La fonction permet le choix et appelle les fonctions permettant ces actions.
      */
     public void play() {
+
+    if(isAccused()){
+
+    }
+
+
+
+
+
+
         //role reveler onn peut pas jouer
         if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch) {
             System.out.println("You can't play : you are a witch !");
