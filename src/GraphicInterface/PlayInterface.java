@@ -127,12 +127,8 @@ public class PlayInterface extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         switch ((UpdateCode)arg){
-            case GAME_INIT_ROUND:
-                break;
             case GAME_ROUND:
                 initRound(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
-                break;
-            case CHOOSE_IDENTITY:
                 break;
 
             case ACCUSE_OR_PLAY:

@@ -28,6 +28,10 @@ public abstract class Player extends Observable {
     public <T> void setVue( T vue){
         addObserver((Observer) vue);
     }
+    public <T> void setVue( T vue,T vue2){
+        addObserver((Observer) vue);
+        addObserver((Observer)vue2);
+    }
 
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
@@ -248,9 +252,6 @@ public abstract class Player extends Observable {
             case 2:
                 identity.setRole(Role.Hunt);
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
-                break;
-            default:
-                setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
                 break;
         }
     }

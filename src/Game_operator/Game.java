@@ -71,11 +71,8 @@ public class Game extends Observable {
         }
     }
 
-    public <T> void setPlayers(ArrayList<Player> clone,T vue){
+    public <T> void setPlayers(ArrayList<Player> clone){
         players.addAll(clone);
-        for(Player p : players){
-            p.setVue(vue);
-        }
         if(numberOfBot>0){
             setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
         }else{
@@ -83,23 +80,20 @@ public class Game extends Observable {
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }
     }
-    public <T> void setBots(Integer difficulty,T vue){
+    public <T> void setBots(Integer difficulty){
         int indexBot = players.size()-numberOfPlayerIRL;
-        if(difficulty>2 ||difficulty<0){
+        if(difficulty>2 || difficulty<0){
             setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
+            return;
         }
-        else{
-            if(difficulty==0){
-                players.add(new EasyModeBot());
-            }
-            if(difficulty==1){
-                players.add(new HardModeBot());
-            }
-            players.get(players.size()-1).setName("Bot"+indexBot);
-            players.get(players.size()-1).setGame(this);
-            players.get(players.size()-1).setVue(vue);
-
+        if(difficulty==1){
+            players.add(new EasyModeBot());
         }
+        if(difficulty==2){
+            players.add(new HardModeBot());
+        }
+        players.get(players.size()-1).setName("Bot"+indexBot);
+        players.get(players.size()-1).setGame(this);
         if(players.size()==numberOfPlayerIRL+numberOfBot){
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }

@@ -19,8 +19,10 @@ public class TerminalInterface implements Observer, Runnable{
         t.start();
     }
     public void interruptScan(){
+        while(interrupt){;}
         interrupt=true;
     }
+    public boolean getInterrupt(){return interrupt;}
 
     public boolean verifCode(UpdateCode code){
         return currentGame.getUpdateCode() == code;
@@ -68,7 +70,6 @@ public class TerminalInterface implements Observer, Runnable{
         while (true) {
             ArrayList<Player> p = new ArrayList<>();
             int indexBot = currentGame.getPlayers().size() - currentGame.getNumberOfPlayer() + 1;
-
                 switch (flag) {
                     case INIT_NUMBER_PLAYER:
                         flag = UpdateCode.ATTENTE;
@@ -106,10 +107,12 @@ public class TerminalInterface implements Observer, Runnable{
                                 p.add(i - 1, new PlayerIRL());
                                 p.get(i - 1).setName(input(true));
                                 p.get(i - 1).setGame(currentGame);
-                            } else break;
+                            } else {
+                                break;
+                            }
                         }
                         if (verifCode(UpdateCode.INIT_NAME_PLAYER)) {
-                            currentGame.setPlayers(p,this);
+                            currentGame.setPlayers(p);
                         }
                         break;
 
@@ -119,7 +122,7 @@ public class TerminalInterface implements Observer, Runnable{
                         System.out.print("\nDifficulté Bot n°" + indexBot + "\n1-Easy\n2-Hard\n");
                         chosenDifficulty = input(false);
                         if (verifCode(UpdateCode.INIT_DIFFICULTY_BOT)) {
-                            currentGame.setBots(chosenDifficulty - 1,this);
+                            currentGame.setBots(chosenDifficulty);
                         }
                         break;
 
@@ -129,7 +132,7 @@ public class TerminalInterface implements Observer, Runnable{
                         System.out.print("\nDifficulty Bot n°" + indexBot + "\n1-Easy\n2-Hard\n");
                         chosenDifficulty = input(false);
                         if (verifCode(UpdateCode.ERROR_DIFFICULTY)) {
-                            currentGame.setBots(chosenDifficulty,this);
+                            currentGame.setBots(chosenDifficulty);
                         }
                         break;
 
@@ -137,7 +140,7 @@ public class TerminalInterface implements Observer, Runnable{
                         switch (flagPlayer){
                             case CHOOSE_IDENTITY :
                                 flagPlayer = UpdateCode.ATTENTE;
-                                System.out.println(actualObservable.getName()+"\nWitch role do you want to take ?\n1- Witch\n2- Hunt\n--> ");
+                                System.out.println("\n"+actualObservable.getName()+" Witch role do you want to take ?\n1- Witch\n2- Hunt\n--> ");
                                 int role = input(false);
                                 actualObservable.setIdentity(role);
                                 break;

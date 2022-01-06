@@ -20,6 +20,7 @@ public class SettingsInterface extends JFrame implements Observer{
     private PlayInterface playGame;
     private TerminalInterface myTerminal;
     private JLabel settingLabel;
+    private ChooseIdentity chooseAnIdentity;
 
     private JPanel settingsPanel;
     private JLabel nameLabel;
@@ -85,6 +86,7 @@ public class SettingsInterface extends JFrame implements Observer{
 
     public void setTerminal(TerminalInterface t){
         myTerminal = t;
+        chooseAnIdentity = new ChooseIdentity(myTerminal);
     }
 
     /**
@@ -147,21 +149,20 @@ public class SettingsInterface extends JFrame implements Observer{
     public void allAction() {
         //L'appui sur le bouton OKplayer fait appel a Game pour qu'il modifie le Nbr de Joueur
         okButtonPlayer.addActionListener(e -> {
-            myTerminal.interruptScan();
             currentGame.setNumberOfPlayer(nbrPlayer.getSelectedIndex());    // Ici l'index correspond à la valeur dans notre cas uniquement
+            myTerminal.interruptScan();
         });
 
         //Si il y a pas assez/trop de Joueurs on affiche un texte en laissant l'opportunité de changer le Nbr de JoueurIRL
         //Sinon on fait appel a GAME si tout se passe bien
         okButtonBOT.addActionListener(e -> {
-            myTerminal.interruptScan();
             currentGame.setNumberOfBot(nbrBot.getSelectedIndex());
+            myTerminal.interruptScan();
         });
 
         //On prend le nom écrit sur les fields pour les envoyer à GAME.
         //Le field devient rouge si il est SUBMIT en étant vide et inversement se met en Vert
         submitButton.addActionListener(e -> {
-            myTerminal.interruptScan();
             ArrayList<Player> p = new ArrayList<Player>();
             boolean verif = true;                                   //verif permet d'éviter de modifier le nombre de Joueur si
             for(int i=0;i<currentGame.getNumberOfPlayer();i++){     //l'utilisateur a déja configurer le nombre sur graphique.
@@ -176,16 +177,16 @@ public class SettingsInterface extends JFrame implements Observer{
                     p.get(i).setGame(currentGame);
                 }
             }
-            if(verif){      //Ici le changement dans le GAME se fait seulement si l'étape n'a pas été dépassé par l'interface graphique
-                currentGame.setPlayers(p,this);
+            if(verif){      //Ici le changement dans le GAME se fait seulement si l'étape n'a pas été dépassé par le terminal
+                currentGame.setPlayers(p);
+                myTerminal.interruptScan();
             }
         });
 
         play.addActionListener(e -> {
-            myTerminal.interruptScan();
             for(int i=0;i<currentGame.getNumberOfBot();i++){
-                currentGame.setBots(comboBoxList.get(i).getSelectedIndex(),this);
-            }
+                currentGame.setBots(comboBoxList.get(i).getSelectedIndex());
+            }myTerminal.interruptScan();
         });
     }
 
@@ -199,6 +200,7 @@ public class SettingsInterface extends JFrame implements Observer{
     public void update(Observable o, Object arg) {
         switch ((UpdateCode) arg) {
             case INIT_NUMBER_PLAYER -> {
+                this.setVisible(true);
                 nbrPlayer.setEnabled(true);
                 okButtonPlayer.setEnabled(true);
                 nbrBot.setVisible(false);
@@ -244,13 +246,22 @@ public class SettingsInterface extends JFrame implements Observer{
                 }
                 break;
             }
-            case GAME_INIT_ROUND ->{
+            case GAME_INIT_ROUND -> {
+                for(Player allp : currentGame.getPlayers()){
+                    allp.setVue(this,myTerminal);
+                }
                 dispose();
+                break;
+            }
+            case CHOOSE_IDENTITY -> {
+                chooseAnIdentity.display((Player)o);
+            }
+            case END_CHOOSE_IDENTITY -> chooseAnIdentity.setVisible(false);
+
+            case GAME_ROUND ->{
                 playGame.setVisible(true);
                 break;
             }
-
-
         }
     }
 
