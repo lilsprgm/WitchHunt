@@ -44,14 +44,20 @@ public class ChooseIdentity extends JFrame{
 
     public void allActions(Player player){
         witchButton.addActionListener(e -> {
-            dispose();
-            myTerminal.interruptScan();
-            player.setIdentity(1);
+            if(player.getIdentity().getRole()==null){
+                dispose();
+                myTerminal.interruptScan();
+                System.out.println("J'ai appuyé sur le bouton Witch");
+                player.setIdentity(1);
+            }
         });
         huntButton.addActionListener(e -> {
-            dispose();
-            myTerminal.interruptScan();
-            player.setIdentity(2);
+            if(player.getIdentity().getRole()==null){
+                dispose();
+                myTerminal.interruptScan();
+                System.out.println("J'ai appuyé sur le bouton Hunt");
+                player.setIdentity(2);
+            }
         });
     }
 }

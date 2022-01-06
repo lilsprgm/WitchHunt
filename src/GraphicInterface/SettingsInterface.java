@@ -244,23 +244,19 @@ public class SettingsInterface extends JFrame implements Observer{
                     comboBoxList.get(i).setVisible((i < currentGame.getNumberOfBot()));
                     textBotList.get(i).setVisible((i < currentGame.getNumberOfBot()));
                 }
-                break;
             }
             case GAME_INIT_ROUND -> {
                 for(Player allp : currentGame.getPlayers()){
                     allp.setVue(this,myTerminal);
                 }
                 dispose();
-                break;
             }
             case CHOOSE_IDENTITY -> {
                 chooseAnIdentity.display((Player)o);
             }
-            case END_CHOOSE_IDENTITY -> chooseAnIdentity.setVisible(false);
 
             case GAME_ROUND ->{
                 playGame.setVisible(true);
-                break;
             }
         }
     }

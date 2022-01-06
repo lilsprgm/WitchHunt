@@ -247,11 +247,17 @@ public abstract class Player extends Observable {
         switch (choice){
             case 1:
                 identity.setRole(Role.Witch);
+                System.out.println("Joueur Witch");
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
                 break;
             case 2:
                 identity.setRole(Role.Hunt);
+                System.out.println("Joueur HUNT");
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
+                break;
+            default:
+                System.out.println("Remise a Choose IDENDITY du Joueur");
+                setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
                 break;
         }
     }

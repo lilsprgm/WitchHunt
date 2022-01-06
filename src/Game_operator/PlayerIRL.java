@@ -24,6 +24,7 @@ public class PlayerIRL extends Player {
      * Enregistré grâce à l'instance de la classe Identity du joueur.
      */
     public void chooseIdentity() {
+        System.out.println("\nChoix de l'identité du joueur"+this);
         setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
         while(actualCode!=UpdateCode.END_CHOOSE_IDENTITY);
     }
