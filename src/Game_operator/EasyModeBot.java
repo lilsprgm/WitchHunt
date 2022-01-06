@@ -47,7 +47,7 @@ public class EasyModeBot extends Player {
             if (this.identity.getRole() == Role.Hunt ){
                 this.identity.setRevealed(true);
             }else{
-                playCard();
+                //playCard();
             }
 
             //tour de jeu du bot classique
@@ -57,17 +57,17 @@ public class EasyModeBot extends Player {
                 accusation();
             }
             else{
-                playCard();
+                //playCard();
             }
         }
     }
 
-    @Override
-    public Player chooseAPlayer() {
-        Player player;
-        do {
-            player = game.getPlayers().get((int) Math.round(Math.random() * game.getPlayers().size()));
-        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
-        return player;
-    }
+//    @Override
+//    public Player chooseAPlayer() {
+//        Player player;
+//        do {
+//            player = game.getPlayers().get((int) Math.round(Math.random() * game.getPlayers().size()));
+//        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
+//        return player;
+//    }
 }

@@ -47,7 +47,6 @@ public class ChooseIdentity extends JFrame{
             if(player.getIdentity().getRole()==null){
                 dispose();
                 myTerminal.interruptScan();
-                System.out.println("J'ai appuyé sur le bouton Witch");
                 player.setIdentity(1);
             }
         });
@@ -55,7 +54,6 @@ public class ChooseIdentity extends JFrame{
             if(player.getIdentity().getRole()==null){
                 dispose();
                 myTerminal.interruptScan();
-                System.out.println("J'ai appuyé sur le bouton Hunt");
                 player.setIdentity(2);
             }
         });

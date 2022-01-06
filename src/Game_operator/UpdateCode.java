@@ -16,8 +16,12 @@ public enum UpdateCode {
     GAME_ROUND,
     ACCUSE_OR_PLAY,
     ACCUSE,
+    END_ACCUSATION,
     IS_ACCUSED,
+    IS_REVEALED,
 
+    PLAY_CARD_HUNT,
+    PLAY_CARD_WITCH,
 
     END_PLAY,
 

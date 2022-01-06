@@ -44,7 +44,7 @@ public class PetNewt extends Card {
             i++;
         }
 
-        player.addCardTo(player.getDeck(), player.chooseCardIn(player.chooseAPlayer().getTable()) );
+       // player.addCardTo(player.getDeck(), player.chooseCardIn(player.chooseAPlayer().getTable()) );
     }
 
     @Override

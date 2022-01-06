@@ -24,7 +24,6 @@ public class PlayerIRL extends Player {
      * Enregistré grâce à l'instance de la classe Identity du joueur.
      */
     public void chooseIdentity() {
-        System.out.println("\nChoix de l'identité du joueur"+this);
         setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
         while(actualCode!=UpdateCode.END_CHOOSE_IDENTITY);
     }
@@ -64,8 +63,26 @@ public class PlayerIRL extends Player {
             return;
         } else if (this.isAccused()) {
             setUpdateCode(UpdateCode.IS_ACCUSED);
+            while(actualCode!=UpdateCode.PLAY_CARD_WITCH && actualCode!=UpdateCode.IS_REVEALED);
+            if(actualCode==UpdateCode.PLAY_CARD_WITCH){
+                playCard(UpdateCode.PLAY_CARD_WITCH);
+                //while(actualCode!=UpdateCode.);                                   // Attendre de choisir la carte
+            }
+            if(actualCode==UpdateCode.IS_REVEALED){
+                getIdentity().setRevealed(true);
+                game.chooseNextPlayer(game.getCurrentPlayer());
+                setAccused(false);
+            }
         } else {
                 setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
+                while(actualCode!=UpdateCode.END_ACCUSATION && actualCode!=UpdateCode.PLAY_CARD_HUNT);
+                if(actualCode==UpdateCode.END_ACCUSATION){
+                    accusation();
+                }
+                if(actualCode==UpdateCode.PLAY_CARD_HUNT){
+                    playCard(UpdateCode.PLAY_CARD_HUNT);
+                    //while();                                                      //Attendre de choisir la carte
+                }
                 while(actualCode!=UpdateCode.END_PLAY);
         }
     }
@@ -78,35 +95,39 @@ public class PlayerIRL extends Player {
      *
      * @author lilsb
      */
-    public Player chooseAPlayer(){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
-
-        int i=0;
-        boolean verif=false;
-        List<Player> players = game.getPlayers();
-        for (Player player : players){
-            if (player == this){
-                continue;
-            }
-            i = players.indexOf(player);
-            System.out.println(i+" - "+ player);
-        }
-        int indexOfChosenPlayer = s.nextInt();
-        do{
-            for (Player player : players){
-                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(this)){
-                    i = players.indexOf(player);
-                    verif = true;
-                }
-            }
-            if(!verif){
-                indexOfChosenPlayer = s.nextInt();
-            }
-        }while(!verif);
-        return players.get(i);
-
-        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
-        // regarder avec la fonction scanner .next(pattern))
-        ///////////////// Je pense que ca devrait marche à voir
-
-    }
+//    public Player chooseAPlayer(UpdateCode actualCode){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
+//
+//        if(actualCode==UpdateCode.ACCUSE){
+//
+//        }
+//
+//        int i=0;
+//        boolean verif=false;
+//        List<Player> players = game.getPlayers();
+//        for (Player player : players){
+//            if (player == this){
+//                continue;
+//            }
+//            i = players.indexOf(player);
+//            System.out.println(i+" - "+ player);
+//        }
+//        int indexOfChosenPlayer = s.nextInt();
+//        do{
+//            for (Player player : players){
+//                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(this)){
+//                    i = players.indexOf(player);
+//                    verif = true;
+//                }
+//            }
+//            if(!verif){
+//                indexOfChosenPlayer = s.nextInt();
+//            }
+//        }while(!verif);
+//        return players.get(i);
+//
+//        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
+//        // regarder avec la fonction scanner .next(pattern))
+//        ///////////////// Je pense que ca devrait marche à voir
+//
+//    }
 }

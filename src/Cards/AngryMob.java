@@ -27,34 +27,34 @@ public class AngryMob extends Card implements Action{
     public void actionWitch(Player player) {
         System.out.println("You take next turn");
     }
-
-    @Override
-    public void actionHunt(Player player) {
-        System.out.println("You can reveal another player's identity");
-        Player choosenPlayer;
-        boolean containsBroomstick = false;
-        do{
-            choosenPlayer = player.chooseAPlayer();
-            containsBroomstick = false;
-            for (Card card : choosenPlayer.getTable()){
-                if (card instanceof Broomstick){
-                    System.out.println("Choose another player. You can't choose him he has a special card");
-                    containsBroomstick = true;
-                    break;
-                }
-            }
-        }while (containsBroomstick);
-        choosenPlayer.getIdentity().setRevealed(true);
-        if (choosenPlayer.getIdentity().getRole() == Role.Hunt){
-            System.out.println(" You have revealed a Hunt. You loose 2 points");
-            player.addPoints(-2);
-        }
-        else{
-            System.out.println(" You have revealed a Witch. You win 2 points");
-            player.addPoints(2);
-        }
-
-    }
+//
+//    @Override
+//    public void actionHunt(Player player) {
+//        System.out.println("You can reveal another player's identity");
+//        Player choosenPlayer;
+//        boolean containsBroomstick = false;
+//        do{
+//            choosenPlayer = player.chooseAPlayer();
+//            containsBroomstick = false;
+//            for (Card card : choosenPlayer.getTable()){
+//                if (card instanceof Broomstick){
+//                    System.out.println("Choose another player. You can't choose him he has a special card");
+//                    containsBroomstick = true;
+//                    break;
+//                }
+//            }
+//        }while (containsBroomstick);
+//        choosenPlayer.getIdentity().setRevealed(true);
+//        if (choosenPlayer.getIdentity().getRole() == Role.Hunt){
+//            System.out.println(" You have revealed a Hunt. You loose 2 points");
+//            player.addPoints(-2);
+//        }
+//        else{
+//            System.out.println(" You have revealed a Witch. You win 2 points");
+//            player.addPoints(2);
+//        }
+//
+//    }
 
     @Override
     public boolean conditionWitch(Player player) {

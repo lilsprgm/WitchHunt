@@ -25,13 +25,13 @@ public class Inquisition extends Card {
         player.discardCardFrom(player.getDeck(), cardToBeDiscard);
     }
 
-    @Override
-    public void actionHunt(Player player) {
-        System.out.println(getActionHunt());
-        player.getGame().chooseNextPlayer(player.chooseAPlayer());// on appelle dans la partie du joueur lafonction pour designer
-        //le joueur suivant en appellant en parametre la fonction pour choisir un joueur.
-        System.out.println("Its identtity is  : " + player.getGame().getChosenNextPLayer().getIdentity().getRole());
-    }
+//    @Override
+//    public void actionHunt(Player player) {
+//        System.out.println(getActionHunt());
+//        player.getGame().chooseNextPlayer(player.chooseAPlayer());// on appelle dans la partie du joueur lafonction pour designer
+//        //le joueur suivant en appellant en parametre la fonction pour choisir un joueur.
+//        System.out.println("Its identtity is  : " + player.getGame().getChosenNextPLayer().getIdentity().getRole());
+//    }
 
     @Override
     public boolean conditionWitch(Player player) {

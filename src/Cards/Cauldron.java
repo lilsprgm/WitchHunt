@@ -24,43 +24,43 @@ public class Cauldron extends Card {
      * C'est ensuite au tour du Joueur accusé.
      * @param player Représente le joueur qui a jouer la carte.
      */
-    @Override
-    public void actionWitch(Player player) {
-        System.out.println(getActionWitch());  // peut-etre utiliser une version avec draw
-        int  range = player.getGame().getCurrentPlayer().getDeck().size()+1;
-        int i = (int)(Math.random()*range);
-        Card randomCard = player.getGame().getCurrentPlayer().getDeck().get(i);
-        player.discardCardFrom(player.getGame().getCurrentPlayer().getDeck(),randomCard);
-
-        player.getGame().chooseNextPlayer(player);
-    }
-
-    /**
-     * Permet d'activier l'effet Hunt de la carte Cauldron.
-     * Le Joueur révèle sa carte.
-     * Si le Joueur est un Villageois il doit choisir le prochain Joueur à jouer.
-     * Si le joueur est une Witch il doit laisser le prochain Joueur de la partie jouer.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
-    @Override
-    public void actionHunt(Player player) {
-        System.out.println(getActionHunt());
-        player.getIdentity().setRevealed(true);
-        int numberofPlayer = player.getGame().getNumberOfPlayer()+player.getGame().getNumberOfBot();
-        int indexOfPlayer = player.getGame().getPlayers().indexOf(player);
-
-        if(player.getIdentity().getRole() == Role.Witch){
-            if(indexOfPlayer == numberofPlayer-1){
-                player.getGame().chooseNextPlayer(player.getGame().getPlayers().get(0));
-            }
-            else{
-                player.getGame().chooseNextPlayer( player.getGame().getPlayers().get(indexOfPlayer+1) );
-            }
-        }
-        else{
-            player.getGame().chooseNextPlayer(player.chooseAPlayer());
-        }
-    }
+//    @Override
+//    public void actionWitch(Player player) {
+//        System.out.println(getActionWitch());  // peut-etre utiliser une version avec draw
+//        int  range = player.getGame().getCurrentPlayer().getDeck().size()+1;
+//        int i = (int)(Math.random()*range);
+//        Card randomCard = player.getGame().getCurrentPlayer().getDeck().get(i);
+//        player.discardCardFrom(player.getGame().getCurrentPlayer().getDeck(),randomCard);
+//
+//        player.getGame().chooseNextPlayer(player);
+//    }
+//
+//    /**
+//     * Permet d'activier l'effet Hunt de la carte Cauldron.
+//     * Le Joueur révèle sa carte.
+//     * Si le Joueur est un Villageois il doit choisir le prochain Joueur à jouer.
+//     * Si le joueur est une Witch il doit laisser le prochain Joueur de la partie jouer.
+//     * @param player Représente le joueur qui a jouer la carte.
+//     */
+//    @Override
+//    public void actionHunt(Player player) {
+//        System.out.println(getActionHunt());
+//        player.getIdentity().setRevealed(true);
+//        int numberofPlayer = player.getGame().getNumberOfPlayer()+player.getGame().getNumberOfBot();
+//        int indexOfPlayer = player.getGame().getPlayers().indexOf(player);
+//
+//        if(player.getIdentity().getRole() == Role.Witch){
+//            if(indexOfPlayer == numberofPlayer-1){
+//                player.getGame().chooseNextPlayer(player.getGame().getPlayers().get(0));
+//            }
+//            else{
+//                player.getGame().chooseNextPlayer( player.getGame().getPlayers().get(indexOfPlayer+1) );
+//            }
+//        }
+//        else{
+//            player.getGame().chooseNextPlayer(player.chooseAPlayer());
+//        }
+//    }
     @Override
     public boolean conditionWitch(Player player) {
         return false;

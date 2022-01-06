@@ -176,65 +176,109 @@ public abstract class Player extends Observable {
      */
     public abstract void play();
 
+
+    public void playCard(UpdateCode code) {            // Lorsque Play card est appelé, on vérifie quelle carte à été révélé pour la jouer
+
+        for(Card allc : this.getDeck()){
+            if(allc.isRevealed()){
+                //allc
+            }
+        }
+//        System.out.println("Wich card do you want to play");
+//        Card cardToBePlayed = this.chooseCardIn(deck);
+//        if(accused && cardToBePlayed.conditionWitch(this)){
+//            cardToBePlayed.actionWitch(this);
+//            this.addCardTo(this.table,cardToBePlayed);
+//        }
+//        else if(!accused && cardToBePlayed.conditionHunt(this)){
+//            cardToBePlayed.actionHunt(this);
+//            this.addCardTo(this.table,cardToBePlayed);
+//        }
+//        this.getGame().chooseNextPlayer(this);
+    }
+
     /**
      * Fonction quui permet de gérer la phase de jeu correspondant à une accusation.
      * Elle regroupe le choix du joueur accusé, l'action du joueur accusé, ainsi que l'attribution des points à la fin de l'accusation.
      * @author lilsb
      */
-    public void accusation(){ // on transmet en parametre d'entré le joueur qui accuse
-        this.setUpdateCode(UpdateCode.ACCUSE);
-        System.out.println("Who do you want to accuse ?");
-        Player accusedPlayer;
-        do {
-            accusedPlayer = chooseAPlayer();
-        }while ((accusedPlayer == game.getProtectedPlayer()) || accusedPlayer == this);// pb si le joueur protégé est le seul à pouvoir être accusé // remettre en protected player pour que ca soit plus simple et que ca colle avec les cartes.
-        // solution peut etre lorsque l'on set le playerprotected faire une verif
-        accusedPlayer.setAccused(true);
-        accusedPlayer.play();
-        accusedPlayer.setAccused(false);
-        game.setProtectedPlayer(null); // permet la réinitialistation de joueur protégé (car protégé un tour seulement
-        if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
-            this.addPoints(1);
-            System.out.println(this.getName() + " won 1 point");
+    public void accusation(){
+        for(Player allp : game.getPlayers()){
+            if(allp.isAccused()){
+                allp.play();
+                if(allp.getIdentity().isRevealed()){
+                    if(allp.getIdentity().getRole()==Role.Witch){
+                        addPoints(1);
+                        setUpdateCode(UpdateCode.END_PLAY);
+                    }
+                }else allp.setAccused(false);
+            }
         }
+
+        //        setUpdateCode(UpdateCode.ACCUSE);
+//        System.out.println("ACCUSATION LANCE");
+//        while(actualCode!=UpdateCode.END_ACCUSATION);
+//        Player accusedPlayer = new PlayerIRL();
+//        do {
+//            //accusedPlayer = chooseAPlayer();
+//        }while ((accusedPlayer == game.getProtectedPlayer()) || accusedPlayer == this);// pb si le joueur protégé est le seul à pouvoir être accusé // remettre en protected player pour que ca soit plus simple et que ca colle avec les cartes.
+//        // solution peut etre lorsque l'on set le playerprotected faire une verif
+//        accusedPlayer.setAccused(true);
+//        accusedPlayer.play();
+//        accusedPlayer.setAccused(false);
+//        game.setProtectedPlayer(null); // permet la réinitialistation de joueur protégé (car protégé un tour seulement
+//        if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
+//            this.addPoints(1);
+//            System.out.println(this.getName() + " won 1 point");
+//        }
 
     }
 
+    public void chooseAPlayer(int choice,UpdateCode code){
+        switch (code){
+            case ACCUSE -> {
+                List<Player> listP = chooseThis(UpdateCode.ACCUSE);
+                if(choice<listP.size() && choice>=0){
+                    listP.get(choice).setAccused(true);
+                    setUpdateCode(UpdateCode.END_ACCUSATION);
+                }else{
+                    setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
+                }
+                break;
+            }
+            case PLAY_CARD_HUNT -> {
 
-    public void playCard() {
-        System.out.println("Wich card do you want to play");
-        Card cardToBePlayed = this.chooseCardIn(deck);
-        if(accused && cardToBePlayed.conditionWitch(this)){
-            cardToBePlayed.actionWitch(this);
-            this.addCardTo(this.table,cardToBePlayed);
+                break;
+            }
         }
-        else if(!accused && cardToBePlayed.conditionHunt(this)){
-            cardToBePlayed.actionHunt(this);
-            this.addCardTo(this.table,cardToBePlayed);
-        }
-        this.getGame().chooseNextPlayer(this);
     }
 
-    public abstract Player chooseAPlayer();
 
     public abstract Card chooseCardIn(List<Card> Stock);
 
+    //Renvoi la liste de player élligibles au codes
+    public List<Player> chooseThis(UpdateCode actualCode){
+        List<Player> players = new ArrayList<>();
+        if(actualCode==UpdateCode.ACCUSE){
+            for(Player allP : game.getPlayers()){
+                if(allP==this || allP.getIdentity().isRevealed() || allP==game.getProtectedPlayer()){
+                } else players.add(allP);
+            }
+        }
+        return players;
+    }
 
     public void setChoice(int choice){
         switch (choice) {
-            case 1 -> this.accusation();
-            case 2 -> this.playCard();
+            case 1 -> setUpdateCode(UpdateCode.ACCUSE);
+            case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
             default -> setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
         }
     }
     public void setChoiceAccused(int choice){
         switch (choice) {
-            case 1 -> {
-                this.getIdentity().setRevealed(true);
-                game.chooseNextPlayer(game.getCurrentPlayer());
-                game.getCurrentPlayer().endPlay();
-            }
-            case 2 -> this.playCard();
+            case 1 -> setUpdateCode(UpdateCode.IS_REVEALED);
+            case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT); //this.playCard();
             default -> setUpdateCode(UpdateCode.IS_ACCUSED);
         }
     }
@@ -247,16 +291,13 @@ public abstract class Player extends Observable {
         switch (choice){
             case 1:
                 identity.setRole(Role.Witch);
-                System.out.println("Joueur Witch");
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
                 break;
             case 2:
                 identity.setRole(Role.Hunt);
-                System.out.println("Joueur HUNT");
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
                 break;
             default:
-                System.out.println("Remise a Choose IDENDITY du Joueur");
                 setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
                 break;
         }

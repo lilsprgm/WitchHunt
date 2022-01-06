@@ -31,15 +31,15 @@ public class HookedNose extends Card {
         // la variable current player et on obtient le deck avec getDeck().
     }
 
-    @Override
-    public void actionHunt(Player player) {
-        System.out.println(getActionHunt());
-        Player chosenPlayer = player.chooseAPlayer();
-        player.getGame().chooseNextPlayer(chosenPlayer);
-        player.addCardTo(player.getDeck(), player.getGame().draw(chosenPlayer.getDeck())); // on ajoute une carte au deck du joueur qui joue,
-        // qu'on a pioché dans la main du joueur choisi
-
-    }
+//    @Override
+//    public void actionHunt(Player player) {
+//        System.out.println(getActionHunt());
+//        Player chosenPlayer = player.chooseAPlayer();
+//        player.getGame().chooseNextPlayer(chosenPlayer);
+//        player.addCardTo(player.getDeck(), player.getGame().draw(chosenPlayer.getDeck())); // on ajoute une carte au deck du joueur qui joue,
+//        // qu'on a pioché dans la main du joueur choisi
+//
+//    }
 
     @Override
     public boolean conditionWitch(Player player) {

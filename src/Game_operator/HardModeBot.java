@@ -45,7 +45,7 @@ public class HardModeBot extends Player {
             if (this.deck.isEmpty() ){
                 this.identity.setRevealed(true);
             }else{
-                playCard();
+               // playCard();
             }
 
             //tour de jeu du bot classique
@@ -55,18 +55,18 @@ public class HardModeBot extends Player {
         }
     }
 
-    @Override
-    public Player chooseAPlayer() {
-        Player player = null;
-        List<Player> players = game.getPlayers();
-        int max = 0;
-        do {
-            for (Player p : players){
-                if (p.numberOfPoints > max){//on choisi le player avec le plus de points possible (car les cartes sont souvent désavantageuse
-                    player = p;
-                }
-            }
-        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
-        return player;
-    }
+//    @Override
+//    public Player chooseAPlayer() {
+//        Player player = null;
+//        List<Player> players = game.getPlayers();
+//        int max = 0;
+//        do {
+//            for (Player p : players){
+//                if (p.numberOfPoints > max){//on choisi le player avec le plus de points possible (car les cartes sont souvent désavantageuse
+//                    player = p;
+//                }
+//            }
+//        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
+//        return player;
+//    }
 }

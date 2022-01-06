@@ -23,11 +23,11 @@ public class BlackCat extends Card{
          *Le Joueur qui à joué la carte est le prochain à jouer.
          * @param player Représente le joueur qui a jouer la carte.
          */
-    @Override
-    public void actionWitch(Player player) {
-        System.out.println(getActionWitch());
-        player.getGame().chooseNextPlayer(player.chooseAPlayer());
-    }
+//    @Override
+//    public void actionWitch(Player player) {
+//        System.out.println(getActionWitch());
+//        player.getGame().chooseNextPlayer(player.chooseAPlayer());
+//    }
 
        /**
         * Permet d'activer l'effet Hunt de la carte BlackCat.

@@ -24,12 +24,12 @@ public class Broomstick extends Card{
         System.out.println(getActionWitch());
     }
 
-    @Override
-    public void actionHunt(Player player) {
-        System.out.println(getActionHunt());
-        Player chosenPlayer = player.chooseAPlayer();
-        player.getGame().chooseNextPlayer(chosenPlayer);
-    }
+//    @Override
+//    public void actionHunt(Player player) {
+//        System.out.println(getActionHunt());
+//        Player chosenPlayer = player.chooseAPlayer();
+//        player.getGame().chooseNextPlayer(chosenPlayer);
+//    }
 
     @Override
     public boolean conditionWitch(Player player) {

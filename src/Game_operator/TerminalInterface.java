@@ -1,7 +1,10 @@
 package Game_operator;
 
+import Cards.Role;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -144,30 +147,57 @@ public class TerminalInterface implements Observer, Runnable{
                                 int role = input(false,true);
                                 if(!interrupt){
                                     actualObservable.setIdentity(role);
-                                    System.out.println("Aucune interruption");
                                 }else{
-                                    interrupt=false;
-                                    System.out.println("Interruption detecte");
-                                }
+                                    interrupt=false;}
                                 break;
                         }
                         break;
 
                     case GAME_ROUND:
+                        int choice;
                         switch (flagPlayer){
                             case ACCUSE_OR_PLAY:
                                 flagPlayer = UpdateCode.ATTENTE;
                                 System.out.println("\n\n\n\nYour turn "+ actualObservable.getName());
                                 System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
-                                int choice = input(false,false);
+                                choice = input(false,false);
                                 actualObservable.setChoice(choice);
                                 break;
 
+                            case ACCUSE:        // CORRIGER ACCUSE, MAUVAISE INPUT PRISE
+                                flagPlayer = UpdateCode.ATTENTE;
+                                System.out.println("Who do you want to accuse ?");
+                                List<Player> listP = actualObservable.chooseThis(UpdateCode.ACCUSE); // On récupère la liste des joueurs accusables
+                                for(int i=1;i< listP.size()+1;i++){
+                                    System.out.println(i+"- "+listP.get(i-1).getName());
+                                }
+                                choice = input(false,false);
+                                actualObservable.chooseAPlayer(choice-1,UpdateCode.ACCUSE);
+                                break;
+
                             case IS_ACCUSED:
+                                flagPlayer = UpdateCode.ATTENTE;
                                 System.out.println(actualObservable.getName() + " you are accused !!!!" +
                                         "\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
                                 choice = input(false,false);
                                 actualObservable.setChoiceAccused(choice);
+                                break;
+
+                            case IS_REVEALED:
+                                flagPlayer = UpdateCode.ATTENTE;
+                                if(actualObservable.getIdentity().getRole()== Role.Witch){
+                                    System.out.printf(actualObservable.getName()+" was a Witch\n ");
+                                }
+                                if(actualObservable.getIdentity().getRole()== Role.Hunt){
+                                    System.out.printf(actualObservable.getName()+" was a Villager\n ");
+                                }
+                                break;
+
+                            case END_PLAY:
+                                System.out.println(actualObservable.getName()+" finish his round\nHe have "+actualObservable.getNumberOfPoints());
+                                break;
+
+                            case ATTENTE:
                                 break;
                         }
                     break;
@@ -177,6 +207,7 @@ public class TerminalInterface implements Observer, Runnable{
                 }
         }
     }
+
     @Override
     public void update(Observable o, Object arg) {
 
@@ -199,9 +230,17 @@ public class TerminalInterface implements Observer, Runnable{
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.ACCUSE_OR_PLAY;
             }
+            case ACCUSE -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.ACCUSE;
+            }
             case IS_ACCUSED -> {
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.IS_ACCUSED;
+            }
+            case IS_REVEALED -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.IS_REVEALED;
             }
         }
 

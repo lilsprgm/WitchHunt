@@ -26,15 +26,15 @@ public class PointedHat extends Card{
         player.discardCardFrom(player.getTable(), chosenCard);
     }
 
-    @Override
-    public void actionHunt(Player player) {
-        System.out.println(getActionWitch());
-        Card chosenCard = player.chooseCardIn(player.getTable());
-        chosenCard.setRevealed(false);
-        player.addCardTo(player.getDeck(), chosenCard);
-        player.discardCardFrom(player.getTable(), chosenCard);
-        player.getGame().chooseNextPlayer(player.chooseAPlayer());
-    }
+//    @Override
+//    public void actionHunt(Player player) {
+//        System.out.println(getActionWitch());
+//        Card chosenCard = player.chooseCardIn(player.getTable());
+//        chosenCard.setRevealed(false);
+//        player.addCardTo(player.getDeck(), chosenCard);
+//        player.discardCardFrom(player.getTable(), chosenCard);
+//        player.getGame().chooseNextPlayer(player.chooseAPlayer());
+//    }
 
     @Override
     public boolean conditionWitch(Player player) {
