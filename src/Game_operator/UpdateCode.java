@@ -10,10 +10,13 @@ public enum UpdateCode {
     ERROR_DIFFICULTY,
 
     GAME_INIT_ROUND,
+    GAME_ROUND,
+    GAME_END_ROUND,
+
     CHOOSE_IDENTITY,
     END_CHOOSE_IDENTITY,
 
-    GAME_ROUND,
+
     ACCUSE_OR_PLAY,
     ACCUSE,
     END_ACCUSATION,
@@ -24,5 +27,13 @@ public enum UpdateCode {
     PLAY_CARD_WITCH,
 
     END_PLAY,
+
+    BOT_ACCUSE,
+    BOT_PLAY_HUNT,
+    BOT_IS_ACCUSED,
+    BOT_REVEAL,
+    BOT_PLAY_WITCH,
+
+    END_GAME,
 
 }

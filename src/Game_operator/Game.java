@@ -76,7 +76,6 @@ public class Game extends Observable {
         if(numberOfBot>0){
             setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
         }else{
-            //this.currentPlayer = players.get(0);                                  // A VOIR
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }
     }
@@ -213,6 +212,7 @@ public class Game extends Observable {
     public void init_Game(){
         this.initPlayers();
         this.initStockPile();
+        while(actualCode!=UpdateCode.GAME_INIT_ROUND);
     }
 
     /**
@@ -253,7 +253,14 @@ public class Game extends Observable {
             while (!endOfRound()){
                 this.currentPlayer.play();
                 this.currentPlayer = chosenNextPlayer;
-                System.out.println(chosenNextPlayer);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                // System.out.println(chosenNextPlayer);
             }
         }
     }
@@ -273,8 +280,6 @@ public class Game extends Observable {
             }
         }
         if (numberOfRevealed == players.size() - 1){
-            System.out.println("End of the round !!");
-
             // partie pour compter les points si la personne n'est pas decouverte
             for (Player player :players){
                 if (!player.getIdentity().isRevealed()){
@@ -286,7 +291,7 @@ public class Game extends Observable {
                     }
                 }
             }
-            //
+            setUpdateCode(UpdateCode.GAME_END_ROUND);
             return true;
         }
         else {
@@ -323,16 +328,24 @@ public class Game extends Observable {
      * @author lilsb
      */
     public boolean endOfGame(){
-        if(actualCode==UpdateCode.GAME_INIT_ROUND ||actualCode==UpdateCode.GAME_ROUND){
-            for (int i=0;i<numberOfBot+numberOfPlayerIRL;i++){
-                if (players.get(i).getNumberOfPoints() >= 5){
-                    System.out.println("End of the game");
+            for (Player allp : players){
+                if (allp.getNumberOfPoints() >= 5){
+                    restartPoint();
+                    setUpdateCode(UpdateCode.END_GAME);
                     return true;
                 }
             }
-        }
-        return false;
+            if(actualCode!=UpdateCode.GAME_INIT_ROUND){
+                setUpdateCode(UpdateCode.GAME_INIT_ROUND);
+            }
+            return false;
 
+    }
+
+    public void restartPoint(){
+        for(Player allp : players){
+            allp.restartPoint();
+        }
     }
 
     /**

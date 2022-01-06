@@ -9,6 +9,7 @@ public abstract class Player extends Observable {
     protected int numberOfPoints = 0;
     protected String name;
     protected boolean accused = false;
+    protected Player AccusedPlayer;
     protected Identity identity =new Identity();
     protected ArrayList<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
     protected ArrayList<Card> deck = new ArrayList<Card>();
@@ -50,6 +51,13 @@ public abstract class Player extends Observable {
         // Automatically generated method. Please do not modify this code.
         return this.numberOfPoints;
     }
+    /**
+     *
+     * @return Le joueur qui a été accusé
+     */
+    public Player getAccusedPlayer(){
+        return AccusedPlayer;
+    }
 
     /**
      * Permet de lier le joueur a une partie.
@@ -71,12 +79,11 @@ public abstract class Player extends Observable {
     public void addPoints(int point){
         this.numberOfPoints += point;
     }
- /*
-    private void setNumberOfPoints(int value) {
-        // Automatically generated method. Please do not modify this code.
-        this.numberOfPoints = value;
+    public void losePoints(int point){this.numberOfPoints-=point;}
+
+    public void restartPoint(){
+        numberOfPoints=0;
     }
-*/
 
     /**
      *
@@ -211,7 +218,11 @@ public abstract class Player extends Observable {
                         addPoints(1);
                         setUpdateCode(UpdateCode.END_PLAY);
                     }
-                }else allp.setAccused(false);
+                    else setUpdateCode(UpdateCode.END_PLAY);
+                }else {
+                    allp.setAccused(false);
+                    //setUpdateCode(UpdateCode.END_PLAY);
+                }
             }
         }
 
@@ -240,8 +251,9 @@ public abstract class Player extends Observable {
                 List<Player> listP = chooseThis(UpdateCode.ACCUSE);
                 if(choice<listP.size() && choice>=0){
                     listP.get(choice).setAccused(true);
-                    setUpdateCode(UpdateCode.END_ACCUSATION);
-                }else{
+                    if(this instanceof PlayerIRL){setUpdateCode(UpdateCode.END_ACCUSATION);}
+                    if(this instanceof EasyModeBot || this instanceof HardModeBot){setUpdateCode(UpdateCode.BOT_ACCUSE);}
+                }else if(this instanceof PlayerIRL){
                     setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
                 }
                 break;
@@ -278,8 +290,14 @@ public abstract class Player extends Observable {
     public void setChoiceAccused(int choice){
         switch (choice) {
             case 1 -> setUpdateCode(UpdateCode.IS_REVEALED);
-            case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT); //this.playCard();
-            default -> setUpdateCode(UpdateCode.IS_ACCUSED);
+            case 2 -> {if(this instanceof EasyModeBot || this instanceof HardModeBot) {
+                    setUpdateCode(UpdateCode.BOT_PLAY_WITCH);
+                }else setUpdateCode(UpdateCode.PLAY_CARD_WITCH);
+            }
+            default -> {if(this instanceof EasyModeBot || this instanceof HardModeBot) {
+                    setUpdateCode(UpdateCode.BOT_IS_ACCUSED);
+                }else setUpdateCode(UpdateCode.IS_ACCUSED);
+            }
         }
     }
 

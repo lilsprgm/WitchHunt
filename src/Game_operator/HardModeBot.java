@@ -6,6 +6,8 @@ import Cards.Role;
 import java.util.List;
 
 public class HardModeBot extends Player {
+
+
     @Override
     public void chooseIdentity() {
         this.getIdentity().setRole((Role.values()[(int) Math.round(Math.random())]));

@@ -13,6 +13,7 @@ public class TerminalInterface implements Observer, Runnable{
     private final Game currentGame;
     private volatile UpdateCode flag = UpdateCode.ATTENTE;
     private volatile UpdateCode flagPlayer = UpdateCode.ATTENTE;
+    private volatile UpdateCode flagBot = UpdateCode.ATTENTE;
     private volatile Player actualObservable;
     private volatile boolean interrupt = false;
 
@@ -153,8 +154,17 @@ public class TerminalInterface implements Observer, Runnable{
                         }
                         break;
 
+                    case GAME_END_ROUND:
+                        flag = UpdateCode.ATTENTE;
+                        System.out.println("End of the round !!");
+                        for(Player allp : currentGame.getPlayers()){
+                            System.out.println(allp);
+                        }
+                        break;
+
                     case GAME_ROUND:
                         int choice;
+
                         switch (flagPlayer){
                             case ACCUSE_OR_PLAY:
                                 flagPlayer = UpdateCode.ATTENTE;
@@ -200,7 +210,31 @@ public class TerminalInterface implements Observer, Runnable{
                             case ATTENTE:
                                 break;
                         }
+                        switch (flagBot){
+                            case BOT_PLAY_WITCH -> {
+                                flagBot=UpdateCode.ATTENTE;
+                                System.out.println(actualObservable.getName()+" choose to play a Witch Card");
+                            }
+                            case BOT_PLAY_HUNT -> {
+                                flagBot=UpdateCode.ATTENTE;
+                                System.out.println(actualObservable.getName()+" choose to play a Hunt Card");
+                            }
+                            case BOT_ACCUSE -> {
+                                flagBot=UpdateCode.ATTENTE;
+                                System.out.println(actualObservable.getName()+" choose to accuse "+actualObservable.getAccusedPlayer().getName());
+                            }
+                        }
                     break;
+
+                    case END_GAME:
+                        flag = UpdateCode.ATTENTE;
+                        for (Player allp : currentGame.getPlayers()){
+                            if (allp.getNumberOfPoints() >= 5){
+                                System.out.println("The WINNER is "+allp.getName());
+                            }
+                        }
+                        System.out.println("End Of The Game !");
+                        break;
 
                     case ATTENTE:
                         break;
@@ -219,6 +253,7 @@ public class TerminalInterface implements Observer, Runnable{
             case INIT_NAME_PLAYER -> flag = UpdateCode.INIT_NAME_PLAYER;
             case INIT_DIFFICULTY_BOT -> flag = UpdateCode.INIT_DIFFICULTY_BOT;
 
+            case END_GAME -> flag = UpdateCode.END_GAME;
             case GAME_INIT_ROUND -> flag = UpdateCode.GAME_INIT_ROUND;
             case CHOOSE_IDENTITY -> {
                 actualObservable = (Player)o;
@@ -226,6 +261,7 @@ public class TerminalInterface implements Observer, Runnable{
             }
 
             case GAME_ROUND -> flag = UpdateCode.GAME_ROUND;
+            case GAME_END_ROUND -> flag = UpdateCode.GAME_END_ROUND;
             case ACCUSE_OR_PLAY -> {
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.ACCUSE_OR_PLAY;
@@ -241,6 +277,18 @@ public class TerminalInterface implements Observer, Runnable{
             case IS_REVEALED -> {
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.IS_REVEALED;
+            }
+            case BOT_PLAY_WITCH -> {
+                actualObservable = (Player)o;
+                flagBot = UpdateCode.BOT_PLAY_WITCH;
+            }
+            case BOT_PLAY_HUNT -> {
+                actualObservable = (Player)o;
+                flagBot = UpdateCode.BOT_PLAY_HUNT;
+            }
+            case BOT_ACCUSE -> {
+                actualObservable = (Player)o;
+                flagBot = UpdateCode.BOT_ACCUSE;
             }
         }
 

@@ -3,6 +3,7 @@ package Game_operator;
 import Cards.Card;
 import Cards.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EasyModeBot extends Player {
@@ -13,12 +14,12 @@ public class EasyModeBot extends Player {
         notifyObservers(newUpdateCode);
     }
 
-
     // idée : en mode easy on choisit les joueurs et les cartes aléatoirement.
     // on  révèle l'identité directement lorsque l'on est hunt mais pas witch
     @Override
     public void chooseIdentity() {
-        this.getIdentity().setRole((Role.values()[(int) Math.round(Math.random())]));
+        //this.getIdentity().setRole((Role.values()[(int) Math.round(Math.random())]));
+        this.getIdentity().setRole(Role.Hunt);                                          // Pour tester A enlever
         // int entre 0 et 1 car int arrondi toujours a l'entier superieur
     }
 
@@ -43,39 +44,49 @@ public class EasyModeBot extends Player {
      */
     public void play() {
 
-    if(isAccused()){
+        List<Player> listP = new ArrayList<Player>();
 
+    if(isAccused()){
+        if(identity.getRole()==Role.Hunt){
+            setChoiceAccused(1);
+            getIdentity().setRevealed(true);
+            game.chooseNextPlayer(game.getCurrentPlayer());
+            setAccused(false);
+        }else{                                  // 1 Se Revele et 2 Joue Carte
+            setChoiceAccused(2);
+        }
+    }
+    if(game.getCurrentPlayer()==this){          // C'est au bot de Jouer
+        AccusedPlayer = chooseThis(UpdateCode.ACCUSE).get(0);
+        chooseAPlayer(0,UpdateCode.ACCUSE);         // Va accuser le premier Joueur
+        accusation();                                     // Va faire jouer celui qui a été accusé
     }
 
 
-
-
-
-
-        //role reveler onn peut pas jouer
-        if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch) {
-            System.out.println("You can't play : you are a witch !");
-            return;
-
-        //bot accusé
-        } else if (this.isAccused()) {
-            System.out.println(this.getName() + " you are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
-            if (this.identity.getRole() == Role.Hunt ){
-                this.identity.setRevealed(true);
-            }else{
-                //playCard();
-            }
-
-            //tour de jeu du bot classique
-        } else {
-            System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
-            if (this.deck.isEmpty()){
-                accusation();
-            }
-            else{
-                //playCard();
-            }
-        }
+//        //role reveler onn peut pas jouer
+//        if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch) {
+//            System.out.println("You can't play : you are a witch !");
+//            return;
+//
+//        //bot accusé
+//        } else if (this.isAccused()) {
+//            System.out.println(this.getName() + " you are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
+//            if (this.identity.getRole() == Role.Hunt ){
+//                this.identity.setRevealed(true);
+//            }else{
+//                //playCard();
+//            }
+//
+//            //tour de jeu du bot classique
+//        } else {
+//            System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
+//            if (this.deck.isEmpty()){
+//                accusation();
+//            }
+//            else{
+//                //playCard();
+//            }
+//        }
     }
 
 //    @Override
