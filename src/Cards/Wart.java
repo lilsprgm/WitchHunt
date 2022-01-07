@@ -26,8 +26,8 @@ public class Wart extends Card {
      */
     @Override
     public void actionWitch(Player player) {
-        System.out.println(getActionWitch());
         player.getGame().chooseNextPlayer(player);
+        player.setAccused(false);
     }
 
     /**
@@ -35,11 +35,10 @@ public class Wart extends Card {
      *Le Joueur doit choisir parmis les Joueurs de la partie le prochain à jouer.
      * @param player Représente le joueur qui a jouer la carte.
      */
-//    @Override
-//    public void actionHunt(Player player) {
-//        System.out.println(getActionHunt());
-//        player.getGame().chooseNextPlayer(player.chooseAPlayer());
-//    }
+    @Override
+    public void actionHunt(Player player) {
+        player.getGame().chooseNextPlayer(player.chooseAPlayer());
+    }
 
     @Override
     public boolean conditionWitch(Player player) {

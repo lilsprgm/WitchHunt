@@ -200,11 +200,18 @@ public abstract class Player extends Observable {
 
                 while(!cardWichIsPlayed.isRevealed() && actualCode!=UpdateCode.PLAY_CARD_HUNT);
                 if(cardWichIsPlayed.isRevealed()){
-                    removeCardTo(deck,cardWichIsPlayed);
-                    addCardTo(table,cardWichIsPlayed);
                     //Action effectué
-                    cardWichIsPlayed = null;
-                    setUpdateCode(UpdateCode.END_PLAY);
+                    if(cardWichIsPlayed.conditionHunt(this)){
+                        cardWichIsPlayed.actionHunt(this);
+                        removeCardTo(deck,cardWichIsPlayed);
+                        addCardTo(table,cardWichIsPlayed);
+                        cardWichIsPlayed = null;
+                        setUpdateCode(UpdateCode.END_PLAY);
+                    }else {
+                        System.out.println("Condition not respected");
+                        cardWichIsPlayed.setRevealed(false);
+                        setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
+                    }
                 }
             }
             case PLAY_CARD_WITCH -> {
@@ -212,15 +219,20 @@ public abstract class Player extends Observable {
                 setUpdateCode(UpdateCode.EFFECT_CARD_WITCH);
 
                 while(!cardWichIsPlayed.isRevealed() && actualCode!=UpdateCode.PLAY_CARD_WITCH && actualCode!=UpdateCode.IS_REVEALED);
-                System.out.println(actualCode);
                 if(cardWichIsPlayed.isRevealed()){
-                    removeCardTo(deck,cardWichIsPlayed);
-                    addCardTo(table,cardWichIsPlayed);
                     //Action effectué
-                    cardWichIsPlayed = null;
-                    setUpdateCode(UpdateCode.END_PLAY);
+                    if(cardWichIsPlayed.conditionWitch(this)){
+                        cardWichIsPlayed.actionWitch(this);
+                        removeCardTo(deck,cardWichIsPlayed);
+                        addCardTo(table,cardWichIsPlayed);
+                        cardWichIsPlayed = null;
+                        setUpdateCode(UpdateCode.END_PLAY);
+                    }else {
+                        System.out.println("Condition not respected");
+                        cardWichIsPlayed.setRevealed(false);
+                        setUpdateCode(UpdateCode.PLAY_CARD_WITCH);
+                    }
                 }
-                System.out.println(actualCode);
             }
         }
 //        System.out.println("Wich card do you want to play");
@@ -258,24 +270,6 @@ public abstract class Player extends Observable {
                 }
             }
         }
-
-        //        setUpdateCode(UpdateCode.ACCUSE);
-//        System.out.println("ACCUSATION LANCE");
-//        while(actualCode!=UpdateCode.END_ACCUSATION);
-//        Player accusedPlayer = new PlayerIRL();
-//        do {
-//            //accusedPlayer = chooseAPlayer();
-//        }while ((accusedPlayer == game.getProtectedPlayer()) || accusedPlayer == this);// pb si le joueur protégé est le seul à pouvoir être accusé // remettre en protected player pour que ca soit plus simple et que ca colle avec les cartes.
-//        // solution peut etre lorsque l'on set le playerprotected faire une verif
-//        accusedPlayer.setAccused(true);
-//        accusedPlayer.play();
-//        accusedPlayer.setAccused(false);
-//        game.setProtectedPlayer(null); // permet la réinitialistation de joueur protégé (car protégé un tour seulement
-//        if (accusedPlayer.getIdentity().isRevealed() & accusedPlayer.getIdentity().getRole() == Role.Witch){
-//            this.addPoints(1);
-//            System.out.println(this.getName() + " won 1 point");
-//        }
-
     }
 
     public void makeAchoice(int choice, UpdateCode code) {
@@ -308,7 +302,10 @@ public abstract class Player extends Observable {
             }
             case EFFECT_CARD_HUNT -> {
                 switch (choice){
-                    case 1 -> cardWichIsPlayed.setRevealed(true);
+                    case 1 -> {
+                        cardWichIsPlayed.setRevealed(true);
+                        System.out.println("Carte révélée");
+                    }
                     case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
                     default -> setUpdateCode(UpdateCode.EFFECT_CARD_HUNT);
                 }
@@ -324,6 +321,7 @@ public abstract class Player extends Observable {
     }
 
 
+    public abstract Player chooseAPlayer();
     public abstract Card chooseCardIn(List<Card> Stock);
 
     //Renvoi la liste de player élligibles au codes
@@ -360,10 +358,6 @@ public abstract class Player extends Observable {
                 }else setUpdateCode(UpdateCode.IS_ACCUSED);
             }
         }
-    }
-
-    public void endPlay(){
-        setUpdateCode(UpdateCode.END_PLAY);
     }
 
     public void setIdentity(int choice){

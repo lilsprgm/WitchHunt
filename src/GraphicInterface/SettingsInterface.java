@@ -1,6 +1,7 @@
 package GraphicInterface;
 
 //import Game_operator.Observer;
+import Cards.Card;
 import Game_operator.*;
 
 import java.awt.*;
@@ -185,7 +186,7 @@ public class SettingsInterface extends JFrame implements Observer{
 
         play.addActionListener(e -> {
             for(int i=0;i<currentGame.getNumberOfBot();i++){
-                currentGame.setBots(comboBoxList.get(i).getSelectedIndex());
+                currentGame.setBots(comboBoxList.get(i).getSelectedIndex()+1);
             }myTerminal.interruptScan();
         });
     }

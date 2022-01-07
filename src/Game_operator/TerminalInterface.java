@@ -1,5 +1,6 @@
 package Game_operator;
 
+import Cards.Card;
 import Cards.Role;
 
 import java.io.*;
@@ -230,7 +231,7 @@ public class TerminalInterface implements Observer, Runnable{
 
                             case EMPTY_DECK:
                                 flagPlayer = UpdateCode.ATTENTE;
-                                System.out.println("\nYou can't play a Card");
+                                System.out.println("\nYou can't play a/this Card");
                                 actualObservable.setChoice(3);
                                 break;
 
@@ -307,69 +308,65 @@ public class TerminalInterface implements Observer, Runnable{
             case END_GAME -> flag = UpdateCode.END_GAME;
             case GAME_INIT_ROUND -> flag = UpdateCode.GAME_INIT_ROUND;
             case CHOOSE_IDENTITY -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.CHOOSE_IDENTITY;
             }
 
             case GAME_ROUND -> flag = UpdateCode.GAME_ROUND;
             case GAME_END_ROUND -> flag = UpdateCode.GAME_END_ROUND;
             case ACCUSE_OR_PLAY -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.ACCUSE_OR_PLAY;
             }
             case ACCUSE -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.ACCUSE;
             }
             case PLAY_CARD_HUNT -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.PLAY_CARD_HUNT;
             }
             case PLAY_CARD_WITCH -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.PLAY_CARD_WITCH;
             }
 
             case EFFECT_CARD_HUNT -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.EFFECT_CARD_HUNT;
             }
             case EFFECT_CARD_WITCH -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.EFFECT_CARD_WITCH;
             }
             case END_CHOOSE_CARD -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.END_CHOOSE_CARD;
             }
             case END_PLAY -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.END_PLAY;
             }
             case IS_ACCUSED -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.IS_ACCUSED;
             }
             case IS_REVEALED -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagPlayer = UpdateCode.IS_REVEALED;
             }
-
-
-
             case BOT_PLAY_WITCH -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagBot = UpdateCode.BOT_PLAY_WITCH;
             }
             case BOT_PLAY_HUNT -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagBot = UpdateCode.BOT_PLAY_HUNT;
             }
             case BOT_ACCUSE -> {
-                actualObservable = (Player)o;
+                actualObservable = (Player) o;
                 flagBot = UpdateCode.BOT_ACCUSE;
             }
         }
-
     }
 }

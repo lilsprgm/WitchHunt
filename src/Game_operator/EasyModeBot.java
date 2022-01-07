@@ -89,12 +89,12 @@ public class EasyModeBot extends Player {
 //        }
     }
 
-//    @Override
-//    public Player chooseAPlayer() {
-//        Player player;
-//        do {
-//            player = game.getPlayers().get((int) Math.round(Math.random() * game.getPlayers().size()));
-//        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
-//        return player;
-//    }
+    @Override
+    public Player chooseAPlayer() {
+        Player player;
+        do {
+            player = game.getPlayers().get((int) Math.round(Math.random() * game.getPlayers().size()));
+        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
+        return player;
+    }
 }

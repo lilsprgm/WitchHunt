@@ -38,6 +38,9 @@ public enum UpdateCode {
     BOT_REVEAL,
     BOT_PLAY_WITCH,
 
+    CARD_CHOOSE_PLAYER,
+
+
     END_GAME,
 
 }

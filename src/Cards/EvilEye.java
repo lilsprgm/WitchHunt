@@ -6,6 +6,8 @@ public class EvilEye extends Card{
         setName("EvilEye");
         setActionHunt("Choose next player\n At their turn they must accuse a player other than you if possible");
         setActionWitch(getActionHunt());
+        setConditionHunt("");
+        setConditionWitch("");
     }
     private static EvilEye instance =null;
     public static EvilEye getInstance(){
@@ -19,17 +21,16 @@ public class EvilEye extends Card{
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());
-        //Player chosenPlayer = player.chooseAPlayer();
-        //player.getGame().chooseNextPlayer(chosenPlayer);
+        Player chosenPlayer = player.chooseAPlayer();
+        player.getGame().chooseNextPlayer(chosenPlayer);
         player.getGame().setProtectedPlayer(player);
     }
 
 
     @Override
     public void actionHunt(Player player) {
-        System.out.println(getActionHunt());
-//        Player chosenPlayer = player.chooseAPlayer();
-//        player.getGame().chooseNextPlayer(chosenPlayer);
+        Player chosenPlayer = player.chooseAPlayer();
+        player.getGame().chooseNextPlayer(chosenPlayer);
         player.getGame().setProtectedPlayer(player);
     }
 

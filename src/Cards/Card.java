@@ -3,6 +3,8 @@ package Cards;
 
 import Game_operator.*;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 
 public class Card implements Action{ //(extends Observable)
@@ -21,6 +23,7 @@ public class Card implements Action{ //(extends Observable)
     public String getName() {
         return name;
     }
+
 
     public boolean isRevealed() {
         // Automatically generated method. Please do not modify this code.
