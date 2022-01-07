@@ -3,6 +3,7 @@ package GraphicInterface;
 import Cards.*;
 import Game_operator.Game;
 import Game_operator.Player;
+import Game_operator.TerminalInterface;
 import Game_operator.UpdateCode;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.util.*;
 public class PlayInterface extends JFrame implements Observer {
 
     private final Game currentGame;
+    private TerminalInterface myTerminal;
     private Player actualObservable;
     private JLabel tourPlayer;
     private JPanel playPanel;
@@ -40,6 +42,7 @@ public class PlayInterface extends JFrame implements Observer {
 
     private JButton buttontest;
     private int i = 0;
+    private int choice=50;
 
     public PlayInterface(Game game){
         super("WITCHHUNT");
@@ -60,6 +63,10 @@ public class PlayInterface extends JFrame implements Observer {
 
     }
 
+    public void setMyTerminal(TerminalInterface ter){
+        myTerminal = ter;
+    }
+
     public void allActions(){
 
         //Lors d'un appui sur la carte n°1 :
@@ -68,15 +75,53 @@ public class PlayInterface extends JFrame implements Observer {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if(carteN1.isEnabled()){
-                    carteN1.setEnabled(false);
+                    carteN1.setEnabled(false);carteN2.setEnabled(true);
+                    carteN3.setEnabled(true);carteN4.setEnabled(true);
+                    choice = 0;
                 }
-                else carteN1.setEnabled(true);
+            }
+        });
+        carteN2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(carteN2.isEnabled()){
+                    carteN1.setEnabled(true);carteN2.setEnabled(false);
+                    carteN3.setEnabled(true);carteN4.setEnabled(true);
+                    choice = 1;
+                }
+            }
+        });
+        carteN3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(carteN3.isEnabled()){
+                    carteN1.setEnabled(true);carteN2.setEnabled(true);
+                    carteN3.setEnabled(false);carteN4.setEnabled(true);
+                    choice = 2;
+                }
+            }
+        });
+        carteN4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(carteN4.isEnabled()){
+                    carteN1.setEnabled(true);carteN2.setEnabled(true);
+                    carteN3.setEnabled(true);carteN4.setEnabled(false);
+                    choice = 3;
+                }
             }
         });
         accuseButton.addActionListener(e -> {
+            myTerminal.interruptScan();
             actualObservable.setChoice(1);
         });
         playACardButton.addActionListener(e -> {
+            myTerminal.interruptScan();
+            validCardBtn.setVisible(true);
+            accuseButton.setVisible(false);
             actualObservable.setChoice(2);
         });
         validAccusation.addActionListener(e -> {

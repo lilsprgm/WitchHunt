@@ -258,6 +258,7 @@ public class SettingsInterface extends JFrame implements Observer{
 
             case GAME_ROUND ->{
                 playGame.setVisible(true);
+                playGame.setMyTerminal(myTerminal);
             }
         }
     }
