@@ -180,7 +180,7 @@ public class Game extends Observable {
      *
      * @author lilsb
      */
-    public Card draw(/*@NotNull*/ List<Card> cards){ // pour piocher
+    public Card draw(List<Card> cards){ // pour piocher
         Card card = cards.get(0);// on prend toujours l'index 1 car dans tout les cas les cartes sont mélangés
         cards.remove(0);
         return card;

@@ -174,7 +174,7 @@ public class TerminalInterface implements Observer, Runnable{
                                 actualObservable.setChoice(choice);
                                 break;
 
-                            case ACCUSE:        // CORRIGER ACCUSE, MAUVAISE INPUT PRISE
+                            case ACCUSE:
                                 flagPlayer = UpdateCode.ATTENTE;
                                 System.out.println("Who do you want to accuse ?");
                                 List<Player> listP = actualObservable.chooseThis(UpdateCode.ACCUSE); // On récupère la liste des joueurs accusables
@@ -182,7 +182,56 @@ public class TerminalInterface implements Observer, Runnable{
                                     System.out.println(i+"- "+listP.get(i-1).getName());
                                 }
                                 choice = input(false,false);
-                                actualObservable.chooseAPlayer(choice-1,UpdateCode.ACCUSE);
+                                actualObservable.makeAchoice(choice-1,UpdateCode.ACCUSE);
+                                break;
+
+                            case PLAY_CARD_HUNT:
+                                flagPlayer = UpdateCode.ATTENTE;
+                                System.out.println("Wich Hunt card do you want to play");
+                                for(int i=1; i<actualObservable.getDeck().size()+1;i++){
+                                    System.out.printf(i+"- "+actualObservable.getDeck().get(i-1).getName()+"\n");
+                                }
+                                choice = input(false,false);
+                                actualObservable.makeAchoice(choice-1,UpdateCode.PLAY_CARD_HUNT);
+                                break;
+
+                            case PLAY_CARD_WITCH:
+                                flagPlayer = UpdateCode.ATTENTE;
+                                System.out.println("Which Witch card do you want to play : ");
+                                for(int i=1; i<actualObservable.getDeck().size()+1;i++){
+                                    System.out.printf(i+"- "+actualObservable.getDeck().get(i-1).getName()+"\n");
+                                }
+                                choice = input(false,false);
+                                actualObservable.makeAchoice(choice-1,UpdateCode.PLAY_CARD_WITCH);
+                                break;
+
+                            case EFFECT_CARD_HUNT:
+                                flagPlayer=UpdateCode.ATTENTE;
+                                System.out.println("\n"+actualObservable.getCardWichIsPlayed().getActionHunt());
+                                System.out.println(actualObservable.getCardWichIsPlayed().getConditionHunt());
+                                System.out.println("Play the Card ? \n1- Yes\n2- No");
+                                choice = input(false,false);
+                                actualObservable.makeAchoice(choice,UpdateCode.EFFECT_CARD_HUNT);
+                                break;
+
+                            case EFFECT_CARD_WITCH:
+                                flagPlayer=UpdateCode.ATTENTE;
+                                System.out.println("\n"+actualObservable.getCardWichIsPlayed().getActionWitch());
+                                System.out.println(actualObservable.getCardWichIsPlayed().getConditionWitch());
+                                System.out.println("Play the Card ? \n1- Yes\n2- No");
+                                choice = input(false,false);
+                                actualObservable.makeAchoice(choice,UpdateCode.EFFECT_CARD_WITCH);
+                                break;
+
+                            case END_CHOOSE_CARD:
+                                flagPlayer = UpdateCode.ATTENTE;
+                                System.out.printf("\nThe player " + actualObservable.getName()+" play the card "+ actualObservable.getCardWichIsPlayed()+".");
+                                break;
+
+                            case EMPTY_DECK:
+                                flagPlayer = UpdateCode.ATTENTE;
+                                System.out.println("\nYou can't play a Card");
+                                actualObservable.setChoice(3);
                                 break;
 
                             case IS_ACCUSED:
@@ -204,7 +253,9 @@ public class TerminalInterface implements Observer, Runnable{
                                 break;
 
                             case END_PLAY:
-                                System.out.println(actualObservable.getName()+" finish his round\nHe have "+actualObservable.getNumberOfPoints());
+                                flagPlayer = UpdateCode.ATTENTE;
+                                System.out.println("\nThe player "+actualObservable.getName()+
+                                        " finish his round.\nHe have "+actualObservable.getNumberOfPoints()+" point(s).");
                                 break;
 
                             case ATTENTE:
@@ -270,6 +321,31 @@ public class TerminalInterface implements Observer, Runnable{
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.ACCUSE;
             }
+            case PLAY_CARD_HUNT -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.PLAY_CARD_HUNT;
+            }
+            case PLAY_CARD_WITCH -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.PLAY_CARD_WITCH;
+            }
+
+            case EFFECT_CARD_HUNT -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.EFFECT_CARD_HUNT;
+            }
+            case EFFECT_CARD_WITCH -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.EFFECT_CARD_WITCH;
+            }
+            case END_CHOOSE_CARD -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.END_CHOOSE_CARD;
+            }
+            case END_PLAY -> {
+                actualObservable = (Player)o;
+                flagPlayer = UpdateCode.END_PLAY;
+            }
             case IS_ACCUSED -> {
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.IS_ACCUSED;
@@ -278,6 +354,9 @@ public class TerminalInterface implements Observer, Runnable{
                 actualObservable = (Player)o;
                 flagPlayer = UpdateCode.IS_REVEALED;
             }
+
+
+
             case BOT_PLAY_WITCH -> {
                 actualObservable = (Player)o;
                 flagBot = UpdateCode.BOT_PLAY_WITCH;

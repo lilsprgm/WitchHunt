@@ -58,7 +58,7 @@ public class EasyModeBot extends Player {
     }
     if(game.getCurrentPlayer()==this){          // C'est au bot de Jouer
         AccusedPlayer = chooseThis(UpdateCode.ACCUSE).get(0);
-        chooseAPlayer(0,UpdateCode.ACCUSE);         // Va accuser le premier Joueur
+        makeAchoice(0,UpdateCode.ACCUSE);         // Va accuser le premier Joueur
         accusation();                                     // Va faire jouer celui qui a été accusé
     }
 

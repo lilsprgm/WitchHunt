@@ -6,8 +6,10 @@ public class Wart extends Card {
 
     private Wart(){
         setName("Wart");
-        setActionHunt("Choose next player");
-        setActionWitch("Take next turn");
+        setActionHunt("[Hunt Effect] : Choose next player");
+        setActionWitch("[Witch Effect] : Take next turn");
+        setConditionHunt("[Condition] : No condition");
+        setConditionWitch("[Condition] : No condition");
     }
     private static Wart instance =null;
     public static Wart getInstance(){

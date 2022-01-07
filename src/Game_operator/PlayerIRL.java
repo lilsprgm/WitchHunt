@@ -58,43 +58,64 @@ public class PlayerIRL extends Player {
      * La fonction permet le choix et appelle les fonctions permettant ces actions.
      */
     public void play() {
+
         if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch) {
             System.out.println("You can't play : you are a witch !");
-            return;
-        } else if (this.isAccused()) {
+        }
+
+
+        else if (this.isAccused()) {
             setUpdateCode(UpdateCode.IS_ACCUSED);
             while(actualCode!=UpdateCode.PLAY_CARD_WITCH && actualCode!=UpdateCode.IS_REVEALED);
-            if(actualCode==UpdateCode.PLAY_CARD_WITCH){
-                playCard(UpdateCode.PLAY_CARD_WITCH);
-                //while(actualCode!=UpdateCode.);                                   // Attendre de choisir la carte
+
+            while(actualCode==UpdateCode.PLAY_CARD_WITCH || actualCode==UpdateCode.IS_ACCUSED || actualCode==UpdateCode.IS_REVEALED){
+
+                if(actualCode==UpdateCode.IS_REVEALED){
+                    getIdentity().setRevealed(true);
+                    setAccused(false);
+                    return;
+                }
+                while(actualCode==UpdateCode.PLAY_CARD_WITCH){
+                    while(actualCode!=UpdateCode.END_CHOOSE_CARD && actualCode!=UpdateCode.IS_ACCUSED);                               //Attendre de choisir la carte
+                    if(actualCode==UpdateCode.END_CHOOSE_CARD){
+                        playCard(UpdateCode.PLAY_CARD_WITCH);
+                    }
+                }
             }
-            if(actualCode==UpdateCode.IS_REVEALED){
-                getIdentity().setRevealed(true);
-                game.chooseNextPlayer(game.getCurrentPlayer());
-                setAccused(false);
-            }
+
+
         } else {
                 setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
                 while(actualCode!=UpdateCode.END_ACCUSATION && actualCode!=UpdateCode.PLAY_CARD_HUNT);
-                if(actualCode==UpdateCode.END_ACCUSATION){
-                    accusation();
+
+                while(actualCode==UpdateCode.END_ACCUSATION || actualCode==UpdateCode.PLAY_CARD_HUNT || actualCode==UpdateCode.ACCUSE_OR_PLAY || actualCode==UpdateCode.ACCUSE){
+                    if(actualCode==UpdateCode.END_ACCUSATION){
+                        accusation();
+                        while(actualCode!=UpdateCode.END_PLAY);
+                        return;
+                    }
+                    while(actualCode==UpdateCode.PLAY_CARD_HUNT){
+                        while(actualCode!=UpdateCode.END_CHOOSE_CARD && actualCode!=UpdateCode.ACCUSE_OR_PLAY);                               //Attendre de choisir la carte
+
+                        if(actualCode==UpdateCode.END_CHOOSE_CARD){
+                            playCard(UpdateCode.PLAY_CARD_HUNT);
+                            while(actualCode!=UpdateCode.END_PLAY && actualCode!=UpdateCode.PLAY_CARD_HUNT);
+                            if(actualCode==UpdateCode.END_PLAY){return;}
+                        }
+                    }
+                    while(actualCode!=UpdateCode.ACCUSE_OR_PLAY && actualCode!=UpdateCode.ACCUSE && actualCode!=UpdateCode.END_ACCUSATION);
                 }
-                if(actualCode==UpdateCode.PLAY_CARD_HUNT){
-                    playCard(UpdateCode.PLAY_CARD_HUNT);
-                    //while();                                                      //Attendre de choisir la carte
-                }
-                while(actualCode!=UpdateCode.END_PLAY);
         }
     }
 
-
-    /**
-     * Permet de choisir le nom du joueur suivant.
-     * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
-     * @return le joueur choisi.
-     *
-     * @author lilsb
-     */
+//
+//    /**
+//     * Permet de choisir le nom du joueur suivant.
+//     * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
+//     * @return le joueur choisi.
+//     *
+//     * @author lilsb
+//     */
 //    public Player chooseAPlayer(UpdateCode actualCode){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
 //
 //        if(actualCode==UpdateCode.ACCUSE){

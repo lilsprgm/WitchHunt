@@ -10,10 +10,11 @@ public abstract class Player extends Observable {
     protected String name;
     protected boolean accused = false;
     protected Player AccusedPlayer;
+    protected Card cardWichIsPlayed = null;
     protected Identity identity =new Identity();
-    protected ArrayList<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
-    protected ArrayList<Card> deck = new ArrayList<Card>();
-    protected ArrayList<Card> table = new ArrayList<Card>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
+    //protected ArrayList<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
+    protected ArrayList<Card> deck = new ArrayList<>();
+    protected ArrayList<Card> table = new ArrayList<>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
 
     protected Scanner s = new Scanner(System.in);
     protected Game game;
@@ -51,6 +52,9 @@ public abstract class Player extends Observable {
         // Automatically generated method. Please do not modify this code.
         return this.numberOfPoints;
     }
+
+
+    public Card getCardWichIsPlayed(){return cardWichIsPlayed;}
     /**
      *
      * @return Le joueur qui a été accusé
@@ -172,6 +176,9 @@ public abstract class Player extends Observable {
         stock.add(card);
         this.getGame().shuffle(stock);
     }
+    public void removeCardTo(List<Card>stock,Card card){
+        stock.remove(card);
+    }
 
     /**
      * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.
@@ -186,9 +193,34 @@ public abstract class Player extends Observable {
 
     public void playCard(UpdateCode code) {            // Lorsque Play card est appelé, on vérifie quelle carte à été révélé pour la jouer
 
-        for(Card allc : this.getDeck()){
-            if(allc.isRevealed()){
-                //allc
+        switch (code){
+            case PLAY_CARD_HUNT -> {
+                //Affichage des effets + actionHunt
+                setUpdateCode(UpdateCode.EFFECT_CARD_HUNT);
+
+                while(!cardWichIsPlayed.isRevealed() && actualCode!=UpdateCode.PLAY_CARD_HUNT);
+                if(cardWichIsPlayed.isRevealed()){
+                    removeCardTo(deck,cardWichIsPlayed);
+                    addCardTo(table,cardWichIsPlayed);
+                    //Action effectué
+                    cardWichIsPlayed = null;
+                    setUpdateCode(UpdateCode.END_PLAY);
+                }
+            }
+            case PLAY_CARD_WITCH -> {
+                //Affichage des effets + actionHunt
+                setUpdateCode(UpdateCode.EFFECT_CARD_WITCH);
+
+                while(!cardWichIsPlayed.isRevealed() && actualCode!=UpdateCode.PLAY_CARD_WITCH && actualCode!=UpdateCode.IS_REVEALED);
+                System.out.println(actualCode);
+                if(cardWichIsPlayed.isRevealed()){
+                    removeCardTo(deck,cardWichIsPlayed);
+                    addCardTo(table,cardWichIsPlayed);
+                    //Action effectué
+                    cardWichIsPlayed = null;
+                    setUpdateCode(UpdateCode.END_PLAY);
+                }
+                System.out.println(actualCode);
             }
         }
 //        System.out.println("Wich card do you want to play");
@@ -214,14 +246,15 @@ public abstract class Player extends Observable {
             if(allp.isAccused()){
                 allp.play();
                 if(allp.getIdentity().isRevealed()){
+                    game.chooseNextPlayer(this);
+                    allp.setAccused(false);
                     if(allp.getIdentity().getRole()==Role.Witch){
                         addPoints(1);
                         setUpdateCode(UpdateCode.END_PLAY);
                     }
                     else setUpdateCode(UpdateCode.END_PLAY);
                 }else {
-                    allp.setAccused(false);
-                    //setUpdateCode(UpdateCode.END_PLAY);
+                    setUpdateCode(UpdateCode.END_PLAY);
                 }
             }
         }
@@ -245,22 +278,47 @@ public abstract class Player extends Observable {
 
     }
 
-    public void chooseAPlayer(int choice,UpdateCode code){
-        switch (code){
+    public void makeAchoice(int choice, UpdateCode code) {
+        switch (code) {
             case ACCUSE -> {
                 List<Player> listP = chooseThis(UpdateCode.ACCUSE);
-                if(choice<listP.size() && choice>=0){
+                if (choice < listP.size() && choice >= 0) {
                     listP.get(choice).setAccused(true);
-                    if(this instanceof PlayerIRL){setUpdateCode(UpdateCode.END_ACCUSATION);}
-                    if(this instanceof EasyModeBot || this instanceof HardModeBot){setUpdateCode(UpdateCode.BOT_ACCUSE);}
-                }else if(this instanceof PlayerIRL){
+                    if (this instanceof PlayerIRL) {
+                        setUpdateCode(UpdateCode.END_ACCUSATION);
+                    }
+                    if (this instanceof EasyModeBot || this instanceof HardModeBot) {
+                        setUpdateCode(UpdateCode.BOT_ACCUSE);
+                    }
+                } else if (this instanceof PlayerIRL) {
                     setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
                 }
-                break;
             }
             case PLAY_CARD_HUNT -> {
-
-                break;
+                if (choice < getDeck().size() && choice >= 0) {
+                    cardWichIsPlayed = getDeck().get(choice);
+                    setUpdateCode(UpdateCode.END_CHOOSE_CARD);
+                } else setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
+            }
+            case PLAY_CARD_WITCH -> {
+                if (choice < getDeck().size() && choice >= 0) {
+                    cardWichIsPlayed = getDeck().get(choice);
+                    setUpdateCode(UpdateCode.END_CHOOSE_CARD);
+                } else setUpdateCode(UpdateCode.IS_ACCUSED);
+            }
+            case EFFECT_CARD_HUNT -> {
+                switch (choice){
+                    case 1 -> cardWichIsPlayed.setRevealed(true);
+                    case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
+                    default -> setUpdateCode(UpdateCode.EFFECT_CARD_HUNT);
+                }
+            }
+            case EFFECT_CARD_WITCH -> {
+                switch (choice){
+                    case 1 -> cardWichIsPlayed.setRevealed(true);
+                    case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_WITCH);
+                    default -> setUpdateCode(UpdateCode.EFFECT_CARD_WITCH);
+                }
             }
         }
     }
@@ -273,8 +331,9 @@ public abstract class Player extends Observable {
         List<Player> players = new ArrayList<>();
         if(actualCode==UpdateCode.ACCUSE){
             for(Player allP : game.getPlayers()){
-                if(allP==this || allP.getIdentity().isRevealed() || allP==game.getProtectedPlayer()){
-                } else players.add(allP);
+                if (allP != this && !allP.getIdentity().isRevealed() && allP != game.getProtectedPlayer()) {
+                    players.add(allP);
+                }
             }
         }
         return players;
@@ -283,7 +342,9 @@ public abstract class Player extends Observable {
     public void setChoice(int choice){
         switch (choice) {
             case 1 -> setUpdateCode(UpdateCode.ACCUSE);
-            case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
+            case 2 -> {
+                if(this.getDeck().isEmpty()){ setUpdateCode(UpdateCode.EMPTY_DECK);
+                }else setUpdateCode(UpdateCode.PLAY_CARD_HUNT);}
             default -> setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
         }
     }
@@ -306,18 +367,16 @@ public abstract class Player extends Observable {
     }
 
     public void setIdentity(int choice){
-        switch (choice){
-            case 1:
+        switch (choice) {
+            case 1 -> {
                 identity.setRole(Role.Witch);
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 identity.setRole(Role.Hunt);
                 setUpdateCode(UpdateCode.END_CHOOSE_IDENTITY);
-                break;
-            default:
-                setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
-                break;
+            }
+            default -> setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
         }
     }
 

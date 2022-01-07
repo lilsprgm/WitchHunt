@@ -25,6 +25,10 @@ public enum UpdateCode {
 
     PLAY_CARD_HUNT,
     PLAY_CARD_WITCH,
+    EFFECT_CARD_HUNT,
+    EFFECT_CARD_WITCH,
+    END_CHOOSE_CARD,
+    EMPTY_DECK,
 
     END_PLAY,
 
