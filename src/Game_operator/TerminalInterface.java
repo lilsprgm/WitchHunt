@@ -172,7 +172,9 @@ public class TerminalInterface implements Observer, Runnable{
                                 System.out.println("\n\n\n\nYour turn "+ actualObservable.getName());
                                 System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
                                 choice = input(false,false);
-                                actualObservable.setChoice(choice);
+                                if(verifCode(UpdateCode.ACCUSE_OR_PLAY)) {
+                                    actualObservable.setChoice(choice);
+                                }
                                 break;
 
                             case ACCUSE:
@@ -183,7 +185,7 @@ public class TerminalInterface implements Observer, Runnable{
                                     System.out.println(i+"- "+listP.get(i-1).getName());
                                 }
                                 choice = input(false,false);
-                                actualObservable.makeAchoice(choice-1,UpdateCode.ACCUSE);
+                                if(verifCode(UpdateCode.ACCUSE)){actualObservable.makeAchoice(choice-1,UpdateCode.ACCUSE);}
                                 break;
 
                             case PLAY_CARD_HUNT:
@@ -193,7 +195,8 @@ public class TerminalInterface implements Observer, Runnable{
                                     System.out.printf(i+"- "+actualObservable.getDeck().get(i-1).getName()+"\n");
                                 }
                                 choice = input(false,false);
-                                actualObservable.makeAchoice(choice-1,UpdateCode.PLAY_CARD_HUNT);
+                                if(verifCode(UpdateCode.PLAY_CARD_HUNT)){actualObservable.makeAchoice(choice-1,UpdateCode.PLAY_CARD_HUNT);}
+
                                 break;
 
                             case PLAY_CARD_WITCH:
@@ -203,7 +206,7 @@ public class TerminalInterface implements Observer, Runnable{
                                     System.out.printf(i+"- "+actualObservable.getDeck().get(i-1).getName()+"\n");
                                 }
                                 choice = input(false,false);
-                                actualObservable.makeAchoice(choice-1,UpdateCode.PLAY_CARD_WITCH);
+                                if(verifCode(UpdateCode.PLAY_CARD_WITCH)){actualObservable.makeAchoice(choice-1,UpdateCode.PLAY_CARD_WITCH);}
                                 break;
 
                             case EFFECT_CARD_HUNT:
@@ -212,7 +215,7 @@ public class TerminalInterface implements Observer, Runnable{
                                 System.out.println(actualObservable.getCardWichIsPlayed().getConditionHunt());
                                 System.out.println("Play the Card ? \n1- Yes\n2- No");
                                 choice = input(false,false);
-                                actualObservable.makeAchoice(choice,UpdateCode.EFFECT_CARD_HUNT);
+                                if(verifCode(UpdateCode.EFFECT_CARD_HUNT)){actualObservable.makeAchoice(choice,UpdateCode.EFFECT_CARD_HUNT);}
                                 break;
 
                             case EFFECT_CARD_WITCH:
@@ -221,7 +224,7 @@ public class TerminalInterface implements Observer, Runnable{
                                 System.out.println(actualObservable.getCardWichIsPlayed().getConditionWitch());
                                 System.out.println("Play the Card ? \n1- Yes\n2- No");
                                 choice = input(false,false);
-                                actualObservable.makeAchoice(choice,UpdateCode.EFFECT_CARD_WITCH);
+                                if(verifCode(UpdateCode.EFFECT_CARD_WITCH)){actualObservable.makeAchoice(choice,UpdateCode.EFFECT_CARD_WITCH);}
                                 break;
 
                             case END_CHOOSE_CARD:
@@ -240,7 +243,9 @@ public class TerminalInterface implements Observer, Runnable{
                                 System.out.println(actualObservable.getName() + " you are accused !!!!" +
                                         "\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
                                 choice = input(false,false);
-                                actualObservable.setChoiceAccused(choice);
+                                if (verifCode(UpdateCode.IS_ACCUSED)) {
+                                    actualObservable.setChoiceAccused(choice);
+                                }
                                 break;
 
                             case IS_REVEALED:
