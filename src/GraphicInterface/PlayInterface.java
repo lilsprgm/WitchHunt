@@ -10,10 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class PlayInterface extends JFrame implements Observer {
 
@@ -36,6 +33,9 @@ public class PlayInterface extends JFrame implements Observer {
     private JButton accuseButton;
     private JComboBox playerComboBox;
     private JButton validAccusation;
+    private JButton validCardBtn;
+    private JButton revealBtn;
+    private JLabel phaseLabel;
     private ArrayList<JLabel> carteN = new ArrayList<>();
 
     private JButton buttontest;
@@ -51,6 +51,8 @@ public class PlayInterface extends JFrame implements Observer {
         this.setVisible(false);
         validAccusation.setVisible(false);
         playerComboBox.setVisible(false);
+        validCardBtn.setVisible(false);
+        revealBtn.setVisible(false);
         initImageIcon();
         allActions();
 
@@ -76,6 +78,25 @@ public class PlayInterface extends JFrame implements Observer {
         });
         playACardButton.addActionListener(e -> {
             actualObservable.setChoice(2);
+        });
+        validAccusation.addActionListener(e -> {
+            myTerminal.interruptScan();
+            Player choosenPlayer = (Player) playerComboBox.getSelectedItem();
+            actualObservable.makeAchoice(playerComboBox.getSelectedIndex(), UpdateCode.ACCUSE);
+        });
+
+        validCardBtn.addActionListener(e -> {
+            myTerminal.interruptScan();
+            if(actualObservable.isAccused() && choice != 50){
+                actualObservable.makeAchoice(choice,UpdateCode.PLAY_CARD_WITCH);
+            }else if(choice != 50){
+                actualObservable.makeAchoice(choice,UpdateCode.PLAY_CARD_HUNT);
+            }
+        });
+
+        revealBtn.addActionListener(e -> {
+            myTerminal.interruptScan();
+            actualObservable.setChoiceAccused(1);
         });
     }
 
@@ -123,21 +144,66 @@ public class PlayInterface extends JFrame implements Observer {
         label.setIcon(image);
     }
 
+    public void showAccuseInterface(){
+        accuseButton.setVisible(false);
+        playACardButton.setVisible(false);
+        validCardBtn.setVisible(true);
+        revealBtn.setVisible(true);
+        phaseLabel.setText("Your are ACCUSED. What do you want to do ?");
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         switch ((UpdateCode)arg){
             case GAME_ROUND:
-                initRound(currentGame.getCurrentPlayer()); // Permet d'obtenir la main du joueur actuel
+                initRound(currentGame.getCurrentPlayer());
+                validCardBtn.setEnabled(false);
+                for (Player p : currentGame.getPlayers()){
+                    p.setVue(this);// Permet d'obtenir la main du joueur actuel
+                }
                 break;
 
             case ACCUSE_OR_PLAY:
                 actualObservable =(Player) o;
                 accuseButton.setVisible(true);
                 accuseButton.setVisible(true);
+                break;
             case ACCUSE:
+                List<Player> playerList = new ArrayList<Player>();
+                playerList = actualObservable.chooseThis(UpdateCode.ACCUSE);
+                for (Player p : playerList){
+                    playerComboBox.addItem(p);
+                }
                 playerComboBox.setVisible(true);
                 validAccusation.setVisible(true);
+                break;
+
+            case IS_ACCUSED:
+                playerComboBox.setVisible(false);
+                validAccusation.setVisible(false);
+                actualObservable = (Player)o;
+                initRound(actualObservable);
+                showAccuseInterface();
+                break;
+            case IS_REVEALED:
+                    actualObservable.getIdentity().setRevealed(true);
+                    //phaseLabel.setText();
+                break;
+
+            case PLAY_CARD_WITCH:
+                validCardBtn.setEnabled(true);
+                break;
+            case PLAY_CARD_HUNT:
+                validCardBtn.setEnabled(true);
+                break;
+            case EFFECT_CARD_HUNT:
+                actualObservable = (Player)o;
+                actualObservable.makeAchoice(1,UpdateCode.EFFECT_CARD_HUNT);
+                break;
+            case EFFECT_CARD_WITCH:
+                actualObservable = (Player)o;
+                actualObservable.makeAchoice(1,UpdateCode.EFFECT_CARD_WITCH);
+                break;
         }
     }
 
