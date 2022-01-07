@@ -38,6 +38,8 @@ public class PlayInterface extends JFrame implements Observer {
     private JButton validCardBtn;
     private JButton revealBtn;
     private JLabel phaseLabel;
+    private JLabel identityLabel;
+    private JLabel pointLabel;
     private ArrayList<JLabel> carteN = new ArrayList<>();
 
     private JButton buttontest;
@@ -211,7 +213,12 @@ public class PlayInterface extends JFrame implements Observer {
             case ACCUSE_OR_PLAY:
                 actualObservable =(Player) o;
                 accuseButton.setVisible(true);
-                accuseButton.setVisible(true);
+                playACardButton.setVisible(true);
+                validAccusation.setVisible(false);
+                playerComboBox.setVisible(false);
+                validCardBtn.setVisible(false);
+                revealBtn.setVisible(false);
+
                 break;
             case ACCUSE:
                 List<Player> playerList = new ArrayList<Player>();
@@ -232,8 +239,14 @@ public class PlayInterface extends JFrame implements Observer {
                 break;
             case IS_REVEALED:
                     actualObservable.getIdentity().setRevealed(true);
-                    //phaseLabel.setText();
-                break;
+                    accuseButton.setVisible(false);
+                    accuseButton.setVisible(false);
+                    validAccusation.setVisible(false);
+                    playerComboBox.setVisible(false);
+                    validCardBtn.setVisible(false);
+                    revealBtn.setVisible(false);
+                    phaseLabel.setText(actualObservable.getName() + "has been revealed : he is a "+actualObservable.getIdentity().getRole());
+                    break;
 
             case PLAY_CARD_WITCH:
                 validCardBtn.setEnabled(true);
