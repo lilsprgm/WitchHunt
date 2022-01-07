@@ -2,6 +2,7 @@ package Game_operator;
 
 import Cards.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerIRL extends Player {
@@ -108,31 +109,33 @@ public class PlayerIRL extends Player {
         }
     }
 
-//
-//    /**
-//     * Permet de choisir le nom du joueur suivant.
-//     * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
-//     * @return le joueur choisi.
-//     *
-//     * @author lilsb
-//     */
-//    public Player chooseAPlayer(UpdateCode actualCode){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
-//
-//        if(actualCode==UpdateCode.ACCUSE){
-//
-//        }
-//
-//        int i=0;
-//        boolean verif=false;
-//        List<Player> players = game.getPlayers();
-//        for (Player player : players){
-//            if (player == this){
-//                continue;
-//            }
-//            i = players.indexOf(player);
-//            System.out.println(i+" - "+ player);
-//        }
-//        int indexOfChosenPlayer = s.nextInt();
+
+    /**
+     * Permet de choisir le nom du joueur suivant.
+     * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
+     * @return le joueur choisi.
+     *
+     * @author lilsb
+     */
+    public Player chooseAPlayer(){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
+        List<Player> allp = new ArrayList<>();
+        int i=0;
+        boolean verif=false;
+        List<Player> players = game.getPlayers();
+        for (Player player : players){
+            if (player == this || (player.getIdentity().isRevealed()&&player.getIdentity().getRole()==Role.Witch)){
+                continue;
+            }
+            allp.add(player);
+            System.out.println(i+" - "+ player.getName());
+            i++;
+        }
+        int indexOfChosenPlayer = s.nextInt();
+        while(indexOfChosenPlayer<0 || indexOfChosenPlayer>=allp.size()){
+            System.out.println("\nWrong number");
+            indexOfChosenPlayer = s.nextInt();
+        }
+        return allp.get(indexOfChosenPlayer);
 //        do{
 //            for (Player player : players){
 //                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(this)){
@@ -145,10 +148,8 @@ public class PlayerIRL extends Player {
 //            }
 //        }while(!verif);
 //        return players.get(i);
-//
-//        // attention a revoir car exception si on se trompe lorsque l'on tape le nom.
-//        // regarder avec la fonction scanner .next(pattern))
-//        ///////////////// Je pense que ca devrait marche à voir
-//
-//    }
+
+        ///////////////// Je pense que ca devrait marche à voir
+
+    }
 }

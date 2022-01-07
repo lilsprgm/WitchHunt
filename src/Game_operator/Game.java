@@ -87,12 +87,14 @@ public class Game extends Observable {
         }
         if(difficulty==1){
             players.add(new EasyModeBot());
+            players.get(players.size()-1).setName("Bot"+indexBot);
+            players.get(players.size()-1).setGame(this);
         }
         if(difficulty==2){
             players.add(new HardModeBot());
+            players.get(players.size()-1).setName("Bot"+indexBot);
+            players.get(players.size()-1).setGame(this);
         }
-        players.get(players.size()-1).setName("Bot"+indexBot);
-        players.get(players.size()-1).setGame(this);
         if(players.size()==numberOfPlayerIRL+numberOfBot){
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }
@@ -108,6 +110,10 @@ public class Game extends Observable {
 
     public static List<Card> getDiscardedCard() {
         return discardedCard;
+    }
+
+    public List<Card> getStockPile(){
+        return stockPile;
     }
 
     public int getNumberOfPlayer() {
@@ -229,6 +235,7 @@ public class Game extends Observable {
                 player.clearDeck();
                 player.chooseIdentity();
                 player.getIdentity().setRevealed(false);
+                player.setAccused(false);
             }
             while (stockPile.size() - (numberOfPlayerIRL + numberOfBot) >= 0){
                 for (Player player : players){

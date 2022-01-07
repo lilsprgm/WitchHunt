@@ -9,6 +9,7 @@ public class PetNewt extends Card {
         setActionHunt("Take a revealed Rumour card from any other player into your hand\nChoose next player");
         setActionWitch("Take next turn");
         setConditionHunt("At least one player has already revealed a Rumor Card");
+        setConditionWitch("");
     }
     private static PetNewt instance =null;
     public static PetNewt getInstance(){
@@ -20,7 +21,6 @@ public class PetNewt extends Card {
 
     @Override
     public void actionWitch(Player player) {
-        System.out.println(getActionWitch());
         player.getGame().chooseNextPlayer(player);
     }
 
@@ -33,7 +33,6 @@ public class PetNewt extends Card {
      */
     @Override
     public void actionHunt(Player player) {
-        System.out.println(getActionHunt());
         int i=1;
         System.out.println("Choose a player from whom you want to take a revealed Card : \n");
         for(Player p : player.getGame().getPlayers()){
@@ -44,7 +43,7 @@ public class PetNewt extends Card {
             i++;
         }
 
-       // player.addCardTo(player.getDeck(), player.chooseCardIn(player.chooseAPlayer().getTable()) );
+       player.addCardTo(player.getDeck(), player.chooseCardIn(player.chooseAPlayer().getTable()) );
     }
 
     @Override
