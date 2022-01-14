@@ -2,8 +2,17 @@ package Cards;
 
 import Game_operator.Player;
 
+/**
+ * Classe representant la carte Wart.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class Wart extends Card {
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private Wart(){
         setName("Wart");
         setActionHunt("[Hunt Effect] : Choose next player");
@@ -11,7 +20,16 @@ public class Wart extends Card {
         setConditionHunt("[Condition] : No condition");
         setConditionWitch("[Condition] : No condition");
     }
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static Wart instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static Wart getInstance(){
         if (Wart.instance == null) {
             Wart.instance = new Wart();
@@ -19,22 +37,12 @@ public class Wart extends Card {
         return instance;
     }
 
-    /**
-     * Permet d'activer l'effet Witch de la carte Wart.
-     *Le Joueur est le prochain à jouer.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
     @Override
     public void actionWitch(Player player) {
         player.getGame().chooseNextPlayer(player);
         player.setAccused(false);
     }
 
-    /**
-     * Permet d'activer l'effet Hunt de la carte Wart.
-     *Le Joueur doit choisir parmis les Joueurs de la partie le prochain à jouer.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
     @Override
     public void actionHunt(Player player) {
         player.getGame().chooseNextPlayer(player.chooseAPlayer());

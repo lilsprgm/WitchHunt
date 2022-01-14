@@ -2,8 +2,17 @@ package Cards;
 
 import Game_operator.Player;
 
+/**
+ * Classe representant la carte HookedNose.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class HookedNose extends Card {
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private HookedNose(){
         setName("HookedNose");
         setActionHunt("Choose next player\n Before their turn take a card from its hand and add it to yours");
@@ -12,7 +21,16 @@ public class HookedNose extends Card {
         setConditionHunt("");
     }
 
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static HookedNose instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static HookedNose getInstance(){
         if (HookedNose.instance == null) {
             HookedNose.instance = new HookedNose();
@@ -25,9 +43,6 @@ public class HookedNose extends Card {
         Card chosencard = player.chooseCardIn(currentPlayer.getDeck());
         player.addCardTo(player.getDeck(), chosencard);
         currentPlayer.discardCardFrom(currentPlayer.getDeck(), chosencard);
-        //on ajoute une carte au joueur
-        //on la choisit dans la main du joueur qui joue actuellement (donc qui a accusé). On y accede a travers a partie du joueur,
-        // la variable current player et on obtient le deck avec getDeck().
     }
 
     @Override
@@ -35,9 +50,7 @@ public class HookedNose extends Card {
         Player chosenPlayer = player.chooseAPlayer();
         player.getGame().chooseNextPlayer(chosenPlayer);
         chosenPlayer.setAccused(false);
-        player.addCardTo(player.getDeck(), player.getGame().draw(chosenPlayer.getDeck())); // on ajoute une carte au deck du joueur qui joue,
-        // qu'on a pioché dans la main du joueur choisi
-
+        player.addCardTo(player.getDeck(), player.getGame().draw(chosenPlayer.getDeck()));
     }
 
     @Override

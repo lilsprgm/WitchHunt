@@ -4,94 +4,106 @@ import Cards.*;
 
 import java.util.*;
 
+/**
+ * Classe representant un Joueur lambda dans une partie.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public abstract class Player extends Observable {
 
+    /**
+     * Nombre de point du Joueur.
+     */
     protected int numberOfPoints = 0;
+    /**
+     * Nom du Joueur.
+     */
     protected String name;
+    /**
+     * Le Joueur est accuse ou non.
+     */
     protected boolean accused = false;
+    /**
+     * Le Joueur choisi lors de l'accusation.
+     */
     protected Player AccusedPlayer;
+    /**
+     * La carte a joue.
+     */
     protected Card cardWichIsPlayed = null;
+    /**
+     * L'identite du Joueur.
+     */
     protected Identity identity =new Identity();
-    //protected ArrayList<Action> action = new ArrayList<Action> (); // je sais pas a quoi sert cette variable ?
+    /**
+     * La main du Joueur.
+     */
     protected ArrayList<Card> deck = new ArrayList<>();
-    protected ArrayList<Card> table = new ArrayList<>();//collection dans laquelle sont stocké les cartes deja jouées. (c'est comme si on les posait devant soit.
-
+    /**
+     * La table du Joueur (cartes deja joues).
+     */
+    protected ArrayList<Card> table = new ArrayList<>();
     protected Scanner s = new Scanner(System.in);
+    /**
+     * La partie dans laquelle joue le Joueur.
+     */
     protected Game game;
+    /**
+     * L'etape de Jeu du Joueur.
+     */
     protected volatile UpdateCode actualCode;
 
+    /**
+     * Methode permettant d'affiche le nom et le score du Joueur.
+     * @return Le nom et le score du Joueur.
+     * @author Lilsb et AGOUGILE
+     */
     public String toString(){
         return name +" --> Score : " + numberOfPoints;
     }
-    public List<Card> getTable() {
-        return table;
-    }
 
+    /**
+     * Methode permettant d'ajouter un observateur.
+     * @param vue L'observateur a ajouter dans les observateurs.
+     * @author Lilsb et AGOUGILE
+     */
     public <T> void setVue( T vue){
         addObserver((Observer) vue);
     }
+    /**
+     * Methode permettant d'ajouter deux observateurs.
+     * @param vue L'observateur a ajouter dans les observateurs.
+     * @param vue2  Le second Observateur à ajouter dans les observateurs.
+     * @author Lilsb et AGOUGILE
+     */
     public <T> void setVue( T vue,T vue2){
         addObserver((Observer) vue);
         addObserver((Observer)vue2);
     }
-
+    /**
+     * Methode qui permet de changer l'etape actuelle du Joueur.
+     * et de notifier tous les observateurs.
+     * @param newUpdateCode Le nouveau code à set.
+     * @author Lilsb et AGOUGILE
+     */
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
         setChanged();
         notifyObservers(newUpdateCode);
     }
-
-    public void setTable(ArrayList<Card> table) {
-        this.table = table;
-    }
     /**
-     *
-     * @return le nombre de joueur qui appelle la classe
+     * Getter de la Partie du Joueur
+     * @return La partie dans laquelle joue le Joueur.
+     * @author Lilsb et AGOUGILE
      */
-    public int getNumberOfPoints() {
-        // Automatically generated method. Please do not modify this code.
-        return this.numberOfPoints;
-    }
-
-
-    public Card getCardWichIsPlayed(){return cardWichIsPlayed;}
-    /**
-     *
-     * @return Le joueur qui a été accusé
-     */
-    public Player getAccusedPlayer(){
-        return AccusedPlayer;
-    }
-
-    /**
-     * Permet de lier le joueur a une partie.
-     * @param instance l'instance de la partie dans laquelle le joueur joue.
-     */
-    public void setGame(Game instance){ // Pas obligé il me semple que l'instance est retourné directement par getInstance
-        this.game = instance; // On lie le joueur à une partie.
-        // C'est une methode comme une autre on aurait pu aussi passer l'instance de la parrtie comme argument dans la fonction play du joueur
-    }
-
     public Game getGame(){
         return this.game;
     }
 
     /**
-     * Peermet de rajouter des points au joueur qui appelle la méthode
-     * @param point le nombre de points qu'on veut lui ajouter. Lors de l'instanciation les points du joueur sont initialisés à 0.
-     */
-    public void addPoints(int point){
-        this.numberOfPoints += point;
-    }
-    public void losePoints(int point){this.numberOfPoints-=point;}
-
-    public void restartPoint(){
-        numberOfPoints=0;
-    }
-
-    /**
-     *
-     * @return le nom du joueur
+     * Getter du nom du Joueur.
+     * @return Le nom du Joueur.
+     * @author Lilsb et AGOUGILE
      */
     public String getName() {
         // Automatically generated method. Please do not modify this code.
@@ -99,35 +111,51 @@ public abstract class Player extends Observable {
     }
 
     /**
-     * Permet d'enregistrer le nom du joueur
-     * @param name le nom du joueur
+     * Getter du nombre de point du Joueur.
+     * @return Le nombre de point du Joueur.
+     * @author Lilsb et AGOUGILE
      */
-    public void setName(String name) {
+    public int getNumberOfPoints() {
         // Automatically generated method. Please do not modify this code.
-        this.name = name;
+        return this.numberOfPoints;
     }
 
     /**
-     * Permet de savoir si je joueur est accusé
-     * @return true si oui sinon false
+     * Getter de la carte actuellement jouee.
+     * @return La carte actuellement jouee.
+     * @author Lilsb et AGOUGILE
      */
-    public boolean isAccused() {
-        // Automatically generated method. Please do not modify this code.
-        return this.accused;
+    public Card getCardWichIsPlayed(){return cardWichIsPlayed;}
+    /**
+     * Getter du Joueur Accuse.
+     * @return Le Joueur Accuse.
+     * @author Lilsb et AGOUGILE
+     */
+    public Player getAccusedPlayer(){
+        return AccusedPlayer;
+    }
+    /**
+     * Getter des cartes deja jouees par le Joueur.
+     * @return La liste des cartes deja jouees par le Joueur.
+     * @author Lilsb et AGOUGILE
+     */
+    public List<Card> getTable() {
+        return table;
     }
 
     /**
-     * Permet d'enregistrer qu'un joueur est accusé, ou ne l'est plus.
-     * @param value un boolean true s'il on veut l'accusé et false si on veut qu'il ne le soit plus/pas.
+     * Getter de la main du Joueur
+     * @return La liste des carte composant la main du Joueur.
+     * @author Lilsb et AGOUGILE
      */
-    public void setAccused(boolean value) {
-        // Automatically generated method. Please do not modify this code.
-        this.accused = value;
-    }
 
+    public ArrayList<Card> getDeck() {
+        return deck;
+    }
     /**
-     * Permet d'avoir l'identité du joueur, et de savoir s'il a été découvert
-     * @return l'instance de la classe Identity du joueur
+     * Getter de l'identite du Joueur
+     * @return L'identite du Joueur.
+     * @author Lilsb et AGOUGILE
      */
     public Identity getIdentity() {
         // Automatically generated method. Please do not modify this code.
@@ -135,72 +163,130 @@ public abstract class Player extends Observable {
     }
 
     /**
-     * Permet d'enregistrer que l'identité d'un joueur a été révélée
-     * Enregistré grâce à l'instance de la classe Identity du joueur.
+     * Setter de la Partie du Joueur
+     * @param instance La partie dans laquelle doit jouer le Joueur.
+     * @author Lilsb et AGOUGILE
+     */
+    public void setGame(Game instance){
+        this.game = instance;
+    }
+
+    /**
+     * Setter du nom du Joueur
+     * @param name Le nom du joueur
+     */
+    public void setName(String name) {
+        // Automatically generated method. Please do not modify this code.
+        this.name = name;
+    }
+    /**
+     * Setter de l'etat d'accusation du Joueur.
+     * @param value L'etat d'accusation du Joueur.
+     * @author Lilsb et AGOUGILE
+     */
+    public void setAccused(boolean value) {
+        // Automatically generated method. Please do not modify this code.
+        this.accused = value;
+    }
+
+    /**
+     * Methode permettant d'ajouter des points au Joueur.
+     * @param point Le nombre de point a ajouter.
+     * @author Lilsb et AGOUGILE
+     */
+    public void addPoints(int point){
+        this.numberOfPoints += point;
+    }
+    /**
+     * Methode permettant de restart les points du Joueur.
+     * @author Lilsb et AGOUGILE
+     */
+    public void restartPoint(){
+        numberOfPoints=0;
+    }
+
+
+    /**
+     * Verifie si le Joueur est accusee.
+     * @return true si le Joueur est accusee.
+     * @author Lilsb et AGOUGILE
+     */
+    public boolean isAccused() {
+        // Automatically generated method. Please do not modify this code.
+        return this.accused;
+    }
+
+    /**
+     * Methode permettant de reveler l'identite du Joueur.
+     * @author Lilsb et AGOUGILE
      */
     public void revealIdentity (){
         identity.setRevealed(true);
     }
 
     /**
-     * Permet au joueur de choisir le rôle, l'identité qu'il veut prendre.
-     * Enregistré grâce à l'instance de la classe Identity du joueur.
+     * Methode permettant au Joueur de choisir son identite.
+     * @author Lilsb et AGOUGILE
      */
     public abstract void chooseIdentity();
 
     /**
-     * Permet de récupérer la main du joueur, contenant ses cartes
-     * @return la variable deck, une collection d'instances de Card.
-     */
-    public ArrayList<Card> getDeck() {
-        return deck;
-    }
-
-    /**
-     * Permet de supprimer toutes les cartes de la main du joueur.
+     * Methode permettant de supprimer toute la main du Joueur.
+     * @author Lilsb et AGOUGILE
      */
      public void clearDeck(){
         deck.removeAll(deck);
      }
 
+    /**
+     * Methode permettant de placer une carte dans la defausse.
+     * @param stock La liste de carte visee.
+     * @param card La carte a supprimer de la liste.
+     * @author Lilsb et AGOUGILE
+     */
      public void discardCardFrom(List<Card> stock ,Card card){
          stock.remove(card);
-         this.getGame().getDiscardedCard().add(card);
+         Game.getDiscardedCard().add(card);
      }
     /**
-     * Permet d'ajouter une carte dans un tas de carte(n'importe lequel). On mélange le tas à la fin.
-     * @param stock la "pile de carte dans laquelle on veut ajouter une carte.
-     * @param card l'instance de la carte que l'on veut ajouter
+     * Methode permettant d'ajouter une carte dans une liste donnee.
+     * @param stock La "pile de carte dans laquelle on veut ajouter une carte.
+     * @param card La carte que l'on veut ajouter.
+     * @author Lilsb et AGOUGILE
      */
     public void addCardTo(List<Card> stock , Card card){
         stock.add(card);
         this.getGame().shuffle(stock);
     }
+    /**
+     * Methode permettant de supprimer une carte d'une liste donnee.
+     * @param stock La "pile de carte dans laquelle on veut retirer une carte.
+     * @param card La carte que l'on veut retirer.
+     * @author Lilsb et AGOUGILE
+     */
     public void removeCardTo(List<Card>stock,Card card){
         stock.remove(card);
     }
 
     /**
-     * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.
-     * D'abord si le l'identité du joueur a été révélée et qu'il est une sorcière, il ne peut plus jouer.
-     * Ensuite, si le joueur est accusé, il va pouvoir jouer, mais doit choisir entre révéler son identité ou jouer une carte,
-     * seulement une carte action witch. La fonction permet le choix et appelle les fonctions permettant ces actions.
-     * Enfin le dernier cas de figure, c'est le tour du joueur de jouer. Il peut donc soit joueur une carte, soit accuser quelqu'un.
-     * La fonction permet le choix et appelle les fonctions permettant ces actions.
+     * Methode relative a tous les Joueurs permettant de jouer un Round classique.
+     * @author Lilsb et AGOUGILE
      */
     public abstract void play();
 
-
-    public void playCard(UpdateCode code) {            // Lorsque Play card est appelé, on vérifie quelle carte à été révélé pour la jouer
+    /**
+     * Methode relative a tous les Joueurs permettant de jouer une Carte Witch ou Hunt.
+     * @param code L'etape du tour du Joueur.
+     * @author Lilsb et AGOUGILE
+     */
+    public void playCard(UpdateCode code) {
 
         switch (code){
             case PLAY_CARD_HUNT -> {
-                //Affichage des effets + actionHunt
                 setUpdateCode(UpdateCode.EFFECT_CARD_HUNT);
 
                 while(!cardWichIsPlayed.isRevealed() && actualCode!=UpdateCode.PLAY_CARD_HUNT);
                 if(cardWichIsPlayed.isRevealed()){
-                    //Action effectué
                     if(cardWichIsPlayed.conditionHunt(this)){
                         cardWichIsPlayed.actionHunt(this);
                         removeCardTo(deck,cardWichIsPlayed);
@@ -208,19 +294,16 @@ public abstract class Player extends Observable {
                         cardWichIsPlayed = null;
                         setUpdateCode(UpdateCode.END_PLAY);
                     }else {
-                        System.out.println("Condition not respected");
                         cardWichIsPlayed.setRevealed(false);
                         setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
                     }
                 }
             }
             case PLAY_CARD_WITCH -> {
-                //Affichage des effets + actionHunt
                 setUpdateCode(UpdateCode.EFFECT_CARD_WITCH);
 
                 while(!cardWichIsPlayed.isRevealed() && actualCode!=UpdateCode.PLAY_CARD_WITCH && actualCode!=UpdateCode.IS_REVEALED);
                 if(cardWichIsPlayed.isRevealed()){
-                    //Action effectué
                     if(cardWichIsPlayed.conditionWitch(this)){
                         cardWichIsPlayed.actionWitch(this);
                         removeCardTo(deck,cardWichIsPlayed);
@@ -228,30 +311,17 @@ public abstract class Player extends Observable {
                         cardWichIsPlayed = null;
                         setUpdateCode(UpdateCode.END_PLAY);
                     }else {
-                        System.out.println("Condition not respected");
                         cardWichIsPlayed.setRevealed(false);
                         setUpdateCode(UpdateCode.PLAY_CARD_WITCH);
                     }
                 }
             }
         }
-//        System.out.println("Wich card do you want to play");
-//        Card cardToBePlayed = this.chooseCardIn(deck);
-//        if(accused && cardToBePlayed.conditionWitch(this)){
-//            cardToBePlayed.actionWitch(this);
-//            this.addCardTo(this.table,cardToBePlayed);
-//        }
-//        else if(!accused && cardToBePlayed.conditionHunt(this)){
-//            cardToBePlayed.actionHunt(this);
-//            this.addCardTo(this.table,cardToBePlayed);
-//        }
-//        this.getGame().chooseNextPlayer(this);
     }
 
     /**
-     * Fonction quui permet de gérer la phase de jeu correspondant à une accusation.
-     * Elle regroupe le choix du joueur accusé, l'action du joueur accusé, ainsi que l'attribution des points à la fin de l'accusation.
-     * @author lilsb
+     * Methode relative a tous les Joueurs permettant de lancer la phase d'accusation sur un Joueur.
+     * @author Lilsb et AGOUGILE
      */
     public void accusation(){
         for(Player allp : game.getPlayers()){
@@ -272,6 +342,12 @@ public abstract class Player extends Observable {
         }
     }
 
+    /**
+     * Methode relative a tous les Joueurs permettant de valider un choix quelconque.
+     * @param choice Le choix fait par le Joueur depuis une vue quelconque.
+     * @param code L'etape du Joueur caracterisant le but du choix fait par le Joueur.
+     * @author Lilsb et AGOUGILE
+     */
     public void makeAchoice(int choice, UpdateCode code) {
         switch (code) {
             case ACCUSE -> {
@@ -304,7 +380,6 @@ public abstract class Player extends Observable {
                 switch (choice){
                     case 1 -> {
                         cardWichIsPlayed.setRevealed(true);
-                        System.out.println("Carte révélée");
                     }
                     case 2 -> setUpdateCode(UpdateCode.PLAY_CARD_HUNT);
                     default -> setUpdateCode(UpdateCode.EFFECT_CARD_HUNT);
@@ -320,11 +395,25 @@ public abstract class Player extends Observable {
         }
     }
 
-
+    /**
+     * Methode permettant de choisir un Joueur parmis un choix definit.
+     * @return Le Joueur choisi.
+     * @author Lilsb et AGOUGILE
+     */
     public abstract Player chooseAPlayer();
+    /**
+     * Methode permettant de choisir une carte parmis un choix definit.
+     * @return La Carte choisie.
+     * @author Lilsb et AGOUGILE
+     */
     public abstract Card chooseCardIn(List<Card> Stock);
 
-    //Renvoi la liste de player élligibles au codes
+    /**
+     * Methode permettant de recevoir une liste de Joueur choisissable pour une etape donnee.
+     * @return La liste des Joueurs choisissable.
+     * @param actualCode L'etape du Joueur.
+     * @author Lilsb et AGOUGILE
+     */
     public List<Player> chooseThis(UpdateCode actualCode){
         List<Player> players = new ArrayList<>();
         if(actualCode==UpdateCode.ACCUSE){
@@ -336,7 +425,11 @@ public abstract class Player extends Observable {
         }
         return players;
     }
-
+    /**
+     * Methode permettant de valider le choix d'un Joueur entre l'accusation ou le jeu d'une carte Hunt.
+     * @param choice Le choix fait par le Joueur : 1 , 2 , retour.
+     * @author Lilsb et AGOUGILE
+     */
     public void setChoice(int choice){
         switch (choice) {
             case 1 -> setUpdateCode(UpdateCode.ACCUSE);
@@ -346,6 +439,11 @@ public abstract class Player extends Observable {
             default -> setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
         }
     }
+    /**
+     * Methode permettant de valider le choix d'un Joueur entre revele son identite ou jouer une carte Witch.
+     * @param choice Le choix fait par le Joueur : 1 , 2 , retour.
+     * @author Lilsb et AGOUGILE
+     */
     public void setChoiceAccused(int choice){
         switch (choice) {
             case 1 -> setUpdateCode(UpdateCode.IS_REVEALED);
@@ -359,7 +457,12 @@ public abstract class Player extends Observable {
             }
         }
     }
-
+    /**
+     * Methode permettant de valider le choix d'un Joueur lors du choix de l'identite.
+     * 1 = Witch ; 2 = Hunt ; else = RETOUR ;
+     * @param choice Le choix fait par le Joueur : 1 , 2 , retour.
+     * @author Lilsb et AGOUGILE
+     */
     public void setIdentity(int choice){
         switch (choice) {
             case 1 -> {
@@ -373,7 +476,4 @@ public abstract class Player extends Observable {
             default -> setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
         }
     }
-
-
-
 }

@@ -13,10 +13,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
+/**
+ * L'interface Graphique de Jeu.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class PlayInterface extends JFrame implements Observer {
 
+    /**
+     * La partie que la vue graphique observe.
+     * @author Lilsb et AGOUGILE
+     */
     private final Game currentGame;
+    /**
+     * La vue terminal relie a l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     private TerminalInterface myTerminal;
+    /**
+     * L'observable actuellement observe.
+     * @author Lilsb et AGOUGILE
+     */
     private Player actualObservable;
     private JLabel tourPlayer;
     private JPanel playPanel;
@@ -24,7 +41,7 @@ public class PlayInterface extends JFrame implements Observer {
     private ImageIcon angryMob; private ImageIcon blackCat; private ImageIcon broomstick; private ImageIcon cauldron;
     private ImageIcon duckingStool; private ImageIcon evilEye; private ImageIcon hookedNose; private ImageIcon petNewt;
     private ImageIcon pointedHat; private ImageIcon theInquisition; private ImageIcon toad; private ImageIcon wart;
-    private HashMap<Card,ImageIcon> imageList = new HashMap();
+    private final HashMap<Card,ImageIcon> imageList = new HashMap();
     private ArrayList<Card> hand;
 
     private JLabel carteN1;
@@ -40,12 +57,17 @@ public class PlayInterface extends JFrame implements Observer {
     private JLabel phaseLabel;
     private JLabel identityLabel;
     private JLabel pointLabel;
-    private ArrayList<JLabel> carteN = new ArrayList<>();
+    private final ArrayList<JLabel> carteN = new ArrayList<>();
 
     private JButton buttontest;
-    private int i = 0;
+    private final int i = 0;
     private int choice=50;
 
+    /**
+     * Le constructeur de l'interface rend invisible des la creation avec tous les elements la composant.
+     * @param game La Partie observée par l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     public PlayInterface(Game game){
         super("WITCHHUNT");
         currentGame=game;
@@ -65,10 +87,19 @@ public class PlayInterface extends JFrame implements Observer {
 
     }
 
+    /**
+     * Setter du terminal.
+     * @param ter Le terminal a affilie.
+     * @author Lilsb et AGOUGILE
+     */
     public void setMyTerminal(TerminalInterface ter){
         myTerminal = ter;
     }
 
+    /**
+     * Methode permettant de gerer toutes les actions disponibles sur l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     public void allActions(){
 
         //Lors d'un appui sur la carte n°1 :
@@ -147,9 +178,12 @@ public class PlayInterface extends JFrame implements Observer {
         });
     }
 
+    /**
+     * Methode permettant d'initiliaser les images de chaque cartes dans les ressources.
+     * @author Lilsb et AGOUGILE
+     */
     public void initImageIcon(){
 
-        //Permet de créer les images des cartes
          angryMob = new ImageIcon(this.getClass().getResource("/Ressources/AngryMob.png"));
          blackCat = new ImageIcon(this.getClass().getResource("/Ressources/BlackCat.png"));
          broomstick = new ImageIcon(this.getClass().getResource("/Ressources/Broomstick.png"));
@@ -163,7 +197,6 @@ public class PlayInterface extends JFrame implements Observer {
          toad = new ImageIcon(this.getClass().getResource("/Ressources/Toad.png"));
          wart = new ImageIcon(this.getClass().getResource("/Ressources/Wart.png"));
 
-         //Permet d'affilier une image à la carte qu'elle représente
         imageList.put(AngryMob.getInstance(),angryMob);imageList.put(BlackCat.getInstance(),blackCat);
         imageList.put(Broomstick.getInstance(),broomstick);imageList.put(Cauldron.getInstance(),cauldron);
         imageList.put(DuckingStool.getInstance(),duckingStool);imageList.put( EvilEye.getInstance(),evilEye);
@@ -175,8 +208,8 @@ public class PlayInterface extends JFrame implements Observer {
 
     }
     /**
-     * Permet d'initialiser la liste "actualImage" en fonction de la main du Joueur donné en paramètre (current Joueur)
-     * @param p
+     * Permet d'initialiser la main du Joueur donne avec les images en ressources
+     * @param p Le Joueur a affiché.
      */
     public void initRound(Player p){
         hand = p.getDeck();
@@ -186,11 +219,18 @@ public class PlayInterface extends JFrame implements Observer {
         tourPlayer.setText("Tour : "+p.getName());
     }
 
-
+    /**
+     * Setter des Images sur les label de l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     public void setImageIcon(JLabel label, ImageIcon image){
         label.setIcon(image);
     }
 
+    /**
+     * Permet d'afficher la vue du Joueur accuse.
+     * @author Lilsb et AGOUGILE
+     */
     public void showAccuseInterface(){
         accuseButton.setVisible(false);
         playACardButton.setVisible(false);
@@ -199,6 +239,13 @@ public class PlayInterface extends JFrame implements Observer {
         phaseLabel.setText("Your are ACCUSED. What do you want to do ?");
     }
 
+    /**
+     * Update permet de modifier l'interface en fonction de l'avancement de la configuration du jeu.
+     * Elle utilisera l'énumération "UpdateCode" pour détecter l'étape actuelle.
+     * @param o L'objet qui a notifié les observeurs
+     * @param arg Le code envoye par l'observable.
+     * @author Lilsb et AGOUGILE
+     */
     @Override
     public void update(Observable o, Object arg) {
         switch ((UpdateCode)arg){
@@ -264,6 +311,4 @@ public class PlayInterface extends JFrame implements Observer {
                 break;
         }
     }
-
-
 }

@@ -2,8 +2,17 @@ package Cards;
 
 import Game_operator.Player;
 
+/**
+ * Classe representant la carte BroomStick.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class Broomstick extends Card{
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private Broomstick(){
         setName("Broomstick");
         setActionHunt("You choose next player");
@@ -11,7 +20,16 @@ public class Broomstick extends Card{
         setConditionHunt("");
         setConditionWitch("");
     }
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static Broomstick instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static Broomstick getInstance(){
         if (Broomstick.instance == null) {
             Broomstick.instance = new Broomstick();

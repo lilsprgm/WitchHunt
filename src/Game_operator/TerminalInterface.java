@@ -9,30 +9,88 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * L'interface Terminal du jeu.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class TerminalInterface implements Observer, Runnable{
 
+    /**
+     * La partie que la vue graphique observe.
+     * @author Lilsb et AGOUGILE
+     */
     private final Game currentGame;
+    /**
+     * Flag visant les etapes du Jeu.
+     * @author Lilsb et AGOUGILE
+     */
     private volatile UpdateCode flag = UpdateCode.ATTENTE;
+    /**
+     * Flag visant les etapes des Joueurs.
+     * @author Lilsb et AGOUGILE
+     */
     private volatile UpdateCode flagPlayer = UpdateCode.ATTENTE;
+    /**
+     * Flag visant les etapes des Bots.
+     * @author Lilsb et AGOUGILE
+     */
     private volatile UpdateCode flagBot = UpdateCode.ATTENTE;
+    /**
+     * L'observable actuellement observe.
+     * @author Lilsb et AGOUGILE
+     */
     private volatile Player actualObservable;
+    /**
+     * Interruption du Scanner.
+     * @author Lilsb et AGOUGILE
+     */
     private volatile boolean interrupt = false;
 
+    /**
+     * Constructeur de l'interface terminal qui lance un Thread a la creation.
+     * @param game La partie observee.
+     * @author Lilsb et AGOUGILE
+     */
     public TerminalInterface(Game game){
         currentGame = game;
         Thread t = new Thread(this);
         t.start();
     }
+    /**
+     * Setter de l'interruption du Scanner.
+     * @author Lilsb et AGOUGILE
+     */
     public void interruptScan(){
-        while(interrupt){;}
+        while(interrupt){
+        }
         interrupt=true;
     }
+    /**
+     * Getter de l'interruption du Scanner.
+     * @return
+     * @author Lilsb et AGOUGILE
+     */
     public boolean getInterrupt(){return interrupt;}
 
+    /**
+     * Methode permettant de verifier si le code actual est a jour avec la Partie observee.
+     * @return true
+     * @author Lilsb et AGOUGILE
+     */
     public boolean verifCode(UpdateCode code){
         return currentGame.getUpdateCode() == code;
     }
 
+    /**
+     * Methode permettant de lire une donnee rentre par l'utilisateur.
+     * Permet d'ecrire soit un nom, soit un entier.
+     * Permet d'etre interrompue en mettant interrupt à true, la methode renvoie dans ce cas la une valeur de 50 (int).
+     * @param writeAname true = Ecrire un nom dans le terminal ; false = Ecrire un entier.
+     * @param notChangeInterruptVar true = Ne met pas "interrupt" a false apres une interruption. ; false = Mettre "interrupt" a false apres une interruption.
+     * @return L'entier ou la chaine de caractere entree par l'utilisateur ou (int)50 si interrompue.
+     * @author Lilsb et AGOUGILE
+     */
     public <T> T input(boolean writeAname,boolean notChangeInterruptVar) {
         BufferedReader br = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -67,9 +125,14 @@ public class TerminalInterface implements Observer, Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ;}
+        }
     }
 
+    /**
+     * Thread en cours.
+     * Boucle infinie dans laquelle on verfie l'etat des flags en continue.
+     * @author Lilsb et AGOUGILE
+     */
     @Override
     public void run() {
         while (true) {
@@ -299,6 +362,13 @@ public class TerminalInterface implements Observer, Runnable{
         }
     }
 
+    /**
+     * Update permet de modifier l'interface en fonction de l'avancement de la configuration du jeu.
+     * Elle utilisera l'énumération "UpdateCode" pour détecter l'étape actuelle.
+     * @param o L'objet qui a notifié les observeurs
+     * @param arg Le code envoye par l'observable.
+     * @author Lilsb et AGOUGILE
+     */
     @Override
     public void update(Observable o, Object arg) {
 

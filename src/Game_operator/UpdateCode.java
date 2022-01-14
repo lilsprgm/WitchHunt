@@ -1,5 +1,10 @@
 package Game_operator;
 
+/**
+ * Enumeration des etapes d'un tour de Jeu complet.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public enum UpdateCode {
     ATTENTE,
     INIT_NUMBER_PLAYER,

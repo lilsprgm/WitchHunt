@@ -2,8 +2,17 @@ package Cards;
 
 import Game_operator.Player;
 
+/**
+ * Classe representant la carte PointedHat.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class PointedHat extends Card{
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private PointedHat(){
         setName("PointedHat");
         setActionWitch("Take one of your own revealed  rumour card into your hand\nTake next turn");
@@ -11,8 +20,16 @@ public class PointedHat extends Card{
         setConditionHunt("Only available if you have a revealed Rumour Card");
         setConditionWitch("Only available if you have a revealed Rumour Card");
     }
-
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static PointedHat instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static PointedHat getInstance(){
         if (PointedHat.instance == null) {
             PointedHat.instance = new PointedHat();
@@ -40,21 +57,11 @@ public class PointedHat extends Card{
 
     @Override
     public boolean conditionWitch(Player player) {
-        if (player.getTable().isEmpty()){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return !player.getTable().isEmpty();
     }
 
     @Override
     public boolean conditionHunt(Player player) {
-        if (player.getTable().isEmpty()){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return !player.getTable().isEmpty();
     }
 }

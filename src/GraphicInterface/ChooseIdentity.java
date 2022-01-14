@@ -17,31 +17,51 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * Interface graphique permettant de choisir une identite.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class ChooseIdentity extends JFrame{
 
-    private TerminalInterface myTerminal;
+    /**
+     * Terminal affilie a l'interface graphique.
+     * @author Lilsb et AGOUGILE
+     */
+    private final TerminalInterface myTerminal;
 
     private JPanel choosePanel;
     private JLabel actuelPlayer;
     private JButton witchButton;
     private JButton huntButton;
 
+    /**
+     * L'interface se met invisible des la creation.
+     * @param terminalGiven Le terminal qui doit etre affilie a l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     public ChooseIdentity(TerminalInterface terminalGiven){
         super("WITCHHUNT");
         myTerminal = terminalGiven;
-        this.setContentPane(choosePanel); // permet de choisr la fenetre a afficher
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// set arret prgm quand ferme fenetre
-        this.pack(); // ajustement taille de la fenetre automatique
-        //this.setSize(800,1000);
+        this.setContentPane(choosePanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
         this.setVisible(false);
     }
-
+    /**
+     * Methode permettant d'afficher le nom du Joueur qui doit choisir son identite en activant les actions des boutons.
+     * @author Lilsb et AGOUGILE
+     */
     public void display(Player player){
         actuelPlayer.setText(player.getName());
         setVisible(true);
         allActions(player);
     }
 
+    /**
+     * Methode permettant de gerer toutes les actions disponibles sur l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     public void allActions(Player player){
         witchButton.addActionListener(e -> {
             if(player.getIdentity().getRole()==null){

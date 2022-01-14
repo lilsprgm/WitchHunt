@@ -6,14 +6,24 @@ import java.awt.event.ActionListener;
 
 import  Game_operator.*;
 
+/**
+ * L'interface Graphique de lancement du jeu.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class LaunchInterface extends  JFrame {
 
     private JButton STARTPLAYButton;
     private JPanel launchPanel;
     private JLabel WicthHuntLabel;
-    private SettingsInterface mySettingsInterface;
+    private final SettingsInterface mySettingsInterface;
 
-    public LaunchInterface(SettingsInterface gameSettings){ // constructeur avec titre de l'app
+    /**
+     * Le constructeur de l'interface de lancement visible des la creation.
+     * @param gameSettings L'interface d'initialisation "Settings" a relie.
+     * @author Lilsb et AGOUGILE
+     */
+    public LaunchInterface(SettingsInterface gameSettings){
 
         super("WITCHHUNT");
         mySettingsInterface = gameSettings;
@@ -23,8 +33,11 @@ public class LaunchInterface extends  JFrame {
         this.setVisible(true);
         allAction();
 
-
     }
+    /**
+     * Methode permettant de gerer toutes les actions disponibles sur l'interface.
+     * @author Lilsb et AGOUGILE
+     */
     public void allAction(){
         STARTPLAYButton.addActionListener(new ActionListener() {
             @Override

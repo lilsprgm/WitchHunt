@@ -1,7 +1,17 @@
 package Cards;
 import Game_operator.*;
+
+/**
+ * Classe representant la carte DuckingStool.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class DuckingStool extends Card{
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private DuckingStool(){
         setName("DuckingStool");
         setActionHunt("Choose a player. They must reveal their identity or discard a card from their hand\n Witch you gain 1pt\nHunt you loose 1 pt");
@@ -9,8 +19,16 @@ public class DuckingStool extends Card{
         setConditionHunt("");
         setConditionWitch("");
     }
-
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static DuckingStool instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static DuckingStool getInstance(){
         if (DuckingStool.instance == null) {
             DuckingStool.instance = new DuckingStool();
@@ -27,7 +45,6 @@ public class DuckingStool extends Card{
     @Override
     public void actionHunt(Player player) {
         Player choosenPlayer;
-        // permet de s'assurer qu'il ne choisit pas un joueur qui a joué une carte wart
         boolean containsWart = false;
         do{
             choosenPlayer = player.chooseAPlayer();
@@ -49,13 +66,12 @@ public class DuckingStool extends Card{
                 break;
 
             case 2:
-                if (chosenPlayer.getDeck().isEmpty()){// pour résoudre le problème du cas ou le joueur n'a plus de carte dans sa main
+                if (chosenPlayer.getDeck().isEmpty()){
                     chosenPlayer.getIdentity().setRevealed(true);
                 }
                 else {
                     chosenPlayer.discardCardFrom(chosenPlayer.getDeck(), chosenPlayer.chooseCardIn(chosenPlayer.getDeck()));
                 }
-// attribution point
         }
         if ((chosenPlayer.getIdentity().getRole() == Role.Witch) & (chosenPlayer.getIdentity().isRevealed())){
             player.addPoints(1);

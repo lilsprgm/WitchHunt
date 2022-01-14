@@ -4,9 +4,17 @@ import Game_operator.Game;
 import Game_operator.Player;
 import Game_operator.UpdateCode;
 
+/**
+ * Classe representant la carte AngryMob.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class AngryMob extends Card implements Action{
 
-
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private AngryMob(){
         setName("AngryMob");
         setActionHunt("[Hunt Effect] : Reveal another player's identity\nIf he is a witch you win 2 points else you lose 2 points");
@@ -15,7 +23,16 @@ public class AngryMob extends Card implements Action{
         setConditionWitch("");
     }
 
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static AngryMob instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static AngryMob getInstance(){
         if (AngryMob.instance == null) {
             AngryMob.instance = new AngryMob();
@@ -61,11 +78,6 @@ public class AngryMob extends Card implements Action{
 
     @Override
     public boolean conditionHunt(Player player) {
-        if (player.getIdentity().isRevealed() & player.getIdentity().getRole() == Role.Hunt){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return player.getIdentity().isRevealed() & player.getIdentity().getRole() == Role.Hunt;
     }
 }

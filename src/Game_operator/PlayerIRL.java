@@ -5,15 +5,20 @@ import Cards.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe representant un Joueur Reel.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class PlayerIRL extends Player {
 
- /*
-    private void setNumberOfPoints(int value) {
-        // Automatically generated method. Please do not modify this code.
-        this.numberOfPoints = value;
-    }
-*/
 
+    /**
+     * Methode qui permet de changer l'etape actuelle du Joueur.
+     * et de notifier tous les observateurs.
+     * @param newUpdateCode Le nouveau code à set.
+     * @author Lilsb et AGOUGILE
+     */
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
         setChanged();
@@ -21,8 +26,8 @@ public class PlayerIRL extends Player {
     }
 
     /**
-     * Permet au joueur de choisir le rôle, l'identité qu'il veut prendre.
-     * Enregistré grâce à l'instance de la classe Identity du joueur.
+     * Methode qui permet de lancer la phase de choix d'identite sur les differentes vues.
+     * @author Lilsb et AGOUGILE
      */
     public void chooseIdentity() {
         setUpdateCode(UpdateCode.CHOOSE_IDENTITY);
@@ -30,8 +35,7 @@ public class PlayerIRL extends Player {
     }
 
     /**
-     * Permet de choisir un carte dans un tas de carte (n'importe lequel).
-     *
+     * Permet de choisir une carte dans un tas de carte (n'importe lequel).
      * @param Stock le tas de carte dans lequel on veut choisir la carte
      * @return la carte choisie
      */
@@ -49,23 +53,17 @@ public class PlayerIRL extends Player {
         return Stock.get(chosenCard-1);
     }
 
-
     /**
      * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.
      * D'abord si le l'identité du joueur a été révélée et qu'il est une sorcière, il ne peut plus jouer.
      * Ensuite, si le joueur est accusé, il va pouvoir jouer, mais doit choisir entre révéler son identité ou jouer une carte,
      * seulement une carte action witch. La fonction permet le choix et appelle les fonctions permettant ces actions.
      * Enfin le dernier cas de figure, c'est le tour du joueur de jouer. Il peut donc soit joueur une carte, soit accuser quelqu'un.
-     * La fonction permet le choix et appelle les fonctions permettant ces actions.
+     * La methode permet de lancer le choix dans les differentes vues.
      */
     public void play() {
 
-        if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch) {
-            System.out.println("You can't play : you are a witch !");
-        }
-
-
-        else if (this.isAccused()) {
+        if (this.isAccused()) {
             setUpdateCode(UpdateCode.IS_ACCUSED);
             while(actualCode!=UpdateCode.PLAY_CARD_WITCH && actualCode!=UpdateCode.IS_REVEALED);
 
@@ -77,13 +75,12 @@ public class PlayerIRL extends Player {
                     return;
                 }
                 while(actualCode==UpdateCode.PLAY_CARD_WITCH){
-                    while(actualCode!=UpdateCode.END_CHOOSE_CARD && actualCode!=UpdateCode.IS_ACCUSED);                               //Attendre de choisir la carte
+                    while(actualCode!=UpdateCode.END_CHOOSE_CARD && actualCode!=UpdateCode.IS_ACCUSED);
                     if(actualCode==UpdateCode.END_CHOOSE_CARD){
                         playCard(UpdateCode.PLAY_CARD_WITCH);
                     }
                 }
             }
-
 
         } else {
                 setUpdateCode(UpdateCode.ACCUSE_OR_PLAY);
@@ -96,7 +93,7 @@ public class PlayerIRL extends Player {
                         return;
                     }
                     while(actualCode==UpdateCode.PLAY_CARD_HUNT){
-                        while(actualCode!=UpdateCode.END_CHOOSE_CARD && actualCode!=UpdateCode.ACCUSE_OR_PLAY);                               //Attendre de choisir la carte
+                        while(actualCode!=UpdateCode.END_CHOOSE_CARD && actualCode!=UpdateCode.ACCUSE_OR_PLAY);
 
                         if(actualCode==UpdateCode.END_CHOOSE_CARD){
                             playCard(UpdateCode.PLAY_CARD_HUNT);
@@ -109,12 +106,10 @@ public class PlayerIRL extends Player {
         }
     }
 
-
     /**
      * Permet de choisir le nom du joueur suivant.
      * On affiche le nom de tous les joueurs pouvant être choisi puis l'utilisateur rentre le nom du joueur qu'il veut choisir.
      * @return le joueur choisi.
-     *
      * @author lilsb
      */
     public Player chooseAPlayer(){ // Soucis, le joueur pourra choisir un joueur déja révélé Witch.
@@ -136,20 +131,5 @@ public class PlayerIRL extends Player {
             indexOfChosenPlayer = s.nextInt();
         }
         return allp.get(indexOfChosenPlayer);
-//        do{
-//            for (Player player : players){
-//                if (players.indexOf(player) == indexOfChosenPlayer & indexOfChosenPlayer != players.indexOf(this)){
-//                    i = players.indexOf(player);
-//                    verif = true;
-//                }
-//            }
-//            if(!verif){
-//                indexOfChosenPlayer = s.nextInt();
-//            }
-//        }while(!verif);
-//        return players.get(i);
-
-        ///////////////// Je pense que ca devrait marche à voir
-
     }
 }

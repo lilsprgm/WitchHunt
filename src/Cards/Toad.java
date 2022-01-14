@@ -2,8 +2,17 @@ package Cards;
 
 import Game_operator.Player;
 
+/**
+ * Classe representant la carte Toad.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class Toad extends Card {
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private Toad(){
         setName("Toad");
         setActionHunt("Reveal your identity\nVillager : Choose next player\nWitch : Player to your left takes next turn");
@@ -11,7 +20,16 @@ public class Toad extends Card {
         setConditionHunt("");
         setConditionWitch("");
     }
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static Toad instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static Toad getInstance(){
         if (Toad.instance == null) {
             Toad.instance = new Toad();
@@ -19,23 +37,11 @@ public class Toad extends Card {
         return instance;
     }
 
-    /**
-     * Permet d'activier l'effet Witch de la carte Toad.
-     *Le Joueur doit choisir parmis les Joueurs de la partie le prochain à jouer.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
     @Override
     public void actionWitch(Player player) {
         player.getGame().chooseNextPlayer(player.chooseAPlayer());
     }
 
-    /**
-     * Permet d'activier l'effet Hunt de la carte Toad.
-     * Le Joueur révèle sa carte.
-     * Si le Joueur est un Villageois il doit choisir le prochain Joueur à jouer.
-     * Si le joueur est une Witch il doit laisser le prochain Joueur de la partie jouer.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
     @Override
     public void actionHunt(Player player) {
         player.getIdentity().setRevealed(true);

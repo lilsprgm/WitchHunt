@@ -1,7 +1,17 @@
 package Cards;
  import  Game_operator.*;
+
+/**
+ * Classe representant la carte EvilEye.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class EvilEye extends Card{
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private EvilEye(){
         setName("EvilEye");
         setActionHunt("Choose next player\n At their turn they must accuse a player other than you if possible");
@@ -9,7 +19,16 @@ public class EvilEye extends Card{
         setConditionHunt("");
         setConditionWitch("");
     }
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static EvilEye instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static EvilEye getInstance(){
         if (EvilEye.instance == null) {
             EvilEye.instance = new EvilEye();
@@ -17,7 +36,6 @@ public class EvilEye extends Card{
         return instance;
     }
 
-    // Ici le Joueur sera protégé du Joueur qu'il aura choisi et uniquement lui
     @Override
     public void actionWitch(Player player) {
         System.out.println(getActionWitch());

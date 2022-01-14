@@ -3,8 +3,17 @@ package Cards;
 import Game_operator.Player;
 import java.lang.Math; // Pour les fonctions Random
 
+/**
+ * Classe representant la carte Cauldron.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class Cauldron extends Card {
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
     private Cauldron(){
         setName("Cauldron");
         setActionHunt("Reveal your identity\nVillager : Choose next player\nWitch : Player to your left takes next turn");
@@ -12,20 +21,22 @@ public class Cauldron extends Card {
         setConditionHunt("");
         setConditionWitch("");
     }
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static Cauldron instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static Cauldron getInstance(){
         if (Cauldron.instance == null) {
             Cauldron.instance = new Cauldron();
         }
         return instance;
     }
-
-    /**
-     * Permet d'activier l'effet Witch de la carte Cauldron.
-     * Le Joueur qui à accusé doit défausser une carte aléatoire de sa main.
-     * C'est ensuite au tour du Joueur accusé.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
     @Override
     public void actionWitch(Player player) {
         int  range = player.getGame().getCurrentPlayer().getDeck().size()+1;
@@ -36,13 +47,6 @@ public class Cauldron extends Card {
         player.getGame().chooseNextPlayer(player);
     }
 
-    /**
-     * Permet d'activier l'effet Hunt de la carte Cauldron.
-     * Le Joueur révèle sa carte.
-     * Si le Joueur est un Villageois il doit choisir le prochain Joueur à jouer.
-     * Si le joueur est une Witch il doit laisser le prochain Joueur de la partie jouer.
-     * @param player Représente le joueur qui a jouer la carte.
-     */
     @Override
     public void actionHunt(Player player) {
         player.getIdentity().setRevealed(true);

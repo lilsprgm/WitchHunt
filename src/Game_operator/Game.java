@@ -5,28 +5,61 @@ import Cards.*;
 import GraphicInterface.*;
 import java.util.*;
 
-//test commit
+/**
+ * Classe principale permettant d'integrer toutes les fonctionnalites du Jeu de carte WitchHunt
+ * @version 1.3
+ * @author Lilsb et AGOUGILE
+ */
 
 public class Game extends Observable {
 
-    Scanner s = new Scanner(System.in);          // "s" Permet d'utiliser les méthodes de la classe Scanner.
+    /**
+     * Nombre de Joueur Reel.
+     */
     private int numberOfPlayerIRL=0;
+    /**
+     * Nombre de Bot.
+     */
     private int numberOfBot=0;
-    
-    private ArrayList<Player> players = new ArrayList<Player> ();     // Utiliser ArrayList pour les Joueurs
+    /**
+     * Liste des Joueurs dans la partie.
+     */
+    private final ArrayList<Player> players = new ArrayList<Player> ();
+    /**
+     * Prochain Joueur a joue.
+     */
     private Player chosenNextPlayer = null;
-
+    /**
+     * Joueur Protege.
+     */
     private Player protectedPlayer = null;
-
+    /**
+     * Joueur actuellement en train de jouer.
+     */
     private Player currentPlayer = null;
-
-    private static List<Card> stockPile = new ArrayList<Card> (); // Utiliser les Liste QUEUE à la place
-    private static List<Card> discardedCard = new ArrayList<Card> ();
-
+    /**
+     * Liste des cartes dans la pile.
+     */
+    private static final List<Card> stockPile = new ArrayList<Card> ();
+    /**
+     * Liste des cartes dans la defausse.
+     */
+    private static final List<Card> discardedCard = new ArrayList<Card> ();
+    /**
+     * Instance unique de la partie.
+     */
     private static Game instance = null;
+    /**
+     * Etape de la partie.
+     */
     private volatile UpdateCode actualCode;
 
 
+    /**
+     * Constructeur du jeu integrant le patron Singleton.
+     * Ajout des vues observatrices dans le constructeur.
+     * @author Lilsb et AGOUGILE
+     */
     private Game(){
         TerminalInterface myTerminalInterface = new TerminalInterface(this);
         PlayInterface myGame = new PlayInterface(this);
@@ -38,15 +71,44 @@ public class Game extends Observable {
         addObserver(myGame);
     }
 
+    /**
+     * Methode qui permet d'instaurer le patron de conception Singleton.
+     * @return Le jeu cree ou en cours.
+     * @author Lilsb et AGOUGILE
+     */
+    public static Game getInstance() {
+        if (Game.instance == null) {
+            Game.instance = new Game();
+        }
+        return Game.instance;
+    }
+
+    /**
+     * Methode qui permet de changer l'etape actuelle du jeu.
+     * et de notifier tous les observateurs.
+     * @param newUpdateCode Le nouveau code a set.
+     * @author Lilsb et AGOUGILE
+     */
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
         setChanged();
         notifyObservers(newUpdateCode);
     }
+
+    /**
+     * Methode qui permet de reçevoir l'etape actuelle du jeu sous forme d'une enumeration "UpdateCode"
+     * @return Le code actuel.
+     * @author Lilsb et AGOUGILE
+     */
     public UpdateCode getUpdateCode(){
         return actualCode;
     }
 
+    /**
+     * Methode qui permet de modifier le nombre de joueur reel avant de passer a l'etape suivante.
+     * @param nbrPlayer  Le nombre de Joueur reel souhaite.
+     * @author Lilsb et AGOUGILE
+     */
     public void setNumberOfPlayer(int nbrPlayer){
         if(nbrPlayer > 6 || nbrPlayer<0){
             setUpdateCode(UpdateCode.ERROR_NUMBER);
@@ -58,6 +120,12 @@ public class Game extends Observable {
             }else setUpdateCode(UpdateCode.INIT_NAME_PLAYER);
         }
     }
+
+    /**
+     * Methode qui permet de modifier le nombre de Bot avant de passer a l'etape suivante.
+     * @param nbrBot  Le nombre de Bot souhaite.
+     * @author Lilsb et AGOUGILE
+     */
     public void setNumberOfBot(int nbrBot){
         if(nbrBot+numberOfPlayerIRL > 6 || nbrBot+numberOfPlayerIRL<3){
             setUpdateCode(UpdateCode.ERROR_NUMBER);
@@ -71,7 +139,12 @@ public class Game extends Observable {
         }
     }
 
-    public <T> void setPlayers(ArrayList<Player> clone){
+    /**
+     * Methode qui permet de modifier le nom des Joueurs reels avant de passer a l'etape suivante.
+     * @param clone  La liste des Joueurs reel a clone.
+     * @author Lilsb et AGOUGILE
+     */
+    public void setPlayers(ArrayList<Player> clone){
         players.addAll(clone);
         if(numberOfBot>0){
             setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
@@ -79,7 +152,15 @@ public class Game extends Observable {
             setUpdateCode(UpdateCode.GAME_INIT_ROUND);
         }
     }
-    public <T> void setBots(Integer difficulty){
+
+    /**
+     * Methode qui permet de modifier la difficulte des Bots et d'initialiser leurs noms avant de passer a l'etapes suivante.
+     * @param difficulty  La difficulte choisie entre :
+     *                    1 = EasyModeBot;
+     *                    2 = HardModeBot;
+     * @author Lilsb et AGOUGILE
+     */
+    public void setBots(Integer difficulty){
         int indexBot = players.size()-numberOfPlayerIRL;
         if(difficulty>2 || difficulty<0){
             setUpdateCode(UpdateCode.ERROR_DIFFICULTY);
@@ -101,67 +182,17 @@ public class Game extends Observable {
         else setUpdateCode(UpdateCode.INIT_DIFFICULTY_BOT);
     }
 
-    public static Game getInstance() {
-        if (Game.instance == null) {
-            Game.instance = new Game();
-        }
-        return Game.instance;
-    }
-
-    public static List<Card> getDiscardedCard() {
-        return discardedCard;
-    }
-
-    public List<Card> getStockPile(){
-        return stockPile;
-    }
-
-    public int getNumberOfPlayer() {
-        // Automatically generated method. Please do not modify this code.
-        return this.numberOfPlayerIRL;
-    }
-
-    public Player getProtectedPlayer() {
-        return protectedPlayer;
-    }
-
-    public void setProtectedPlayer(Player protectedPlayer) {
-        this.protectedPlayer = protectedPlayer;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public int getNumberOfBot() {
-        // Automatically generated method. Please do not modify this code.
-        return this.numberOfBot;
-    }
-
-    public List<Player> getPlayers() {
-        // Automatically generated method. Please do not modify this code.
-        return this.players;
-    }
-
-    /*
-    public void setPlayers(List<Player> value) {
-        // Automatically generated method. Please do not modify this code.
-        this.players = value;
-    }
-*/
-    public List<Card> getCards() {
-        // Automatically generated method. Please do not modify this code.
-        return this.stockPile;
+    /**
+     * Methode qui permet de passer a l'etape d'initialisation des Joueurs.
+     * @author Lilsb et AGOUGILE
+     */
+    public void initPlayers(){
+        setUpdateCode(UpdateCode.INIT_NUMBER_PLAYER);
     }
 
     /**
-     * intiStockPile est la fonction qui permet d'instancier les cartes action du jeu.
-     * Les cartes sont crées puis stockées dans la collection de la classe game appelé "Stockpile".
-     * Après la création du tas de cartes on les mélange ("suffle(stockPile);") pour pouvoir les distribuer directement ensuite.
-     * La distribution ne s'effectue pas dans cette méthode.
-     *
-     * @author lilsb
-     *
+     * Methode qui permet d'instancier les cartes actions du jeu en les melangeant dans "stockPile".
+     * @author Lilsb et AGOUGILE
      */
     public void initStockPile(){ //Initialisation de la pioche
         stockPile.add(AngryMob.getInstance());
@@ -178,42 +209,18 @@ public class Game extends Observable {
         stockPile.add(Inquisition.getInstance());
         shuffle(stockPile);
     }
-
     /**
-     * Cette fonction permet de piocher aléatoirement une carte dans un tas
-     * @param cards est la collection du tas de carte dans lequel on souhaite piocher.
-     * @return on retourne la carte qui a été piochée.
-     *
-     * @author lilsb
-     */
-    public Card draw(List<Card> cards){ // pour piocher
-        Card card = cards.get(0);// on prend toujours l'index 1 car dans tout les cas les cartes sont mélangés
-        cards.remove(0);
-        return card;
-    }
-
-    /**
-     * Permet de melanger n'importe quelle collection de cartes.
-     * @param cards correspond au tas de cartes que l'on souhaite mélanger.
-     *
-     * @author lilsb
+     * Methode qui permet de melanger n'importe quelle collection de cartes.
+     * @param cards Correspond au tas de cartes que l'on souhaite melanger.
+     * @author Lilsb et AGOUGILE
      */
     public void shuffle(List<Card> cards){   // Pour être plus clair et rapide si on a besoin de melanger n'importe quoi par ex la main d'un joueur
         Collections.shuffle(cards);
     }
 
     /**
-     *
-     *
-     */
-    public void initPlayers(){
-        setUpdateCode(UpdateCode.INIT_NUMBER_PLAYER);
-    }
-
-    /**
-     * Fonction permettant de regrouper les fonctions pour débuter une partie.
-     *
-     * @author lilsb
+     * Methode permettant d'initialiser une partie puis bloque tant que la partie n'a pas commence.
+     * @author Lilsb et AGOUGILE
      */
     public void init_Game(){
         this.initPlayers();
@@ -222,10 +229,10 @@ public class Game extends Observable {
     }
 
     /**
-     * Permet de débuter un nouveau round. Pour se faire, on supprime toutes les cartes des joueurs et on leur redistribue de noouvelles cartes.
-     * Le nombre de cartes distribuées par personne est déterminé automatiquement pour que tous les joueurs aient le même nombre de cartes.
-     *
-     * @author lilsb
+     * Methode permettant d'initialiser un nouveau Round.
+     * Redistribue les cartes entre tous les Joueurs, reinitialise les identites.
+     * Passe ensuite a l'etape suivante.
+     * @author Lilsb et AGOUGILE
      */
     public void initNewRound (){
         if(actualCode==UpdateCode.GAME_INIT_ROUND){
@@ -248,38 +255,31 @@ public class Game extends Observable {
     }
 
     /**
-     * Permet la gestion d'un round complet. Tant que le round n'est pas fini cette fonction permet de gérer l'ordre de jeu ses joueurs.
-     * Il y a deux cas possible : soit on suit l'orde "naturel" de jeu des joueurs,
-     * soit le joueurs suivant a été désigné par l'action d'une carte d'un joueurs.
-     * Quand on arrive au dernier joueurs à jouer, on refait jouer le premier.
-     *
-     * @author lilsb
+     * Methode permettant de gerer les rounds des Joueurs.
+     * Attente de 1 seconde entre chaque tours.
+     * @author Lilsb et AGOUGILE
      */
-    public void roundManagement(){ // pour gerer à qui cest le tour de jouer jsp sii cest tres otpi ?
+    public void roundManagement(){
         if(actualCode==UpdateCode.GAME_ROUND){
             while (!endOfRound()){
                 this.currentPlayer.play();
                 this.currentPlayer = chosenNextPlayer;
-
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                // System.out.println(chosenNextPlayer);
             }
         }
     }
 
     /**
-     * Permet de déterminer si le round est terminé (rappel round terminé si l'identité de tous les joueurs a été révélée sauf un).
-     * Cette fonction gère aussi l'attributiion des points à la fin du round, pour le joueur qui n'a pas été découvert.
-     * @return true si c'est la fin du round, false si ca ne l'est pas.
-     *
-     * @author lilsb
+     * Methode permettant de verifier la fin d'un round et de gerer les points en fin de Round pour enfin passer a l'etape suivante.
+     * True si Identites relevees pour tous les Joueurs sauf 1.
+     * @return true si c'est la fin du round.
+     * @author Lilsb et AGOUGILE
      */
-    public boolean endOfRound(){ // fonction pour déterminer si le round est termiiné ou pas
+    public boolean endOfRound(){
         int numberOfRevealed = 0;
         for (Player player : players){
             if (player.getIdentity().isRevealed()) {
@@ -287,7 +287,6 @@ public class Game extends Observable {
             }
         }
         if (numberOfRevealed == players.size() - 1){
-            // partie pour compter les points si la personne n'est pas decouverte
             for (Player player :players){
                 if (!player.getIdentity().isRevealed()){
                     if (player.getIdentity().getRole() == Role.Witch){
@@ -307,61 +306,30 @@ public class Game extends Observable {
     }
 
     /**
-     * Permet de récupérer le joueurs suivant à joueur, qui n'est pas celui jouant naturellement apres dans l'ordre de jeu.
-     * Ce joueur est stocké dans une variable et on retourne ce joueur.
-     * @return le joueur qui doit joueur ensuite.
-     *
-     * @author lilsb
-     */
-    public Player getChosenNextPLayer (){
-        return chosenNextPlayer;
-    }
-
-    /**
-     * Permet de stocker le nom du joueur suivant désigné.
-     * @param player le joueur qui a été désigné pour jouer en suivant
-     *
-     * @author lilsb
-     */
-    public void chooseNextPlayer(Player player){
-        chosenNextPlayer = player;
-    }
-
-
-    /**
-     * Permet de déterminer si la partie est finie ou non. (Rappel fin de partie si tous les joueurs ont auu moins 5 points).
-     * @return true si c'est la fin de la partie sinon false.
-     *
-     * @author lilsb
+     * Methode permettant de verifier si la partie est finie ou non et passer a l'etape suivante.
+     * Fin de partie si au moins 1 Joueur a 5 points minimum.
+     * @return true si la partie est finie.
+     * @author Lilsb et AGOUGILE
      */
     public boolean endOfGame(){
-            for (Player allp : players){
-                if (allp.getNumberOfPoints() >= 5){
-                    restartPoint();
-                    setUpdateCode(UpdateCode.END_GAME);
-                    return true;
-                }
+        for (Player allp : players){
+            if (allp.getNumberOfPoints() >= 5){
+                restartPoint();
+                setUpdateCode(UpdateCode.END_GAME);
+                return true;
             }
-            if(actualCode!=UpdateCode.GAME_INIT_ROUND){
-                setUpdateCode(UpdateCode.GAME_INIT_ROUND);
-            }
-            return false;
-
-    }
-
-    public void restartPoint(){
-        for(Player allp : players){
-            allp.restartPoint();
         }
+        if(actualCode!=UpdateCode.GAME_INIT_ROUND){
+            setUpdateCode(UpdateCode.GAME_INIT_ROUND);
+        }
+        return false;
     }
 
     /**
-     * Permet d'afficher le nom du ou des gagnants de la partie.
-     * On regarde quel est/sont les joueurs ayant le plus de points. On les affiche ensuite.
-     *
-     * @author lilsb
+     * Methode permettant de construire le podium en fin de Jeu.
+     * @author Lilsb et AGOUGILE
      */
-    public void theWinnerIs(){ // fonction permettant d'afficher les gagnants
+    public void theWinnerIs(){
         List<Player> winner = new ArrayList<Player>();
         winner.add(players.get(0));
         for (Player player : players){
@@ -377,19 +345,124 @@ public class Game extends Observable {
         for (Player player : winner){
             System.out.println(player);
         }
-
-    }
-    public void round(){
-        do{
-
-        }while(true);
-    }
-
-    public void game(){
     }
 
     /**
-     * Partie main du programme. On crée une partie on joue et on affiche le gagnant à la fin
+     * Methode permettant de piocher aleatoirement dans un tas de carte donne.
+     * @param cards La Liste du tas de carte dans lequel on souhaite piocher.
+     * @return La carte qui a ete piochee.
+     * @author Lilsb et AGOUGILE
+     */
+    public Card draw(List<Card> cards){ // pour piocher
+        Card card = cards.get(0);
+        cards.remove(0);
+        return card;
+    }
+    /**
+     * Methode permettant de reinitialiser les points de tous les Joueurs.
+     * @author Lilsb et AGOUGILE
+     */
+    public void restartPoint(){
+        for(Player allp : players){
+            allp.restartPoint();
+        }
+    }
+
+
+
+
+
+
+
+    /**
+     * Getter du nombre de Joueur reel.
+     * @return Le nombre de Joueur reel.
+     * @author Lilsb et AGOUGILE
+     */
+    public int getNumberOfPlayer() {
+        // Automatically generated method. Please do not modify this code.
+        return this.numberOfPlayerIRL;
+    }
+    /**
+     * Getter du nombre de bot
+     * @return Le nombre de bot.
+     * @author Lilsb et AGOUGILE
+     */
+    public int getNumberOfBot() {
+        // Automatically generated method. Please do not modify this code.
+        return this.numberOfBot;
+    }
+    /**
+     * Getter des Joueurs composant le Jeu.
+     * @return La liste des Jouers composant le Jeu.
+     * @author Lilsb et AGOUGILE
+     */
+    public List<Player> getPlayers() {
+        // Automatically generated method. Please do not modify this code.
+        return this.players;
+    }
+    /**
+     * Getter du Joueur en train de jouer.
+     * @return Le Joueur actuellement en train de jouer.
+     * @author Lilsb et AGOUGILE
+     */
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+    /**
+     * Getter du Joueur qui doit jouer le prochain tour.
+     * @return le Joueur qui doit joueur le prochain tour.
+     * @author Lilsb et AGOUGILE
+     */
+    public Player getChosenNextPLayer (){
+        return chosenNextPlayer;
+    }
+    /**
+     * Getter du Joueur protege.
+     * @return Le Joueur protege.
+     * @author Lilsb et AGOUGILE
+     */
+    public Player getProtectedPlayer() {
+        return protectedPlayer;
+    }
+    /**
+     * Getter des Cartes en defausse.
+     * @return La liste des Cartes en defausse.
+     * @author Lilsb et AGOUGILE
+     */
+    public static List<Card> getDiscardedCard() {
+        return discardedCard;
+    }
+    /**
+     * Getter de la pile de carte.
+     * @return La liste des carte dans la pile.
+     * @author Lilsb et AGOUGILE
+     */
+    public List<Card> getCards() {
+        // Automatically generated method. Please do not modify this code.
+        return stockPile;
+    }
+    /**
+     * Setter du Joueur Protege.
+     * @param protectedPlayer Le Joueur qui doit être protege.
+     * @author Lilsb et AGOUGILE
+     */
+    public void setProtectedPlayer(Player protectedPlayer) {
+        this.protectedPlayer = protectedPlayer;
+    }
+    /**
+     * Setter du prochain Joueur.
+     * @param player Le joueur qui doit jouer au prochain tour.
+     * @author Lilsb et AGOUGILE
+     */
+    public void chooseNextPlayer(Player player){
+        chosenNextPlayer = player;
+    }
+
+    /**
+     * Partie main du programme.
+     * Fonctionnement d'une partie de jeu classique.
+     * @author Lilsb et AGOUGILE
      */
     public static void main(String[] arg){
         Game game = Game.getInstance();
@@ -403,5 +476,6 @@ public class Game extends Observable {
         }
     }
 
-
 }
+
+

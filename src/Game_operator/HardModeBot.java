@@ -6,25 +6,41 @@ import Cards.Role;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe representant un bot de difficulte difficile.
+ * @version 1.3
+ * @author Lilsb et AGOUGILE
+ */
 public class HardModeBot extends Player {
 
+    /**
+     * Methode qui permet de changer l'etape actuelle du Joueur.
+     * et de notifier tous les observateurs.
+     * @param newUpdateCode Le nouveau code à set.
+     * @author Lilsb et AGOUGILE
+     */
     private void setUpdateCode(UpdateCode newUpdateCode){
         this.actualCode = newUpdateCode;
         setChanged();
         notifyObservers(newUpdateCode);
     }
 
-    // idée : en mode easy on choisit les joueurs et les cartes aléatoirement.
-    // on  révèle l'identité directement lorsque l'on est hunt mais pas witch
+    /**
+     * Le Bot difficile choisi son role de manière aleatoire.
+     * @author Lilsb et AGOUGILE
+     */
     @Override
     public void chooseIdentity() {
-        //this.getIdentity().setRole((Role.values()[(int) Math.round(Math.random())]));
-        this.getIdentity().setRole(Role.Hunt);                                          // Pour tester A enlever
-        // int entre 0 et 1 car int arrondi toujours a l'entier superieur
+        this.getIdentity().setRole((Role.values()[(int) Math.round(Math.random())]));
     }
 
+    /**
+     * Le Bot difficile choisi une carte aleatoire.
+     * @param Stock La liste de carte parmis laquelle le bot doit choisir une carte.
+     * @author Lilsb et AGOUGILE
+     */
     @Override
-    public Card chooseCardIn(List<Card> Stock) { //  a faire :  coder l'exceptions quand il n'y a plus de cartes
+    public Card chooseCardIn(List<Card> Stock) {
         if (Stock.size() == 0){
             return null;
         }
@@ -35,12 +51,9 @@ public class HardModeBot extends Player {
     }
 
     /**
-     * Fonction qui permet aux joueurs de jouer. Il y a plusieurs cas de figure pour jouer.
-     * D'abord si le l'identité du joueur a été révélée et qu'il est une sorcière, il ne peut plus jouer.
-     * Ensuite, si le joueur est accusé, il va pouvoir jouer, mais doit choisir entre révéler son identité ou jouer une carte,
-     * seulement une carte action witch. La fonction permet le choix et appelle les fonctions permettant ces actions.
-     * Enfin le dernier cas de figure, c'est le tour du joueur de jouer. Il peut donc soit joueur une carte, soit accuser quelqu'un.
-     * La fonction permet le choix et appelle les fonctions permettant ces actions.
+     * Le Bot difficile revele son identite si il se fait accuse.
+     * Il accusera le tout le temps le premier joueur qui a joue de la partie.
+     * @author Lilsb et AGOUGILE
      */
     public void play() {
 
@@ -52,49 +65,27 @@ public class HardModeBot extends Player {
                 getIdentity().setRevealed(true);
                 game.chooseNextPlayer(game.getCurrentPlayer());
                 setAccused(false);
-            }else{                                  // 1 Se Revele et 2 Joue Carte
+            }else{
                 setChoiceAccused(2);
             }
         }
-        if(game.getCurrentPlayer()==this){          // C'est au bot de Jouer
+        if(game.getCurrentPlayer()==this){
             AccusedPlayer = chooseThis(UpdateCode.ACCUSE).get(0);
-            makeAchoice(0,UpdateCode.ACCUSE);         // Va accuser le premier Joueur
-            accusation();                                     // Va faire jouer celui qui a été accusé
+            makeAchoice(0,UpdateCode.ACCUSE);
+            accusation();
         }
-
-
-//        //role reveler onn peut pas jouer
-//        if (this.identity.isRevealed() & this.identity.getRole() == Role.Witch) {
-//            System.out.println("You can't play : you are a witch !");
-//            return;
-//
-//        //bot accusé
-//        } else if (this.isAccused()) {
-//            System.out.println(this.getName() + " you are accused !!!!\nWhat do you want to do ?\n1- Reveal your identity\n2- Play a card (only a Witch action)");
-//            if (this.identity.getRole() == Role.Hunt ){
-//                this.identity.setRevealed(true);
-//            }else{
-//                //playCard();
-//            }
-//
-//            //tour de jeu du bot classique
-//        } else {
-//            System.out.println("What do you want to do ?\n1- Accuse someone \n2- Play a card");
-//            if (this.deck.isEmpty()){
-//                accusation();
-//            }
-//            else{
-//                //playCard();
-//            }
-//        }
     }
 
+    /**
+     * Le Bot difficile choisi un joueur aleatoirement.
+     * @author Lilsb et AGOUGILE
+     */
     @Override
     public Player chooseAPlayer() {
         Player player;
         do {
             player = game.getPlayers().get((int) Math.round(Math.random() * game.getPlayers().size()));
-        } while (player == this); // ajouter || player == protectedPlayer (quand il y aura les bonnes variables)
+        } while (player == this);
         return player;
     }
 }

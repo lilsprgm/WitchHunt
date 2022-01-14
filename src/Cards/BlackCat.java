@@ -2,8 +2,17 @@ package Cards;
 
 import Game_operator.*;
 
+/**
+ * Classe representant la carte BlackCat.
+ * @version 1.0
+ * @author Lilsb et AGOUGILE
+ */
 public class BlackCat extends Card{
 
+    /**
+     * Constructeur Singleton.
+     * @author Lilsb et AGOUGILE
+     */
       private BlackCat(){
             setName("Black Cat");
             setActionHunt("Add one discarded card to your hand, and then discard this card\n Take next turn");
@@ -12,33 +21,31 @@ public class BlackCat extends Card{
             setConditionWitch("");
         }
 
+    /**
+     * Unique instance de la classe.
+     * @author Lilsb et AGOUGILE
+     */
     private static BlackCat instance =null;
+    /**
+     * Permet de creer une uniquer instance de la classe.
+     * @return L'instance de la carte.
+     * @author Lilsb et AGOUGILE
+     */
     public static BlackCat getInstance(){
         if (BlackCat.instance == null) {
             BlackCat.instance = new BlackCat();
         }
         return instance;
     }
-        /**
-         * Permet d'activer l'effet Witch de la carte BlackCat.
-         *Le Joueur qui à joué la carte est le prochain à jouer.
-         * @param player Représente le joueur qui a jouer la carte.
-         */
     @Override
     public void actionWitch(Player player) {
         player.getGame().chooseNextPlayer(player.chooseAPlayer());
     }
 
-       /**
-        * Permet d'activer l'effet Hunt de la carte BlackCat.
-        * Le Joueur peut ajouter une carte de la défausse en échange de la carte BlackCat jouée.
-        * Il joue le prochain tour.
-        * @param player Représente le joueur qui a jouer la carte.
-        */
     @Override
     public void actionHunt(Player player) {
         player.discardCardFrom(player.getDeck(),this);
-        player.getDeck().add(player.chooseCardIn(player.getGame().getDiscardedCard()));
+        player.getDeck().add(player.chooseCardIn(Game.getDiscardedCard()));
     }
 
     @Override
@@ -48,9 +55,6 @@ public class BlackCat extends Card{
     @Override
     public boolean conditionHunt(Player player) {
         System.out.println(getConditionHunt());
-        if(player.getGame().getDiscardedCard().size()>0){
-            return true;
-        }
-        return false;
+        return Game.getDiscardedCard().size() > 0;
     }
 }
