@@ -106,6 +106,7 @@ public class Game extends Observable {
 
     /**
      * Methode qui permet de modifier le nombre de joueur reel avant de passer a l'etape suivante.
+     * Revient a l'etape actuelle si le choix est mauvais.
      * @param nbrPlayer  Le nombre de Joueur reel souhaite.
      * @author Lilsb et AGOUGILE
      */
@@ -123,6 +124,7 @@ public class Game extends Observable {
 
     /**
      * Methode qui permet de modifier le nombre de Bot avant de passer a l'etape suivante.
+     * Revient a l'etape actuelle si le choix est mauvais.
      * @param nbrBot  Le nombre de Bot souhaite.
      * @author Lilsb et AGOUGILE
      */
@@ -141,6 +143,7 @@ public class Game extends Observable {
 
     /**
      * Methode qui permet de modifier le nom des Joueurs reels avant de passer a l'etape suivante.
+     * Passe l'etape du choix de difficulte des bots si il n'y a pas de bots.
      * @param clone  La liste des Joueurs reel a clone.
      * @author Lilsb et AGOUGILE
      */
@@ -155,6 +158,7 @@ public class Game extends Observable {
 
     /**
      * Methode qui permet de modifier la difficulte des Bots et d'initialiser leurs noms avant de passer a l'etapes suivante.
+     * Revient a l'etape actuelle si le choix est mauvais.
      * @param difficulty  La difficulte choisie entre :
      *                    1 = EasyModeBot;
      *                    2 = HardModeBot;
@@ -230,7 +234,7 @@ public class Game extends Observable {
 
     /**
      * Methode permettant d'initialiser un nouveau Round.
-     * Redistribue les cartes entre tous les Joueurs, reinitialise les identites.
+     * Redistribue les cartes entre tous les Joueurs et lance le choix des identites.
      * Passe ensuite a l'etape suivante.
      * @author Lilsb et AGOUGILE
      */
